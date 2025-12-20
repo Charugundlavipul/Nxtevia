@@ -1,0 +1,168 @@
+/** @import must precede all other statements */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Tailwind CSS theme
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+   * A different format will require also updating the theme in tailwind.config.ts.
+  */
+  :root {
+    /* Neutrals (Light Mode) */
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 222 47% 11%; /* #111827 */
+
+    --card: 210 20% 98%; /* #F9FAFB */
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Brand */
+    --primary: 251 94% 28%; /* Dark Indigo #17048a */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 33%; /* Dark Grey #545454 */
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 205 100% 56%; /* Aqua Blue #1FA2FF */
+    --accent-foreground: 0 0% 100%;
+
+    --success: 142 77% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --info: 221 83% 53%;
+    --info-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 26 83% 14%;
+
+    --muted: 210 20% 96%;
+    --muted-foreground: 0 0% 45%; /* #737373 */
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 32% 91%; /* #E5E7EB */
+    --input: 214 32% 91%;
+    --ring: 221 83% 53%;
+
+    --radius: 0.5rem;
+
+    /* Sidebar (light) */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 20% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 221 83% 53%;
+  }
+
+  .dark {
+    /* Neutrals (Dark Mode) */
+    --background: 0 0% 5%; /* #0D0D0D */
+    --foreground: 210 20% 98%; /* #F9FAFB */
+
+    --card: 215 28% 24%; /* lighter dark card for readability */
+    --card-foreground: 210 20% 98%;
+
+    --popover: 215 28% 17%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 240 66% 30%; /* Dark Indigo */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 29%; /* Dark Gray */
+    --secondary-foreground: 0 0% 100%;
+
+    --success: 142 72% 55%;
+    --success-foreground: 0 0% 100%;
+
+    --info: 221 83% 60%;
+    --info-foreground: 0 0% 100%;
+
+    --warning: 38 92% 56%;
+    --warning-foreground: 26 83% 14%;
+
+    --muted: 215 19% 35%; /* #374151 */
+    --muted-foreground: 215 14% 65%; /* #9CA3AF */
+
+    --accent: 221 83% 53%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 19% 35%; /* #374151 */
+    --input: 215 19% 35%;
+    --ring: 205 100% 56%;
+
+    /* Sidebar (dark) */
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 210 20% 98%;
+    --sidebar-primary: 221 83% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 28% 17%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 215 19% 35%;
+    --sidebar-ring: 221 83% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Ensure headings and common text elements inherit the same font */
+  h1, h2, h3, h4, h5, h6, p, li, a, span {
+    font-family: inherit;
+  }
+}
+
+@layer utilities {
+  @keyframes orbit-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes label-cycle {
+    0%, 19% { color: rgb(107 114 128); }
+    20%, 39% { color: rgb(17 24 39); }
+    40%, 59% { color: rgb(107 114 128); }
+    60%, 79% { color: rgb(17 24 39); }
+    80%, 100% { color: rgb(107 114 128); }
+  }
+  .orbit-spin {
+    animation: orbit-spin 25s linear infinite;
+  }
+  .orbit-slow { animation-duration: 30s; }
+  .label-cycle {
+    animation: label-cycle 10s linear infinite;
+  }
+  @keyframes float-y {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  .float-slow { animation: float-y 6s ease-in-out infinite; }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .marquee-track { animation: marquee 30s linear infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .orbit-spin, .label-cycle, .float-slow, .marquee-track { animation: none !important; }
+  }
+}

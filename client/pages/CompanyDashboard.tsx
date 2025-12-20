@@ -1,0 +1,294 @@
+import Layout from "@/components/Layout";
+import { Seo } from "@/components/site/Seo";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import * as React from "react";
+import { Link } from "react-router-dom";
+import { fetchMyOpportunities, type Opportunity } from "@/lib/opportunities";
+import { Briefcase, Plus, Clock, CheckCircle2, XCircle, AlertCircle, Archive, ArrowRight, LayoutDashboard, HelpCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+function useCompanyJobs() {
+  const [list, setList] = React.useState<Opportunity[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    fetchMyOpportunities()
+      .then(setList)
+      .catch(() => setList([]))
+      .finally(() => setLoading(false));
+  }, []);
+  return {
+    loading,
+    all: list,
+    underReview: list.filter((s) => s.status === "pending"),
+    active: list.filter((s) => s.status === "approved"),
+    closed: list.filter((s) => s.status === "closed"),
+    revision: list.filter((s) => s.status === "revision_required"),
+    rejected: list.filter((s) => s.status === "rejected"),
+  };
+}
+
+function JobsTable({ rows }: { rows: Opportunity[] }) {
+  if (rows.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center">
+        <div className="bg-slate-50 p-4 rounded-full mb-3">
+          <Briefcase className="h-6 w-6 text-slate-400" />
+        </div>
+        <p className="text-slate-900 font-medium">No jobs found</p>
+        <p className="text-slate-500 text-sm mt-1">There are no jobs in this category.</p>
+      </div>
+    );
+  }
+
+  const getStatusBadge = (status: Opportunity["status"]) => {
+    switch (status) {
+      case "approved": return <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100"><CheckCircle2 className="h-3 w-3" /> Active</span>;
+      case "pending": return <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-100"><Clock className="h-3 w-3" /> Under Review</span>;
+      case "revision_required": return <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-50 text-orange-700 border border-orange-100"><AlertCircle className="h-3 w-3" /> Revision</span>;
+      case "rejected": return <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-100"><XCircle className="h-3 w-3" /> Rejected</span>;
+      case "closed": return <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200"><Archive className="h-3 w-3" /> Closed</span>;
+      default: return <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">{status}</span>;
+    }
+  };
+
+  return (
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm text-left">
+          <thead className="bg-slate-50/50 text-xs uppercase tracking-wider text-slate-500 font-semibold border-b border-slate-100">
+            <tr>
+              <th className="px-6 py-4">Title</th>
+              <th className="px-6 py-4">Status</th>
+              <th className="px-6 py-4">Submitted</th>
+              <th className="px-6 py-4">Applicants</th>
+              <th className="px-6 py-4 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            {rows.map((s) => (
+              <tr key={s.id} className="hover:bg-slate-50/50 transition-colors group">
+                <td className="px-6 py-4 font-medium text-slate-900">{s.title}</td>
+                <td className="px-6 py-4">{getStatusBadge(s.status)}</td>
+                <td className="px-6 py-4 text-slate-500">{new Date(s.created_at).toLocaleDateString()}</td>
+                <td className="px-6 py-4 text-slate-500">
+                  {/* Placeholder for applicant count if available, else just a dash or icon */}
+                  <span className="inline-flex items-center gap-1 text-slate-400">
+                    <UserGroupIcon className="h-4 w-4" /> -
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-right">
+                  <Button asChild size="sm" variant="ghost" className="text-primary hover:text-primary hover:bg-primary/10">
+                    <Link to={`/company/jobs/${s.id}`}>Manage <ArrowRight className="ml-1 h-3 w-3" /></Link>
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+// Helper icon for applicants column
+function UserGroupIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+    </svg>
+  );
+}
+
+export default function CompanyDashboard() {
+  const jobs = useCompanyJobs();
+  const [tab, setTab] = React.useState<"all" | "pending" | "active" | "revision" | "rejected" | "closed">("all");
+
+  const current = React.useMemo(() => {
+    switch (tab) {
+      case "all": return jobs.all;
+      case "pending": return jobs.underReview;
+      case "active": return jobs.active;
+      case "revision": return jobs.revision;
+      case "closed": return jobs.closed;
+      case "rejected": return jobs.rejected;
+      default: return [];
+    }
+  }, [tab, jobs]);
+
+  const tabs = [
+    { id: "all", label: "All", count: jobs.all?.length || 0 },
+    { id: "pending", label: "Under Review", count: jobs.underReview.length },
+    { id: "active", label: "Active", count: jobs.active.length },
+    { id: "revision", label: "Needs Revision", count: jobs.revision.length },
+    { id: "closed", label: "Closed", count: jobs.closed.length },
+    { id: "rejected", label: "Rejected", count: jobs.rejected.length },
+  ] as const;
+
+  const handleViewActive = () => {
+    setTab("active"); // Switch directly to active tab
+    // Small timeout to allow render, then scroll
+    setTimeout(() => {
+      document.getElementById("jobs-table-section")?.scrollIntoView({ behavior: "smooth" });
+    }, 10);
+  };
+
+  return (
+    <Layout>
+      <Seo title="Company Dashboard – NxteVia" description="Manage posted opportunities" canonical={window.location.href} />
+      <div className="min-h-screen bg-slate-50/50 py-12">
+        <div className="container max-w-6xl space-y-8">
+
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Dashboard</h1>
+              <p className="text-slate-500 mt-1">Manage your job postings and view their status.</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button asChild variant="outline" className="bg-white border-slate-200 hover:bg-slate-50 text-slate-700">
+                <Link to="/company/faq"><HelpCircle className="mr-2 h-4 w-4" /> FAQ</Link>
+              </Button>
+              <Button asChild className="bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20">
+                <Link to="/company/post-opportunity"><Plus className="mr-2 h-4 w-4" /> Post Opportunity</Link>
+              </Button>
+            </div>
+          </div>
+
+          <ActiveJobsShowcase jobs={jobs.active} loading={jobs.loading} onViewAll={handleViewActive} />
+
+          {/* Main Content Card */}
+          <Card id="jobs-table-section" className="bg-white/80 backdrop-blur-xl border-white/60 shadow-sm scroll-mt-24">
+            <CardHeader className="border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="bg-primary/10 p-2 rounded-lg"><LayoutDashboard className="h-5 w-5 text-primary" /></div>
+                <div>
+                  <CardTitle className="text-lg font-bold text-slate-900">Your Opportunities</CardTitle>
+                  <CardDescription>Track and manage your job listings.</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-6">
+
+              {/* Tabs */}
+              <div className="flex flex-wrap gap-2 mb-6 p-1 bg-slate-100/50 rounded-xl w-fit">
+                {tabs.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => setTab(t.id)}
+                    className={cn(
+                      "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                      tab === t.id
+                        ? "bg-white text-primary shadow-sm ring-1 ring-black/5"
+                        : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/50"
+                    )}
+                  >
+                    {t.label}
+                    {t.count > 0 && (
+                      <span className={cn(
+                        "ml-2 px-1.5 py-0.5 rounded-full text-[10px] font-bold",
+                        tab === t.id ? "bg-primary/10 text-primary" : "bg-slate-200 text-slate-600"
+                      )}>
+                        {t.count}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {/* Table */}
+              {jobs.loading ? (
+                <div className="space-y-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="h-16 bg-slate-50 rounded-xl animate-pulse" />
+                  ))}
+                </div>
+              ) : (
+                <JobsTable rows={current} />
+              )}
+
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </Layout>
+  );
+}
+
+function ActiveJobsShowcase({ jobs, loading, onViewAll }: { jobs: Opportunity[]; loading: boolean; onViewAll: () => void }) {
+  if (loading) {
+    return (
+      <div className="grid md:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-32 bg-white rounded-xl border border-slate-200 shadow-sm animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  if (jobs.length === 0) {
+    return (
+      <div className="bg-gradient-to-br from-primary/5 to-indigo-50/50 rounded-2xl p-8 border border-primary/10 text-center">
+        <div className="bg-white p-3 rounded-full w-fit mx-auto shadow-sm mb-4">
+          <Briefcase className="h-6 w-6 text-primary" />
+        </div>
+        <h3 className="text-lg font-semibold text-primary">No active jobs</h3>
+        <p className="text-primary/80 mt-1 mb-6 max-w-md mx-auto">
+          You don't have any jobs currently visible to candidates. Post a new opportunity to get started.
+        </p>
+        <Button asChild className="bg-primary hover:bg-primary/90 text-white shadow-md shadow-primary/20">
+          <Link to="/company/post-opportunity">Post your first job</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-3">
+        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+          <Briefcase className="h-5 w-5 text-primary" />
+        </div>
+        <div>
+          <h2 className="text-lg font-bold text-slate-900">Active Jobs</h2>
+          <p className="text-sm text-slate-500">{jobs.length} opportunities currently live</p>
+        </div>
+      </div>
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {jobs.slice(0, 3).map((job) => (
+          <Link key={job.id} to={`/company/jobs/${job.id}`} className="group block h-full">
+            <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all h-full flex flex-col">
+              <div className="flex items-start justify-between mb-3">
+                <div className="bg-primary/5 p-2 rounded-lg group-hover:bg-primary/10 transition-colors">
+                  <Briefcase className="h-5 w-5 text-primary" />
+                </div>
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                  LIVE
+                </span>
+              </div>
+              <h3 className="font-semibold text-slate-900 line-clamp-2 mb-1 group-hover:text-primary transition-colors">{job.title}</h3>
+              <p className="text-xs text-slate-500 mb-4">Posted {new Date(job.created_at).toLocaleDateString()}</p>
+
+              <div className="mt-auto flex flex-wrap gap-2">
+                {job.modality && <span className="text-[10px] px-2 py-1 bg-slate-50 text-slate-600 rounded-md border border-slate-100">{job.modality}</span>}
+                {job.duration && <span className="text-[10px] px-2 py-1 bg-slate-50 text-slate-600 rounded-md border border-slate-100">{job.duration}</span>}
+              </div>
+            </div>
+          </Link>
+        ))}
+        {jobs.length > 3 && (
+          <button onClick={onViewAll} className="group block h-full text-left w-full">
+            <div className="bg-slate-50 rounded-xl p-5 border border-dashed border-slate-300 hover:border-primary/40 hover:bg-primary/5 transition-all h-full flex flex-col items-center justify-center text-center">
+              <div className="bg-white p-3 rounded-full shadow-sm mb-3 group-hover:scale-110 transition-transform">
+                <ArrowRight className="h-5 w-5 text-slate-400 group-hover:text-primary" />
+              </div>
+              <p className="text-sm font-medium text-slate-600 group-hover:text-primary">View all {jobs.length} jobs</p>
+            </div>
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+

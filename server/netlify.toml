@@ -1,0 +1,23 @@
+[build]
+  command = "npm run build:client"
+  functions = "server/netlify/functions"
+  publish = "dist/spa"
+
+
+[functions]
+  external_node_modules = ["express"]
+  node_bundler = "esbuild"
+  
+
+[[redirects]]
+  force = true
+  from = "/api/*"
+  status = 200
+  to = "/.netlify/functions/api/:splat"
+
+# Single Page App fallback (serve index.html for all non-/api routes)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false

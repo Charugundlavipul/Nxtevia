@@ -1,0 +1,26 @@
+{
+  "name": "@fusion/server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch node-build.ts",
+    "start": "node dist/node-build.mjs",
+    "build": "tsc -p ./tsconfig.json"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.48.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "serverless-http": "^3.2.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.2.1",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2",
+    "vite": "^6.4.1"
+  }
+}
