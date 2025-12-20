@@ -79,10 +79,7 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
           transition={{ duration: 0.6 }}
           className="text-center lg:text-left space-y-8"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-slate-800 shadow-sm">
-            <Badge variant="secondary" className="bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-foreground">New</Badge>
-            <span className="text-sm font-medium text-slate-600 dark:text-slate-300">Global opportunities added daily</span>
-          </div>
+
 
           <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.1]">
             Where skills meet <br />
