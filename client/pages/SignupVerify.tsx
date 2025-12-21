@@ -73,16 +73,20 @@ export default function SignupVerify() {
       setChecking(false);
       return;
     }
-    if (data.session) {
-      finalize(data.session);
-    } else {
-      // If no session found, user likely verified on another device (phone) or same device but different browser.
-      // Redirect to login so they can sign in and trigger the profile check there.
+    const session = data.session;
+    if (!session) {
       setChecking(false);
-      toast({ title: "Session not found", description: "If you verified on another device, please sign in.", duration: 4500 });
-      navigate("/login");
+      toast({ title: "Verification required", description: "Kindly verify your email to proceed.", duration: 3500 });
+      return;
     }
-  }, [finalize, navigate]);
+    const isConfirmed = Boolean(session.user.email_confirmed_at || session.user.confirmed_at);
+    if (!isConfirmed) {
+      setChecking(false);
+      toast({ title: "Verification required", description: "Kindly verify your email to proceed.", duration: 3500 });
+      return;
+    }
+    finalize(session);
+  }, [finalize]);
 
   useEffect(() => {
     const subscription = supabase.auth.onAuthStateChange((_event, session) => {
