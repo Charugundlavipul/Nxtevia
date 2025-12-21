@@ -49,6 +49,7 @@ export default function Login() {
       .select("role, display_name")
       .eq("user_id", userId)
       .maybeSingle();
+    const createdProfile = !profileRow;
 
     if (preferredRole === "admin") {
       if (profileRow?.role !== "admin") {
@@ -63,11 +64,11 @@ export default function Login() {
           toast({ title: "Profile sync failed", description: upsertErr.message, duration: 3000 });
         }
       }
-      return { mappedRole: "admin", displayName: name || profileRow?.display_name || "Admin" };
+      return { mappedRole: "admin", displayName: name || profileRow?.display_name || "Admin", createdProfile };
     }
 
     if (profileRow?.role === "admin") {
-      return { mappedRole: "admin", displayName: profileRow.display_name };
+      return { mappedRole: "admin", displayName: profileRow.display_name, createdProfile };
     }
 
     let mappedRole: "student" | "company" | "admin" = "student";
@@ -91,7 +92,28 @@ export default function Login() {
       await supabase.from("seeker_profiles").upsert({ user_id: userId, contact_email: email });
     }
 
-    return { mappedRole, displayName: profileRow?.display_name ?? name };
+    return { mappedRole, displayName: profileRow?.display_name ?? name, createdProfile };
+  };
+
+  const getNextPath = () => {
+    if (typeof window === "undefined") return null;
+    const raw = new URLSearchParams(window.location.search).get("next");
+    if (!raw || !raw.startsWith("/")) return null;
+    return raw;
+  };
+
+  const resolveRedirect = (
+    mappedRole: "student" | "company" | "admin",
+    createdProfile: boolean,
+  ) => {
+    const next = getNextPath();
+    if (mappedRole === "admin") return "/admin/profile";
+    const onboarding = `/signup/complete?role=${mappedRole}`;
+    const shouldOnboard =
+      createdProfile && (!next || next.startsWith("/signup/verify") || next.startsWith("/login"));
+    if (shouldOnboard) return onboarding;
+    if (next) return next;
+    return mappedRole === "company" ? "/company/home" : "/seekers/home";
   };
 
   useEffect(() => {
@@ -120,13 +142,8 @@ export default function Login() {
         localStorage.setItem("supabase_access_token", session.access_token);
         localStorage.setItem("supabase_refresh_token", session.refresh_token ?? "");
       }
-      if (mappedRole === "company") {
-        navigate("/company/home", { replace: true });
-      } else if (mappedRole === "admin") {
-        navigate("/admin/profile", { replace: true });
-      } else {
-        navigate("/seekers/home", { replace: true });
-      }
+      const redirectTo = resolveRedirect(mappedRole, ensured.createdProfile);
+      navigate(redirectTo, { replace: true });
     });
   }, [navigate]);
 
@@ -226,16 +243,8 @@ export default function Login() {
       setLocalSession(data.session, mappedRole as any, name, email, userId);
 
       toast({ title: "Signed in", description: "Welcome back!", duration: 2000 });
-
-      const params = new URLSearchParams(window.location.search);
-      const next = params.get("next");
-      if (next) {
-        navigate(next);
-      } else if (mappedRole === "company") {
-        navigate("/company/home");
-      } else {
-        navigate("/seekers/home");
-      }
+      const redirectTo = resolveRedirect(mappedRole, ensured.createdProfile);
+      navigate(redirectTo);
     } catch (err) {
       toast({ title: "Sign in failed", description: err instanceof Error ? err.message : "Unexpected error", duration: 3500 });
     } finally {

@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import { Seo } from "@/components/site/Seo";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ToastAction } from "@/components/ui/toast";
 import { supabase } from "@/lib/supabase";
 import { provisionProfileForRole, type UiRole } from "@/lib/signup";
 import { clearPendingSignup, readPendingSignup, savePendingSignup, type PendingSignup } from "@/lib/auth";
@@ -30,6 +31,15 @@ export default function SignupVerify() {
       setPending(fallback);
       setMissingInfo(false);
     }
+  }, [params, pending]);
+
+  const buildSignInPath = useCallback(() => {
+    const roleParam = params.get("role");
+    const role =
+      pending?.role ||
+      (roleParam === "student" || roleParam === "company" ? roleParam : null);
+    const nextPath = role ? `/signup/complete?role=${role}` : "/signup/complete";
+    return `/login?next=${encodeURIComponent(nextPath)}`;
   }, [params, pending]);
 
   const finalize = useCallback(
@@ -75,8 +85,18 @@ export default function SignupVerify() {
     }
     const session = data.session;
     if (!session) {
+      const loginPath = buildSignInPath();
       setChecking(false);
-      toast({ title: "Verification required", description: "Kindly verify your email to proceed.", duration: 3500 });
+      toast({
+        title: "Sign in to continue",
+        description: "We couldn't find a signed-in session on this device. If you verified on another device, please sign in to finish setup.",
+        duration: 5000,
+        action: (
+          <ToastAction altText="Sign in" onClick={() => navigate(loginPath)}>
+            Sign in
+          </ToastAction>
+        ),
+      });
       return;
     }
     const isConfirmed = Boolean(session.user.email_confirmed_at || session.user.confirmed_at);
@@ -86,7 +106,7 @@ export default function SignupVerify() {
       return;
     }
     finalize(session);
-  }, [finalize]);
+  }, [buildSignInPath, finalize, navigate]);
 
   useEffect(() => {
     const subscription = supabase.auth.onAuthStateChange((_event, session) => {
@@ -130,7 +150,11 @@ export default function SignupVerify() {
               <Button className="w-full" onClick={refreshStatus} disabled={checking}>
                 {checking ? "Checking status..." : "I verified my email"}
               </Button>
-              <Button variant="ghost" className="w-full text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" onClick={() => navigate("/login")}>
+              <Button
+                variant="ghost"
+                className="w-full text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                onClick={() => navigate(buildSignInPath())}
+              >
                 Back to sign in
               </Button>
             </>
