@@ -69,16 +69,20 @@ export default function SignupVerify() {
     setChecking(true);
     const { data, error } = await supabase.auth.getSession();
     if (error) {
-      toast({ title: "Refresh failed", description: error.message, duration: 3500 });
+      toast({ title: "Check failed", description: error.message, duration: 3500 });
       setChecking(false);
       return;
     }
     if (data.session) {
       finalize(data.session);
     } else {
+      // If no session found, user likely verified on another device (phone) or same device but different browser.
+      // Redirect to login so they can sign in and trigger the profile check there.
       setChecking(false);
+      toast({ title: "Session not found", description: "If you verified on another device, please sign in.", duration: 4500 });
+      navigate("/login");
     }
-  }, [finalize]);
+  }, [finalize, navigate]);
 
   useEffect(() => {
     const subscription = supabase.auth.onAuthStateChange((_event, session) => {
@@ -86,7 +90,8 @@ export default function SignupVerify() {
         finalize(session);
       }
     });
-    refreshStatus();
+    // Don't auto-run on mount if we just want them to wait, but running it once is okay to check if magic link worked.
+    // refreshStatus(); 
     return () => {
       subscription.data?.subscription.unsubscribe();
     };
@@ -99,29 +104,29 @@ export default function SignupVerify() {
         description="Check your inbox to finish creating your account."
         canonical={typeof window !== "undefined" ? window.location.href : ""}
       />
-      <section className="container py-16 flex items-center justify-center">
-        <Card className="w-full max-w-md">
+      <section className="container py-16 flex items-center justify-center min-h-[60vh]">
+        <Card className="w-full max-w-md bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
           <CardContent className="p-8 space-y-6">
             <div>
-              <h1 className="text-2xl font-bold">Check your inbox</h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                We sent a verification link to your email. Confirm it, then refresh this page to continue.
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Check your inbox</h1>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                We sent a verification link to your email. Confirm it, then click the button below or sign in.
               </p>
             </div>
             <>
               {missingInfo ? (
-                <div className="text-sm text-warning">
+                <div className="text-sm text-amber-600 dark:text-amber-400">
                   We’ll ask for your details again after you confirm your email.
                 </div>
               ) : null}
-              <div className="text-sm text-muted-foreground space-y-2">
+              <div className="text-sm text-slate-500 dark:text-slate-400 space-y-2">
                 <p>Keep this tab open while you verify your email.</p>
-                <p>Once confirmed, we’ll take you straight to the next step to complete your profile.</p>
+                <p>Once confirmed, clicking below will finish your setup.</p>
               </div>
               <Button className="w-full" onClick={refreshStatus} disabled={checking}>
                 {checking ? "Checking status..." : "I verified my email"}
               </Button>
-              <Button variant="ghost" className="w-full" onClick={() => navigate("/login")}>
+              <Button variant="ghost" className="w-full text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" onClick={() => navigate("/login")}>
                 Back to sign in
               </Button>
             </>
