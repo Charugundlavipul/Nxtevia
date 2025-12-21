@@ -26,7 +26,7 @@ export default function SignupVerify() {
       const fallback: PendingSignup = {
         role: roleParam,
         name: params.get("name") || "",
-        email: params.get("email") || "",
+        email: (params.get("email") || "").toLowerCase(),
       };
       savePendingSignup(fallback);
       setPending(fallback);
@@ -57,7 +57,7 @@ export default function SignupVerify() {
       setChecking(true);
       try {
         const derivedName = stored?.name || session.user.user_metadata?.name || session.user.email || "";
-        const derivedEmail = stored?.email || session.user.email || "";
+        const derivedEmail = (stored?.email || session.user.email || "").toLowerCase();
         await provisionProfileForRole(session, inferredRole, derivedName, derivedEmail);
         clearPendingSignup();
         setPending(null);

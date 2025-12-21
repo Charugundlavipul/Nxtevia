@@ -55,7 +55,7 @@ export default function CreateAccount() {
       const next = `/signup/complete?role=${role}`;
       const emailRedirectTo = `${window.location.origin}/login?next=${encodeURIComponent(next)}`;
       const { data, error } = await supabase.auth.signUp({
-        email,
+        email: email.toLowerCase(),
         password,
         options: {
           data: { role: apiRole, name },
@@ -65,7 +65,7 @@ export default function CreateAccount() {
       if (error || !data?.user) { toast({ title: "Could not create account", description: error?.message ?? "Please try again.", duration: 3500 }); setLoading(false); return; }
 
       if (!data.session) {
-        savePendingSignup({ role, name, email });
+        savePendingSignup({ role, name, email: email.toLowerCase() });
         toast({ title: "Check your inbox", description: "Confirm your email, then return to finish setup.", duration: 4000 });
         navigate(`/signup/verify?role=${role}`);
         return;

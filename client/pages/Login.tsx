@@ -198,7 +198,7 @@ export default function Login() {
         localStorage.setItem("supabase_access_token", session.access_token);
         localStorage.setItem("supabase_refresh_token", session.refresh_token ?? "");
       }
-      const redirectTo = await resolveRedirect(mappedRole, ensured.createdProfile, user.id);
+      const redirectTo = await resolveRedirect(mappedRole as "student" | "company" | "admin", ensured.createdProfile, user.id);
       navigate(redirectTo, { replace: true });
     };
 
@@ -259,7 +259,7 @@ export default function Login() {
     setNeedsVerification(false);
 
     const form = new FormData(e.currentTarget);
-    const email = String(form.get("email") || "");
+    const email = String(form.get("email") || "").toLowerCase();
     const password = String(form.get("password") || "");
 
     if (!email || !password) {
@@ -313,7 +313,7 @@ export default function Login() {
       setLocalSession(data.session, mappedRole as any, name, email, userId);
 
       toast({ title: "Signed in", description: "Welcome back!", duration: 2000 });
-      const redirectTo = await resolveRedirect(mappedRole, ensured.createdProfile, userId);
+      const redirectTo = await resolveRedirect(mappedRole as "student" | "company" | "admin", ensured.createdProfile, userId);
       navigate(redirectTo);
     } catch (err) {
       toast({ title: "Sign in failed", description: err instanceof Error ? err.message : "Unexpected error", duration: 3500 });

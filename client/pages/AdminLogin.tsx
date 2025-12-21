@@ -28,7 +28,7 @@ export default function AdminLogin() {
     e.preventDefault();
     trackEvent("admin_login_start", { provider: "password" });
     const form = new FormData(e.currentTarget);
-    const email = String(form.get("email") || "");
+    const email = String(form.get("email") || "").toLowerCase();
     const password = String(form.get("password") || "");
     if (!email || !password) return;
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -67,7 +67,7 @@ export default function AdminLogin() {
                 src="https://cdn.builder.io/api/v1/image/assets%2F92b357447c84469e810f664e6a70c853%2F38cb528327ce42aaad0ef44c24b7d60a?format=webp&width=240"
                 alt="NxteVia"
                 className="h-8 w-auto"
-                fetchpriority="high"
+                fetchPriority="high"
                 decoding="async"
               />
               <span className="sr-only">NxteVia</span>
