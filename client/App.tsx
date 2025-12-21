@@ -88,6 +88,8 @@ import SeekerDashboard from "./pages/SeekerDashboard";
 import SeekerBadges from "./pages/SeekerBadges";
 import SignupComplete from "./pages/SignupComplete";
 import SignupVerify from "./pages/SignupVerify";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import SeekerApplicationDetail from "./pages/SeekerApplicationDetail";
 import { RoleGate } from "@/components/RoleGate";
 import { useAdminSession } from "@/hooks/useAdminSession";
@@ -128,7 +130,7 @@ function GlobalAuthGuard({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  const allowed = ["/", "/home", "/login", "/signup", "/signup/verify", "/admin/login"];
+  const allowed = ["/", "/home", "/login", "/signup", "/signup/verify", "/admin/login", "/forgot-password", "/reset-password"];
   if (!userAuthed && !allowed.includes(pathname)) {
     const next = encodeURIComponent(pathname + search);
     return <SignInRequired to={`/login?next=${next}`} />;
@@ -563,6 +565,8 @@ const App = () => (
               <Route path="/signup" element={<CreateAccount />} />
               <Route path="/signup/complete" element={<SignupComplete />} />
               <Route path="/signup/verify" element={<SignupVerify />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/profile/:username" element={<Profile />} />
               <Route path="/profile/edit" element={<RoleGate allowed={["student"]}><ProfileEdit /></RoleGate>} />
               <Route path="/profile/create" element={<RoleGate allowed={["student"]}><ProfileCreate /></RoleGate>} />
