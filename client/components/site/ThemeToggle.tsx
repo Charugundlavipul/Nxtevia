@@ -17,11 +17,12 @@ function applyTheme(mode: "light" | "dark") {
 }
 
 export function ThemeToggle() {
-  const [mode, setMode] = useState<"light" | "dark">(getSystemPref());
+  // Default to light if no preference is stored, ignoring system preference for initial load as requested
+  const [mode, setMode] = useState<"light" | "dark">("light");
 
   useEffect(() => {
     const stored = localStorage.getItem(THEME_KEY) as "light" | "dark" | null;
-    const initial = stored ?? getSystemPref();
+    const initial = stored ?? "light";
     setMode(initial);
     applyTheme(initial);
   }, []);

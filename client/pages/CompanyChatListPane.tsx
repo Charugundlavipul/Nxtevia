@@ -220,7 +220,7 @@ export default function CompanyChatListPane({ currentConversationId }: CompanyCh
                       <AvatarFallback className={cn(
                         "text-xs font-semibold",
                         isActive
-                          ? "bg-primary/10 dark:bg-primary/40 text-primary dark:text-primary"
+                          ? "bg-primary/10 dark:bg-primary/40 text-primary dark:text-white"
                           : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
                       )}>
                         {otherName.charAt(0).toUpperCase()}
@@ -231,7 +231,7 @@ export default function CompanyChatListPane({ currentConversationId }: CompanyCh
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-0.5">
-                      <span className={cn("text-sm font-semibold truncate", isActive ? "text-primary dark:text-primary" : "text-slate-900 dark:text-white")}>
+                      <span className={cn("text-sm font-semibold truncate", isActive ? "text-primary dark:text-white" : "text-slate-900 dark:text-white")}>
                         {otherName}
                       </span>
                       {lastMsg && (

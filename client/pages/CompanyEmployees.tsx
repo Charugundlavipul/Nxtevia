@@ -81,16 +81,16 @@ function EmployeeOverview({
 
       {/* Stats Cards */}
       <div className="md:col-span-3 grid sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col">
+        <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
           <div className="flex items-center gap-2 mb-3 text-slate-500">
             <Briefcase className="h-4 w-4" />
             <span className="text-xs font-semibold uppercase tracking-wider">Roles Covered</span>
           </div>
-          <p className="text-2xl font-bold text-slate-900 mt-auto">{rolesCovered}</p>
-          <p className="text-xs text-slate-500">Distinct positions</p>
+          <p className="text-2xl font-bold text-slate-900 dark:text-white mt-auto">{rolesCovered}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Distinct positions</p>
         </div>
 
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col">
+        <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
           <div className="flex items-center gap-2 mb-3 text-slate-500">
             <Clock className="h-4 w-4" />
             <span className="text-xs font-semibold uppercase tracking-wider">Ending Soon</span>
@@ -101,15 +101,15 @@ function EmployeeOverview({
             <div className="space-y-2 mt-auto">
               {endingSoon.map((emp) => (
                 <div key={emp.id} className="flex justify-between text-xs">
-                  <span className="font-medium text-slate-700 truncate max-w-[80px]">{getEmployeeLabel(emp.applicant_id)}</span>
-                  <span className="text-slate-500">{formatDate(emp.end_date)}</span>
+                  <span className="font-medium text-slate-700 dark:text-slate-300 truncate max-w-[80px]">{getEmployeeLabel(emp.applicant_id)}</span>
+                  <span className="text-slate-500 dark:text-slate-500">{formatDate(emp.end_date)}</span>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col">
+        <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
           <div className="flex items-center gap-2 mb-3 text-slate-500">
             <UserCheck className="h-4 w-4" />
             <span className="text-xs font-semibold uppercase tracking-wider">Recent Hires</span>
@@ -120,8 +120,8 @@ function EmployeeOverview({
             <div className="space-y-2 mt-auto">
               {recentHires.map((emp) => (
                 <div key={emp.id} className="flex justify-between text-xs">
-                  <span className="font-medium text-slate-700 truncate max-w-[80px]">{getEmployeeLabel(emp.applicant_id)}</span>
-                  <span className="text-slate-500">{formatDate(emp.start_date)}</span>
+                  <span className="font-medium text-slate-700 dark:text-slate-300 truncate max-w-[80px]">{getEmployeeLabel(emp.applicant_id)}</span>
+                  <span className="text-slate-500 dark:text-slate-500">{formatDate(emp.start_date)}</span>
                 </div>
               ))}
             </div>
@@ -214,17 +214,17 @@ export default function CompanyEmployees() {
   return (
     <Layout>
       <Seo title="Employees - NxteVia" canonical={window.location.href} />
-      <div className="min-h-screen bg-slate-50/50 py-12">
+      <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-12">
         <div className="container max-w-6xl space-y-8">
 
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Employees</h1>
-              <p className="text-slate-500 mt-1">Manage your team and view contract details.</p>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Employees</h1>
+              <p className="text-slate-500 dark:text-slate-400 mt-1">Manage your team and view contract details.</p>
             </div>
             <div className="flex items-center gap-3">
-              <Button asChild variant="outline" className="bg-white border-slate-200 hover:bg-slate-50 text-slate-700">
+              <Button asChild variant="outline" className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300">
                 <Link to="/company/faq"><HelpCircle className="mr-2 h-4 w-4" /> Help</Link>
               </Button>
             </div>
@@ -233,21 +233,21 @@ export default function CompanyEmployees() {
           <EmployeeOverview employees={list} loading={loading} getEmployeeLabel={getEmployeeLabel} />
 
           {/* Main Content Card */}
-          <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-sm">
+          <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/60 dark:border-slate-800 shadow-sm">
             <CardHeader className="border-b border-slate-100 pb-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <div className="bg-indigo-50 p-2 rounded-lg"><Users className="h-5 w-5 text-indigo-600" /></div>
                   <div>
-                    <CardTitle className="text-lg font-bold text-slate-900">Team Members</CardTitle>
-                    <CardDescription>View and manage your hired employees.</CardDescription>
+                    <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Team Members</CardTitle>
+                    <CardDescription className="dark:text-slate-400">View and manage your hired employees.</CardDescription>
                   </div>
                 </div>
                 <div className="relative w-full sm:w-64">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                   <Input
                     placeholder="Search employees..."
-                    className="pl-9 bg-slate-50 border-slate-200 focus:bg-white transition-all"
+                    className="pl-9 bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus:bg-white dark:focus:bg-slate-900 transition-all dark:text-white"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -276,7 +276,7 @@ export default function CompanyEmployees() {
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm text-left">
-                    <thead className="bg-slate-50/50 text-xs uppercase tracking-wider text-slate-500 font-semibold border-b border-slate-100">
+                    <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold border-b border-slate-100 dark:border-slate-800">
                       <tr>
                         <th className="px-6 py-4">Full Name</th>
                         <th className="px-6 py-4">Role</th>
@@ -287,24 +287,24 @@ export default function CompanyEmployees() {
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {filteredList.map((employee) => (
-                        <tr key={employee.id} className="hover:bg-slate-50/50 transition-colors">
+                        <tr key={employee.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
-                              <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-xs">
+                              <div className="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-bold text-xs">
                                 {getEmployeeLabel(employee.applicant_id).charAt(0)}
                               </div>
-                              <span className="font-medium text-slate-900">{getEmployeeLabel(employee.applicant_id)}</span>
+                              <span className="font-medium text-slate-900 dark:text-slate-200">{getEmployeeLabel(employee.applicant_id)}</span>
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-slate-600">{employee.role || "-"}</td>
-                          <td className="px-6 py-4 text-slate-500">{formatDate(employee.start_date)}</td>
-                          <td className="px-6 py-4 text-slate-500">{formatDate(employee.end_date)}</td>
+                          <td className="px-6 py-4 text-slate-600 dark:text-slate-400">{employee.role || "-"}</td>
+                          <td className="px-6 py-4 text-slate-500 dark:text-slate-500">{formatDate(employee.start_date)}</td>
+                          <td className="px-6 py-4 text-slate-500 dark:text-slate-500">{formatDate(employee.end_date)}</td>
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-2">
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                className="text-primary hover:text-primary hover:bg-primary/10"
+                                className="text-primary hover:text-primary dark:hover:text-white hover:bg-primary/10 dark:hover:bg-primary/20"
                                 onClick={() => startConversation(employee.applicant_id)}
                               >
                                 <MessageSquare className="h-4 w-4 mr-1.5" />
@@ -313,7 +313,7 @@ export default function CompanyEmployees() {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="border-slate-200 text-slate-600 hover:bg-slate-50"
+                                className="border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
                                 onClick={() => navigate(`/company/employees/${employee.id}/tenure`)}
                               >
                                 Manage

@@ -507,7 +507,7 @@ export default function CompanyRequirements() {
                                 <div className="space-y-3">
                                   <div className="flex items-center justify-between">
                                     <Label className="text-sm font-medium text-slate-900 dark:text-white">Options</Label>
-                                    <Button type="button" variant="ghost" size="sm" onClick={() => addOption(q.id)} className="h-7 text-xs text-primary dark:text-primary hover:text-primary/80 dark:hover:text-primary/70">
+                                    <Button type="button" variant="ghost" size="sm" onClick={() => addOption(q.id)} className="h-7 text-xs text-primary dark:text-primary hover:text-primary dark:hover:text-white/80 dark:hover:text-primary dark:hover:text-white/70">
                                       <Plus className="h-3 w-3 mr-1" /> Add Option
                                     </Button>
                                   </div>

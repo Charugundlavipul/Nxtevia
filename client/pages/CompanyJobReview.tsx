@@ -381,7 +381,7 @@ export default function CompanyJobReview() {
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-sm text-slate-500 mb-2">
-                <Link to="/company/dashboard" className="hover:text-primary transition-colors flex items-center gap-1">
+                <Link to="/company/dashboard" className="hover:text-primary dark:hover:text-white transition-colors flex items-center gap-1">
                   <ArrowLeft className="h-3 w-3" /> Dashboard
                 </Link>
                 <span>/</span>

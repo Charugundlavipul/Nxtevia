@@ -599,7 +599,7 @@ export const FAQ = () => {
                 value={`item-${i}`}
                 className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 px-6 shadow-sm"
               >
-                <AccordionTrigger className="text-left font-medium text-slate-900 dark:text-white hover:text-primary hover:no-underline py-6">
+                <AccordionTrigger className="text-left font-medium text-slate-900 dark:text-white hover:text-primary dark:hover:text-white hover:no-underline py-6">
                   {f.q}
                 </AccordionTrigger>
                 <AccordionContent className="text-slate-600 dark:text-slate-400 pb-6 leading-relaxed">

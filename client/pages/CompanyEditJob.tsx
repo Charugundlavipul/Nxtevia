@@ -229,7 +229,7 @@ export default function CompanyEditJob() {
           {/* Header */}
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-sm text-slate-500 mb-2">
-              <Link to={`/company/jobs/${id}`} className="hover:text-primary transition-colors flex items-center gap-1">
+              <Link to={`/company/jobs/${id}`} className="hover:text-primary dark:hover:text-white transition-colors flex items-center gap-1">
                 <ArrowLeft className="h-3 w-3" /> Back to Job
               </Link>
               <span>/</span>
@@ -490,7 +490,7 @@ export default function CompanyEditJob() {
                                       <p className="text-xs text-slate-500">
                                         {q.type === "multiselect" ? "Applicants can pick multiple." : "Applicants pick one."}
                                       </p>
-                                      <Button type="button" variant="ghost" size="sm" onClick={() => addOption(q.id)} className="text-primary hover:text-primary hover:bg-primary/10 h-8 text-xs">
+                                      <Button type="button" variant="ghost" size="sm" onClick={() => addOption(q.id)} className="text-primary hover:text-primary dark:hover:text-white hover:bg-primary/10 h-8 text-xs">
                                         <Plus className="h-3 w-3 mr-1" /> Add Option
                                       </Button>
                                     </div>

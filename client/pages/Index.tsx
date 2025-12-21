@@ -105,7 +105,7 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
                 asChild
                 size="lg"
                 variant="outline"
-                className="h-14 px-8 rounded-full text-lg border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-white"
+                className="h-14 px-8 rounded-full text-lg border-slate-200 dark:border-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:text-white"
               >
                 <Link to={companyMode || role === "company" ? "/company/post_opportunities" : "/signup?next=/company/post-opportunity"}>
                   Post Opportunity
@@ -615,7 +615,7 @@ function FeaturedProjects({ companyMode }: { companyMode: boolean }) {
 
                   {/* Content */}
                   <div className="mb-6 flex-grow">
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-primary dark:group-hover:text-white dark:hover:text-white transition-colors line-clamp-2">
                       {p.title}
                     </h3>
                     <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-3">
@@ -769,7 +769,7 @@ function FAQ({ companyMode }: { companyMode?: boolean }) {
             value={`item-${i}`}
             className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-950 px-6"
           >
-            <AccordionTrigger className="text-left font-medium text-slate-900 dark:text-white hover:text-primary hover:no-underline py-6">
+            <AccordionTrigger className="text-left font-medium text-slate-900 dark:text-white hover:text-primary dark:hover:text-white hover:no-underline py-6">
               {f.q}
             </AccordionTrigger>
             <AccordionContent className="text-slate-600 dark:text-slate-400 pb-6 leading-relaxed">
@@ -835,7 +835,7 @@ function FinalCTA({ seekerMode, companyMode }: { seekerMode: boolean; companyMod
             </Link>
           </Button>
           {!seekerMode && !companyMode && (
-            <Button asChild size="lg" variant="outline" className="h-12 px-8 rounded-full border-slate-200 dark:border-slate-800 hover:bg-white/50 dark:hover:bg-slate-900 hover:text-primary transition-colors bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+            <Button asChild size="lg" variant="outline" className="h-12 px-8 rounded-full border-slate-200 dark:border-slate-800 hover:bg-white/50 dark:hover:bg-slate-900 hover:text-primary dark:hover:text-white transition-colors bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
               <Link to="/signup?next=/company/post-opportunity">
                 Post an Opportunity
               </Link>

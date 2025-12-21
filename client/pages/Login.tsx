@@ -142,24 +142,64 @@ export default function Login() {
     }
   };
 
+  const [needsVerification, setNeedsVerification] = useState(false);
+  const [lastEmail, setLastEmail] = useState("");
+
+  const resendVerification = async () => {
+    if (!lastEmail) return;
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email: lastEmail,
+        options: {
+          emailRedirectTo: `${window.location.origin}/login`,
+        },
+      });
+      if (error) throw error;
+      toast({ title: "Email sent", description: "Check your inbox for the confirmation link.", duration: 4000 });
+      setNeedsVerification(false);
+    } catch (err) {
+      toast({ title: "Failed to send", description: err instanceof Error ? err.message : "Could not send email", duration: 3000 });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setNeedsVerification(false);
+
     const form = new FormData(e.currentTarget);
     const email = String(form.get("email") || "");
     const password = String(form.get("password") || "");
+
     if (!email || !password) {
       toast({ title: "Missing details", description: "Email and password are required.", duration: 2500 });
       setLoading(false);
       return;
     }
 
+    setLastEmail(email);
     trackEvent("login_start", { provider: "password", role: "auto" });
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error || !data?.session || !data?.user) {
-        toast({ title: "Sign in failed", description: error?.message ?? "Check your credentials.", duration: 3500 });
+
+      if (error) {
+        if (error.message.includes("Email not confirmed")) {
+          setNeedsVerification(true);
+          toast({ title: "Verification required", description: "Please verify your email address.", variant: "destructive" });
+        } else {
+          toast({ title: "Sign in failed", description: error.message, duration: 3500 });
+        }
+        setLoading(false);
+        return;
+      }
+
+      if (!data?.session || !data?.user) {
+        toast({ title: "Sign in failed", description: "Check your credentials.", duration: 3500 });
         setLoading(false);
         return;
       }
@@ -283,6 +323,23 @@ export default function Login() {
 
             <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-xl overflow-hidden">
               <CardContent className="p-8 space-y-6">
+                {needsVerification && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800">
+                    <p className="font-semibold mb-2 flex items-center gap-2">
+                      <Mail className="h-4 w-4" /> Email not verified
+                    </p>
+                    <p className="mb-3">Please check your inbox ({lastEmail}) for the confirmation link.</p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={resendVerification}
+                      disabled={loading}
+                      className="w-full border-amber-300 hover:bg-amber-100 text-amber-900"
+                    >
+                      {loading ? "Sending..." : "Resend Confirmation Email"}
+                    </Button>
+                  </div>
+                )}
                 <form onSubmit={onSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-slate-700 font-semibold">Email address</Label>

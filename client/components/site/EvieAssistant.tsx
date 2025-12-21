@@ -1,94 +1,38 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   listProjects,
   getProjectById as coreGetProjectById,
 } from "@/lib/projects";
 import { trackEvent } from "@/lib/analytics";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { X, MessageCircle, ChevronLeft, Bot, HelpCircle, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-// Intent types from spec
-type Intent =
-  | "find_projects"
-  | "apply_project"
-  | "post_opportunity"
-  | "faq"
-  | "contact_support"
-  | "small_talk";
-
-// Entity extraction result
-interface Entities {
-  skills?: string[];
-  country?: "US" | "IN" | "CA";
-  work_mode?: "remote" | "hybrid" | "on_site";
-  duration_weeks_max?: number;
-}
-
-// Data contracts (subset mapped from UiProject)
-interface Project {
-  id: string;
-  title: string;
-  organization: string;
-  country: "US" | "IN" | "CA";
-  city?: string;
-  work_mode: "remote" | "hybrid" | "on-site";
-  duration_weeks: number;
-  hours_per_week: string;
-  skills: string[];
-  summary: string;
-  outcomes: string;
-  scope: string;
-  stipend: "none" | "micro" | "modest";
-  apply_url: string;
-}
-
-interface EmployerSubmissionSink {
-  org_name: string;
-  website?: string;
-  country: "US" | "IN" | "CA";
-  state?: string;
-  city?: string;
-  postal_code?: string;
-  contact_email: string;
-  modality: "remote" | "hybrid" | "on-site";
-  title: string;
-  desired_outcome: string;
-  scope: string;
-  duration: string;
-  hours_per_week: string;
-  stipend: string;
-  skills_csv: string;
-}
-
-interface CompanyRequirements {
-  company_id: string;
-  require_resume: boolean;
-  require_linkedin: boolean;
-  require_cover_letter: boolean;
-  require_portfolio: boolean;
-  require_availability: boolean;
-  custom_question?: string;
-}
+// Types
+type Role = "student" | "company" | null;
 
 // Structured categories with FAQs for tree UI
-const FAQ_CATEGORIES: { id: string; label: string; faqs: { q: string; a: string }[] }[] = [
+const FAQ_CATEGORIES: { id: string; label: string; roles: Role[]; faqs: { q: string; a: string }[] }[] = [
   {
     id: "general",
-    label: "General",
+    label: "General Questions",
+    roles: ["student", "company", null],
     faqs: [
       { q: "What is NxteVia?", a: "A platform for part-time, real-world projects that help you gain verifiable experience and grow your career." },
       { q: "Where is NxteVia available?", a: "United States, India, and Canada." },
       { q: "How long are projects?", a: "Typically 2–8 weeks with 5–20 hours/week." },
-      { q: "How do I apply?", a: "Open a project and click Apply—complete a short form; the organization reviews weekly." },
       { q: "How do verified completions work?", a: "When a project is marked completed by the organization, NxteVia records a verified completion on your profile and adds a badge if criteria are met." },
     ],
   },
   {
     id: "projects",
     label: "Projects & Applications",
+    roles: ["student", null],
     faqs: [
+      { q: "How do I apply?", a: "Open a project and click Apply—complete a short form; the organization reviews weekly." },
       { q: "Are projects paid?", a: "Some projects are paid; each posting displays stipend information like 'none', 'micro', or 'modest'." },
       { q: "Can I apply to multiple projects?", a: "Yes—submit separate applications for each project. Organizations review and respond per their timelines." },
       { q: "What happens after I apply?", a: "The organization reviews applications weekly; status updates appear in your dashboard and you may be invited to interview or start." },
@@ -97,6 +41,7 @@ const FAQ_CATEGORIES: { id: string; label: string; faqs: { q: string; a: string 
   {
     id: "company",
     label: "For Companies",
+    roles: ["company", null],
     faqs: [
       { q: "How do I post an opportunity?", a: "Use the post form from the company dashboard; include title, scope, duration, and skills." },
       { q: "What are verification rules for hires?", a: "Companies can verify completions; admins may moderate and issue badges based on deliverables." },
@@ -106,6 +51,7 @@ const FAQ_CATEGORIES: { id: string; label: string; faqs: { q: string; a: string 
   {
     id: "support",
     label: "Support",
+    roles: ["student", "company", null],
     faqs: [
       { q: "How do I contact support?", a: "Use the 'Create ticket' action on your profile or email support@nxtevia.com for urgent requests." },
       { q: "How long for a ticket response?", a: "Typical response time is 24–72 hours for pending tickets." },
@@ -114,687 +60,242 @@ const FAQ_CATEGORIES: { id: string; label: string; faqs: { q: string; a: string 
   },
 ];
 
-function faqLookup(question: string): { q: string; a: string } | null {
-  const s = question.toLowerCase();
-  for (const cat of FAQ_CATEGORIES) {
-    const exact = cat.faqs.find((f) => f.q.toLowerCase() === s);
-    if (exact) return exact;
-    const fuzzy = cat.faqs.find((f) => s.includes(f.q.toLowerCase().split(" ")[0]!));
-    if (fuzzy) return fuzzy;
-  }
-  return null;
-}
-
-// Functions (mocked client-side per spec)
-function searchProjects(filters: Entities): Project[] {
-  let items = listProjects();
-  if (filters.country)
-    items = items.filter((p) => p.country === filters.country);
-  if (filters.work_mode)
-    items = items.filter(
-      (p) => p.modality.replace("on-site", "on_site") === filters.work_mode,
-    );
-  if (typeof filters.duration_weeks_max === "number")
-    items = items.filter((p) => p.durationWeeks <= filters.duration_weeks_max!);
-  if (filters.skills && filters.skills.length) {
-    const sset = new Set(filters.skills.map((s) => s.toLowerCase()));
-    items = items.filter((p) =>
-      p.skills.some((x) => sset.has(x.toLowerCase())),
-    );
-  }
-  return items.slice(0, 5).map(toContractProject);
-}
-
-function getProjectById(id: string): Project | null {
-  const p = coreGetProjectById(id);
-  return p ? toContractProject(p) : null;
-}
-
-function createOpportunitySubmission(payload: EmployerSubmissionSink): {
-  id: string;
-  status: "draft" | "review";
-} {
-  // Client-side mock sink; return review to indicate moderation
-  const id = `sub_${Date.now()}`;
-  void payload; // no-op
-  return { id, status: "review" };
-}
-
-function getCompanyRequirements(companyId: string): CompanyRequirements | null {
-  // Default requirements when no org-specific policy is known
-  if (!companyId) return null;
-  return {
-    company_id: companyId,
-    require_resume: true,
-    require_linkedin: true,
-    require_cover_letter: false,
-    require_portfolio: true,
-    require_availability: true,
-    custom_question: "Describe a similar project you’ve done (100 words).",
-  };
-}
-
-
-function openUrl(url: string): void {
-  try {
-    window.open(url, "_blank", "noopener,noreferrer");
-  } catch {
-    window.location.assign(url);
-  }
-}
-
-function toContractProject(
-  p: ReturnType<typeof listProjects>[number],
-): Project {
-  return {
-    id: p.id,
-    title: p.title,
-    organization: p.org,
-    country: p.country,
-    work_mode: p.modality,
-    duration_weeks: p.durationWeeks,
-    hours_per_week: p.hoursPerWeek,
-    skills: p.skills,
-    summary: p.summary,
-    outcomes: p.outcomes,
-    scope: p.scope,
-    stipend: p.stipend,
-    apply_url: p.applyUrl,
-  };
-}
-
-// Helpers: intent + entity parsing
-function parseIntent(text: string): Intent {
-  const s = text.toLowerCase();
-  if (/(post|hire|opportunit(y|ies) for my company|employer)/.test(s))
-    return "post_opportunity";
-  if (/(apply|submit|application)/.test(s)) return "apply_project";
-  if (/(contact|support|email)/.test(s)) return "contact_support";
-  if (
-    /\b(react|python|design|sql|pwa|remote|hybrid|on[- ]?site|india|canada|united states|us|in|ca|weeks?)\b/.test(
-      s,
-    )
-  )
-    return "find_projects";
-  if (/(what|how|faq|paid|duration|available|works?)/.test(s)) return "faq";
-  return "small_talk";
-}
-
-function extractEntities(text: string): Entities {
-  const s = text.toLowerCase();
-  const country = /\b(canada|ca)\b/.test(s)
-    ? "CA"
-    : /\b(india|in)\b/.test(s)
-      ? "IN"
-      : /\b(united states|usa|us)\b/.test(s)
-        ? "US"
-        : undefined;
-  const work_mode = /on[- ]?site/.test(s)
-    ? "on_site"
-    : /hybrid/.test(s)
-      ? "hybrid"
-      : /remote/.test(s)
-        ? "remote"
-        : undefined;
-  const dur = s.match(/(under|less than|≤|<=)?\s*(\d+)\s*weeks?/);
-  const duration_weeks_max = dur
-    ? parseInt(dur[2] || dur[1] || "", 10)
-    : undefined;
-  const tokens = Array.from(
-    new Set(s.split(/[^a-z0-9+.#]/).filter((w) => w.length > 1)),
-  );
-  const allSkills = new Set(
-    listProjects().flatMap((p) => p.skills.map((x) => x.toLowerCase())),
-  );
-  const skills = tokens.filter((t) => allSkills.has(t));
-  return {
-    country,
-    work_mode,
-    duration_weeks_max,
-    skills: skills.length ? skills : undefined,
-  };
-}
-
-// Messages
-type Msg = { id: string; role: "user" | "assistant"; content: React.ReactNode };
-
 export function EvieAssistant() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
-  const [input, setInput] = React.useState("");
-  const [category, setCategory] = React.useState<string | null>(null);
+  const [role, setRole] = React.useState<Role>(null);
+
+  // Navigation State
+  const [view, setView] = React.useState<"topics" | "questions" | "answer">("topics");
+  const [selectedCategory, setSelectedCategory] = React.useState<string | null>(null);
   const [selectedQuestion, setSelectedQuestion] = React.useState<{ q: string; a: string } | null>(null);
-  const listRef = React.useRef<HTMLDivElement | null>(null);
-  const lastResults = React.useRef<Project[] | null>(null);
-  const [msgs, setMsgs] = React.useState<Msg[]>([
-    {
-      id: "hello",
-      role: "assistant",
-      content: (
-        <div className="space-y-1">
-          <div className="font-semibold">Hi, I’m Evie</div>
-          <div className="text-sm text-muted-foreground">
-            Choose a category and pick a question — I’ll show a standard answer.
-          </div>
-        </div>
-      ),
-    },
-  ]);
 
   React.useEffect(() => {
-    if (open) trackEvent("assistant_opened");
+    // Get role from local storage/auth state
+    const storedRole = localStorage.getItem("eaas_role") as Role;
+    setRole(storedRole);
   }, [open]);
 
-  const scrollToEnd = () => {
-    requestAnimationFrame(() =>
-      listRef.current?.scrollTo({
-        top: listRef.current.scrollHeight,
-        behavior: "smooth",
-      }),
-    );
+  React.useEffect(() => {
+    if (open) {
+      trackEvent("assistant_opened");
+    } else {
+      // Reset state on close
+      setTimeout(() => {
+        setView("topics");
+        setSelectedCategory(null);
+        setSelectedQuestion(null);
+      }, 300);
+    }
+  }, [open]);
+
+  const navigateToFaq = () => {
+    setOpen(false);
+    if (role === 'company') {
+      navigate('/company/faq');
+      return;
+    }
+
+    const targetPath = role === 'student' ? '/seekers/home' : '/home';
+
+    if (location.pathname === targetPath) {
+      const el = document.getElementById('faq');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate(targetPath);
+      // Allow navigation to complete then scroll
+      setTimeout(() => {
+        const el = document.getElementById('faq');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 500);
+    }
+  }
+
+  // Filter categories based on role
+  const visibleCategories = FAQ_CATEGORIES.filter(cat => {
+    if (!role) return true; // Show all for guests/unknown
+    return cat.roles.includes(role) || cat.roles.includes(null);
+  });
+
+  const currentCategoryData = FAQ_CATEGORIES.find(c => c.id === selectedCategory);
+
+  const handleCategoryClick = (id: string) => {
+    setSelectedCategory(id);
+    setView("questions");
+    trackEvent("evie_category_selected", { category: id });
   };
 
-  function renderResults(list: Project[], filters: Entities) {
-    const labelParts: string[] = [];
-    if (filters.work_mode) labelParts.push(filters.work_mode.replace("_", " "));
-    if (typeof filters.duration_weeks_max === "number")
-      labelParts.push(`≤ ${filters.duration_weeks_max} weeks`);
-    if (filters.country) labelParts.push(filters.country);
-    const header = labelParts.length
-      ? `Here’s what matches your filters (${labelParts.join(", ")})`
-      : `Here are some opportunities you might like`;
-    return (
-      <div className="space-y-3">
-        <div className="text-sm mb-1">{header}:</div>
-        {list.length === 0 ? (
-          <div className="text-sm">
-            I couldn’t find matches. Try changing filters or exploring remote
-            roles.
-          </div>
-        ) : (
-          list.map((p) => (
-            <Card key={p.id} className="shadow-sm">
-              <CardContent className="p-4 space-y-2">
-                <div className="font-semibold line-clamp-1">
-                  {p.title} — {p.organization}
-                </div>
-                <div className="flex flex-wrap gap-1 text-xs">
-                  <Badge variant="outline">{p.work_mode}</Badge>
-                  <Badge variant="outline">{p.duration_weeks} weeks</Badge>
-                  {p.skills.slice(0, 3).map((s) => (
-                    <Badge key={s} variant="outline">
-                      {s}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="flex gap-2 pt-1">
-                  <Button
-                    size="sm"
-                    className="rounded-lg"
-                    aria-label={`Apply to ${p.title}`}
-                    onClick={() => {
-                      trackEvent("project_apply_clicked", { projectId: p.id });
-                      openUrl(`${p.apply_url}?utm=nxtevia&src=assistant`);
-                    }}
-                  >
-                    Apply
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="rounded-lg"
-                    aria-label="View details"
-                    onClick={() => openUrl(`/opportunities/${p.id}`)}
-                  >
-                    Details
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))
-        )}
-        <div className="text-xs text-muted-foreground">
-          Want more results or change filters?
-        </div>
-      </div>
-    );
-  }
-
-  function renderProjectSummary(p: Project) {
-    return (
-      <Card className="shadow-sm">
-        <CardContent className="p-4 space-y-2">
-          <div className="font-semibold">
-            {p.title} — {p.organization}
-          </div>
-          <div className="text-xs text-muted-foreground">
-            Location/Mode: {p.country} · {p.work_mode}
-          </div>
-          <div className="text-xs text-muted-foreground">
-            Time: {p.duration_weeks} weeks · {p.hours_per_week}
-          </div>
-          <div className="text-sm">What you’ll do: {p.summary}</div>
-          <div className="text-sm">Outcome: {p.outcomes}</div>
-          <div className="flex gap-2 pt-1">
-            <Button
-              size="sm"
-              aria-label="Apply now"
-              onClick={() => {
-                trackEvent("project_apply_clicked", { projectId: p.id });
-                openUrl(`${p.apply_url}?utm=nxtevia&src=assistant`);
-              }}
-            >
-              Apply now
-            </Button>
-            {lastResults.current && lastResults.current.length > 0 && (
-              <Button
-                size="sm"
-                variant="outline"
-                aria-label="Back to results"
-                onClick={() =>
-                  setMsgs((m) => [
-                    ...m,
-                    {
-                      id: String(Date.now()) + "b",
-                      role: "assistant",
-                      content: renderResults(lastResults.current!, {}),
-                    },
-                  ])
-                }
-              >
-                Back to results
-              </Button>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  function renderEmployerGuide() {
-    return (
-      <div className="text-sm">
-        <div className="font-semibold mb-1">
-          Great—let’s post your opportunity. You’ll need:
-        </div>
-        <ul className="list-disc pl-5 mb-2">
-          <li>Title, country, city, modality</li>
-          <li>Desired outcome & scope (milestones, acceptance criteria)</li>
-          <li>Duration & hours/week</li>
-          <li>Skills (comma-separated)</li>
-          <li>Contact email & website (optional)</li>
-        </ul>
-        <Button
-          asChild
-          className="h-10 rounded-xl"
-          aria-label="Open Post Form"
-          onClick={() => trackEvent("post_opportunity_cta_clicked")}
-        >
-          <a href="/company/post-opportunity">Open Post Form</a>
-        </Button>
-      </div>
-    );
-  }
-
-  function renderFAQAnswer(faq: { q: string; a: string }) {
-    return (
-      <div className="text-sm">
-        <div className="font-semibold">{faq.q}</div>
-        <div className="mb-2">{faq.a}</div>
-        <Button asChild size="sm" variant="outline" aria-label="Open full FAQ">
-          <a href="/#faq">Open full FAQ</a>
-        </Button>
-      </div>
-    );
-  }
-
-  function renderHandoff() {
-    return (
-      <div className="text-sm">
-        I might not have that info yet. Want personal help?
-        <div className="mt-2">
-          <Button
-            asChild
-            variant="outline"
-            size="sm"
-            aria-label="Email support"
-          >
-            <a href="mailto:support@nxtevia.com">Email support</a>
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  const ask = (text: string) => {
-    const id = String(Date.now());
-    setMsgs((m) => [...m, { id: id + "u", role: "user", content: text }]);
-
-    const intent = parseIntent(text);
-    const entities = extractEntities(text);
-    trackEvent("intent_resolved", { intent });
-
-    // APPLY on current project page
-    if (intent === "apply_project") {
-      const match = location.pathname.match(/^\/opportunities\/(\w+)/);
-      const p = match ? getProjectById(match[1]!) : null;
-      if (p) {
-        setMsgs((m) => [
-          ...m,
-          { id: id + "a", role: "assistant", content: renderProjectSummary(p) },
-        ]);
-        scrollToEnd();
-        return;
-      }
-      // no context – prompt to browse
-      setMsgs((m) => [
-        ...m,
-        {
-          id: id + "a",
-          role: "assistant",
-          content: (
-            <div className="text-sm">
-              Open a project to apply, or browse options below.
-              <div className="mt-2 flex gap-2">
-                <Button
-                  size="sm"
-                  className="rounded-lg"
-                  onClick={() => ask("show projects")}
-                >
-                  Browse projects
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="rounded-lg"
-                  onClick={() => ask("remote projects under 4 weeks")}
-                >
-                  Quick search
-                </Button>
-              </div>
-            </div>
-          ),
-        },
-      ]);
-      scrollToEnd();
-      return;
-    }
-
-    if (intent === "post_opportunity") {
-      setMsgs((m) => [
-        ...m,
-        { id: id + "a", role: "assistant", content: renderEmployerGuide() },
-      ]);
-      scrollToEnd();
-      return;
-    }
-
-    if (intent === "find_projects") {
-      const results = searchProjects(entities);
-      lastResults.current = results;
-      setMsgs((m) => [
-        ...m,
-        {
-          id: id + "a",
-          role: "assistant",
-          content: renderResults(results, entities),
-        },
-      ]);
-      scrollToEnd();
-      return;
-    }
-
-    if (intent === "faq") {
-      // Special-company requirements
-      if (
-        /(require|need).*(resume|linkedin|portfolio|cover|submit)/.test(
-          text.toLowerCase(),
-        )
-      ) {
-        const req = getCompanyRequirements("org_default");
-        if (req) {
-          trackEvent("faq_viewed", { topic: "requirements" });
-          setMsgs((m) => [
-            ...m,
-            {
-              id: id + "a",
-              role: "assistant",
-              content: (
-                <div className="text-sm">
-                  <div className="font-semibold mb-1">
-                    Typical application requirements
-                  </div>
-                  <ul className="list-disc pl-5 mb-2">
-                    <li>
-                      Resume: {req.require_resume ? "Required" : "Optional"}
-                    </li>
-                    <li>
-                      LinkedIn: {req.require_linkedin ? "Required" : "Optional"}
-                    </li>
-                    <li>
-                      Portfolio:{" "}
-                      {req.require_portfolio ? "Required" : "Optional"}
-                    </li>
-                    <li>
-                      Availability:{" "}
-                      {req.require_availability ? "Required" : "Optional"}
-                    </li>
-                    {req.custom_question && (
-                      <li>Question: {req.custom_question}</li>
-                    )}
-                  </ul>
-                  <Button asChild size="sm" variant="outline">
-                    <a href="/faq">Open full FAQ</a>
-                  </Button>
-                </div>
-              ),
-            },
-          ]);
-          scrollToEnd();
-          return;
-        }
-      }
-
-      const f = faqLookup(text) || {
-        q: "FAQ",
-        a: "I can share how NxteVia works, regions, and timelines.",
-      };
-      trackEvent("faq_viewed", { topic: f.q });
-      setMsgs((m) => [
-        ...m,
-        { id: id + "a", role: "assistant", content: renderFAQAnswer(f) },
-      ]);
-      scrollToEnd();
-      return;
-    }
-
-    if (intent === "contact_support") {
-      trackEvent("handoff_triggered");
-      setMsgs((m) => [
-        ...m,
-        { id: id + "a", role: "assistant", content: renderHandoff() },
-      ]);
-      scrollToEnd();
-      return;
-    }
-
-    // small talk / default deflection
-    setMsgs((m) => [
-      ...m,
-      {
-        id: id + "a",
-        role: "assistant",
-        content: (
-          <div className="text-sm">
-            I can help you find projects or post an opportunity.
-            <div className="mt-2 flex gap-2">
-              <Button
-                size="sm"
-                className="rounded-lg"
-                onClick={() => ask("show projects")}
-              >
-                Browse projects
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                className="rounded-lg"
-                onClick={() => ask("I want to post an opportunity")}
-              >
-                Post an opportunity
-              </Button>
-            </div>
-          </div>
-        ),
-      },
-    ]);
-    scrollToEnd();
+  const handleQuestionClick = (q: { q: string; a: string }) => {
+    setSelectedQuestion(q);
+    setView("answer");
+    trackEvent("evie_question_selected", { question: q.q });
   };
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const text = input.trim();
-    if (!text) return;
-    setInput("");
-    ask(text);
-  };
-
-  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      submit(e as any);
+  const goBack = () => {
+    if (view === "answer") {
+      setView("questions");
+      setSelectedQuestion(null);
+    } else if (view === "questions") {
+      setView("topics");
+      setSelectedCategory(null);
     }
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
-      {/* Launcher */}
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end pointer-events-none">
+      {/* Chat Window */}
+      {open && (
+        <div className="pointer-events-auto w-[90vw] max-w-[360px] h-[500px] max-h-[80vh] flex flex-col rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-2xl overflow-hidden mb-4 animate-in slide-in-from-bottom-5 fade-in duration-300">
+
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md sticky top-0 z-10">
+            <div className="flex items-center gap-3">
+              {view !== "topics" ? (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="-ml-2 size-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
+                  onClick={goBack}
+                >
+                  <ChevronLeft className="size-5" />
+                </Button>
+              ) : (
+                <div className="relative">
+                  <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                    <Bot className="size-5" />
+                  </div>
+                  <span className="absolute bottom-0 right-0 size-2.5 bg-green-500 border-2 border-white dark:border-slate-950 rounded-full"></span>
+                </div>
+              )}
+
+              <div className="flex flex-col">
+                <span className="font-semibold text-sm text-slate-900 dark:text-white">
+                  {view === "topics" && "Hi, I'm Evie 👋"}
+                  {view === "questions" && currentCategoryData?.label}
+                  {view === "answer" && "Answer"}
+                </span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                  {view === "topics" ? "How can I help you today?" : view === "questions" ? "Select a question" : "Here's what I found"}
+                </span>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500"
+              onClick={() => setOpen(false)}
+            >
+              <X className="size-4" />
+            </Button>
+          </div>
+
+          {/* Content Area */}
+          <ScrollArea className="flex-1 p-4 bg-slate-50/50 dark:bg-slate-900/50">
+
+            {/* TOPICS VIEW */}
+            {view === "topics" && (
+              <div className="space-y-3 animate-in fade-in slide-in-from-right-4 duration-300">
+                <div className="bg-white dark:bg-slate-900 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-800 mb-4">
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
+                    I can help answer your questions about NxteVia. Choose a topic below to get started.
+                  </p>
+                </div>
+                <div className="grid gap-2">
+                  {visibleCategories.map((cat, i) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => handleCategoryClick(cat.id)}
+                      className="flex items-center justify-between w-full p-3 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl transition-all hover:scale-[1.02] hover:shadow-sm text-left group"
+                      style={{ animationDelay: `${i * 50}ms` }}
+                    >
+                      <span className="font-medium text-sm text-slate-700 dark:text-slate-200">{cat.label}</span>
+                      <ChevronRight className="size-4 text-slate-400 group-hover:text-primary transition-colors" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* QUESTIONS VIEW */}
+            {view === "questions" && currentCategoryData && (
+              <div className="space-y-2 animate-in fade-in slide-in-from-right-8 duration-300">
+                {currentCategoryData.faqs.map((faq, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleQuestionClick(faq)}
+                    className="w-full text-left p-3 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl transition-all text-sm text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary"
+                  >
+                    {faq.q}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* ANSWER VIEW */}
+            {view === "answer" && selectedQuestion && (
+              <div className="space-y-4 animate-in fade-in slide-in-from-right-8 duration-300">
+                <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800">
+                  <h3 className="font-semibold text-slate-900 dark:text-white mb-3 text-sm">
+                    {selectedQuestion.q}
+                  </h3>
+                  <div className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    {selectedQuestion.a}
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between group bg-white dark:bg-slate-900"
+                    onClick={() => setView("questions")}
+                  >
+                    <span>Back to {currentCategoryData?.label}</span>
+                    <ChevronLeft className="size-4 rotate-180 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
+                    onClick={() => setView("topics")}
+                  >
+                    Start Over
+                  </Button>
+                </div>
+
+                <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
+                  <p className="text-xs text-center text-slate-500 mb-3">Still have questions?</p>
+                  <Button size="sm" variant="secondary" className="w-full" onClick={navigateToFaq}>
+                    Browse Full FAQ
+                  </Button>
+                </div>
+              </div>
+            )}
+
+          </ScrollArea>
+
+          {/* Footer */}
+          <div className="p-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-center">
+            <p className="text-[10px] text-slate-400">Powered by NxteVia Support</p>
+          </div>
+        </div>
+      )}
+
+      {/* Launcher Button */}
       {!open && (
         <button
           aria-label="Open Evie assistant"
           onClick={() => setOpen(true)}
-          className="size-14 rounded-full bg-[#17048A] hover:bg-[#2A21A5] text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-ring flex items-center justify-center"
+          className="pointer-events-auto size-14 rounded-full bg-[#17048A] hover:bg-[#2A21A5] text-white shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-primary/20 flex items-center justify-center relative group"
         >
           <span className="sr-only">Open chat</span>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4 5a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H9l-4 4V5Z"
-              fill="currentColor"
-            />
-          </svg>
+          <HelpCircle className="size-7 animate-in zoom-in duration-300" />
+
+          <span className="absolute -top-1 -right-1 flex size-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full size-3 bg-green-500"></span>
+          </span>
         </button>
-      )}
-
-      {open && (
-        <div className="w-[90vw] max-w-[420px] rounded-2xl border bg-background shadow-2xl overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b bg-card/60 backdrop-blur">
-            <div className="font-semibold flex items-center gap-2">
-              Evie{" "}
-              <span className="ml-1 inline-flex items-center text-xs text-muted-foreground">
-                <span className="size-2 rounded-full bg-green-500 mr-1" />{" "}
-                Online
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                aria-label="What I can do"
-                className="text-sm underline"
-                onClick={() => ask("what can you do")}
-              >
-                What I can do
-              </button>
-              <button
-                aria-label="Close"
-                className="rounded-md px-2 py-1 text-sm hover:bg-muted"
-                onClick={() => setOpen(false)}
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-          <div
-            ref={listRef}
-            className="max-h-[60vh] overflow-auto p-3 space-y-3"
-          >
-            {msgs.map((m) => (
-              <div
-                key={m.id}
-                className={m.role === "user" ? "text-right" : "text-left"}
-              >
-                <div
-                  className={
-                    m.role === "user"
-                      ? "inline-block max-w-[85%] rounded-2xl bg-[#17048A] text-white px-3 py-2"
-                      : "inline-block max-w-[85%] rounded-2xl bg-card px-3 py-2 border"
-                  }
-                >
-                  {typeof m.content === "string" ? (
-                    <span className="text-sm leading-relaxed whitespace-pre-wrap">
-                      {m.content}
-                    </span>
-                  ) : (
-                    m.content
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="px-3 pb-3">
-            {/* Tree UI: category -> question -> answer */}
-            <div className="mb-2">
-              {!category && (
-                <div className="flex flex-wrap gap-2">
-                  {FAQ_CATEGORIES.map((c) => (
-                    <button
-                      key={c.id}
-                      onClick={() => {
-                        setCategory(c.id);
-                        setSelectedQuestion(null);
-                      }}
-                      className="text-xs rounded-full border px-3 py-1.5 hover:border-[#17048A] hover:text-[#17048A] transition-colors"
-                    >
-                      {c.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {category && !selectedQuestion && (
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="font-medium">{FAQ_CATEGORIES.find((c) => c.id === category)?.label}</div>
-                    <button className="text-sm underline" onClick={() => setCategory(null)}>Back</button>
-                  </div>
-                  <div className="space-y-2">
-                    {FAQ_CATEGORIES.find((c) => c.id === category)?.faqs.map((f) => (
-                      <button
-                        key={f.q}
-                        onClick={() => {
-                          // push assistant answer message and close category
-                          setMsgs((m) => [
-                            ...m,
-                            { id: String(Date.now()) + "faq", role: "assistant", content: renderFAQAnswer(f) },
-                          ]);
-                          setCategory(null);
-                          scrollToEnd();
-                        }}
-                        className="w-full text-left rounded-md bg-muted/40 p-2"
-                      >
-                        {f.q}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );

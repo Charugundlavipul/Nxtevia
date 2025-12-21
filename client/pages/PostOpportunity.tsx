@@ -530,7 +530,7 @@ export default function PostOpportunity() {
                                           ? "Applicants can pick more than one."
                                           : "Applicants choose a single option."}
                                       </p>
-                                      <Button type="button" variant="ghost" size="sm" onClick={() => addOption(q.id)} className="h-7 text-xs text-primary dark:text-blue-400 hover:text-primary/80 dark:hover:text-blue-300">
+                                      <Button type="button" variant="ghost" size="sm" onClick={() => addOption(q.id)} className="h-7 text-xs text-primary dark:text-blue-400 hover:text-primary dark:hover:text-white/80 dark:hover:text-blue-300">
                                         <Plus className="h-3 w-3 mr-1" /> Add Option
                                       </Button>
                                     </div>

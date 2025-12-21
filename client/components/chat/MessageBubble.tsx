@@ -151,7 +151,9 @@ export function MessageBubble({ message, isMe, showAvatar = true, showSenderName
 }
 
 function AttachmentItem({ attachment }: { attachment: any }) {
-    const [url, setUrl] = React.useState<string | null>(attachment.url || null);
+    const [url, setUrl] = React.useState<string | null>(
+        (attachment.url && !attachment.url.startsWith("blob:")) ? attachment.url : null
+    );
 
     React.useEffect(() => {
         if (!url && attachment.path) {

@@ -214,7 +214,7 @@ export default function ApplyForm() {
       <Seo title={`Apply – ${opportunity.title}`} canonical={window.location.href} />
       <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50 py-12 transition-colors duration-300">
         <div className="container max-w-2xl">
-          <Button variant="ghost" className="mb-6 pl-0 hover:bg-transparent hover:text-primary dark:hover:text-primary text-slate-600 dark:text-slate-400" onClick={() => navigate(-1)}>
+          <Button variant="ghost" className="mb-6 pl-0 hover:bg-transparent hover:text-primary dark:hover:text-white dark:hover:text-primary dark:hover:text-white text-slate-600 dark:text-slate-400" onClick={() => navigate(-1)}>
             <ChevronLeft className="h-4 w-4 mr-1" /> Back to Opportunity
           </Button>
 
@@ -331,7 +331,7 @@ export default function ApplyForm() {
                             type="button"
                             variant="ghost"
                             size="sm"
-                            className="text-primary dark:text-primary/80 hover:text-primary dark:hover:text-primary hover:bg-primary/10 dark:hover:bg-primary/30"
+                            className="text-primary dark:text-primary/80 hover:text-primary dark:hover:text-white dark:hover:text-primary dark:hover:text-white hover:bg-primary/10 dark:hover:bg-primary/30"
                             onClick={() => setForm(f => ({ ...f, coverLetterFile: null }))}
                           >
                             Remove

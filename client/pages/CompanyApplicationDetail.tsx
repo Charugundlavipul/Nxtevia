@@ -117,7 +117,7 @@ export default function CompanyApplicationDetail() {
           {/* Header */}
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div className="space-y-1">
-              <Link to={`/company/jobs/${application.opportunity_id}/applicants`} className="flex items-center gap-2 text-sm text-slate-500 hover:text-primary transition-colors mb-2">
+              <Link to={`/company/jobs/${application.opportunity_id}/applicants`} className="flex items-center gap-2 text-sm text-slate-500 hover:text-primary dark:hover:text-white transition-colors mb-2">
                 <ArrowLeft className="h-3 w-3" /> Back to Applicants
               </Link>
               <div className="flex items-center gap-3">

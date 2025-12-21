@@ -199,7 +199,7 @@ export default function SeekerApplicationDetail() {
                             </div>
                             <span className="font-medium text-sm text-slate-900 dark:text-white">{item.label}</span>
                           </div>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-primary" asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-primary dark:hover:text-white" asChild>
                             <a href={item.url} target="_blank" rel="noreferrer">
                               <ExternalLink className="h-4 w-4" />
                             </a>

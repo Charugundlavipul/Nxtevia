@@ -373,7 +373,7 @@ export default function AdminJobReview() {
           {/* Header */}
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between mb-8">
             <div className="space-y-2">
-              <Button variant="ghost" className="pl-0 hover:bg-transparent text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors" asChild>
+              <Button variant="ghost" className="pl-0 hover:bg-transparent text-slate-500 hover:text-primary dark:hover:text-white dark:text-slate-400 dark:hover:text-primary dark:hover:text-white transition-colors" asChild>
                 <Link to="/admin/jobs">
                   <ArrowLeft className="h-4 w-4 mr-1" /> Back to Jobs
                 </Link>
@@ -458,7 +458,7 @@ export default function AdminJobReview() {
                       <Users className="h-4 w-4 text-slate-500 dark:text-slate-400" />
                       Interviewing Candidates
                     </CardTitle>
-                    <Button size="sm" variant="ghost" className="h-8 text-primary hover:text-primary hover:bg-primary/10 dark:text-blue-400 dark:hover:bg-blue-900/20" onClick={() => setShowInterviewForm((v) => !v)}>
+                    <Button size="sm" variant="ghost" className="h-8 text-primary hover:text-primary dark:hover:text-white hover:bg-primary/10 dark:text-blue-400 dark:hover:bg-blue-900/20" onClick={() => setShowInterviewForm((v) => !v)}>
                       {showInterviewForm ? "Cancel" : "Add Candidate"}
                     </Button>
                   </CardHeader>

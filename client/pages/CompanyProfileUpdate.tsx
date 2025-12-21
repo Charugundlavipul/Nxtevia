@@ -125,7 +125,7 @@ export default function CompanyProfileUpdate() {
           {/* Header */}
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-sm text-slate-500 mb-2">
-              <Link to={`/company/profile/${(profile.name || "company").toString().trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "company"}`} className="hover:text-primary transition-colors flex items-center gap-1">
+              <Link to={`/company/profile/${(profile.name || "company").toString().trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "company"}`} className="hover:text-primary dark:hover:text-white transition-colors flex items-center gap-1">
                 <ArrowLeft className="h-3 w-3" /> Back to Profile
               </Link>
               <span>/</span>

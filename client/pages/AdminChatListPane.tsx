@@ -220,7 +220,7 @@ export default function AdminChatListPane({ currentConversationId }: AdminChatLi
                       <AvatarFallback className={cn(
                         "text-xs font-semibold",
                         isActive
-                          ? "bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400"
+                          ? "bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-white"
                           : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
                       )}>
                         {otherName.charAt(0).toUpperCase()}
@@ -231,7 +231,7 @@ export default function AdminChatListPane({ currentConversationId }: AdminChatLi
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-0.5">
-                      <span className={cn("text-sm font-semibold truncate", isActive ? "text-blue-700 dark:text-blue-400" : "text-slate-900 dark:text-white")}>
+                      <span className={cn("text-sm font-semibold truncate", isActive ? "text-blue-700 dark:text-white" : "text-slate-900 dark:text-white")}>
                         {otherName}
                       </span>
                       {lastMsg && (

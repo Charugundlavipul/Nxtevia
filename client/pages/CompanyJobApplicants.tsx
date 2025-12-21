@@ -227,7 +227,7 @@ export default function CompanyJobApplicants() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 text-sm text-slate-500 mb-1">
-                <Link to="/company/dashboard" className="hover:text-primary transition-colors">Dashboard</Link>
+                <Link to="/company/dashboard" className="hover:text-primary dark:hover:text-white transition-colors">Dashboard</Link>
                 <span>/</span>
                 <span className="text-slate-900 dark:text-white font-medium">Hiring Pipeline</span>
               </div>
@@ -280,8 +280,8 @@ export default function CompanyJobApplicants() {
                             </td>
                             <td className="px-6 py-4 text-slate-600 dark:text-slate-400">{new Date(a.created_at).toLocaleDateString()}</td>
                             <td className="px-6 py-4 space-x-2">
-                              {a.resume_url ? <a className="text-primary hover:underline" href={a.resume_url} target="_blank" rel="noreferrer">Resume</a> : <span className="text-slate-400">-</span>}
-                              {a.cover_letter_url ? <a className="text-primary hover:underline" href={a.cover_letter_url} target="_blank" rel="noreferrer">Cover</a> : null}
+                              {a.resume_url ? <a className="text-primary dark:text-blue-400 hover:underline" href={a.resume_url} target="_blank" rel="noreferrer">Resume</a> : <span className="text-slate-400">-</span>}
+                              {a.cover_letter_url ? <a className="text-primary dark:text-blue-400 hover:underline" href={a.cover_letter_url} target="_blank" rel="noreferrer">Cover</a> : null}
                             </td>
                             <td className="px-6 py-4"><Badge variant="outline" className="capitalize">{a.status}</Badge></td>
                             <td className="px-6 py-4 text-right">

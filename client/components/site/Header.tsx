@@ -39,9 +39,9 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const baseLink = "text-sm font-medium transition-colors hover:text-primary";
+  const baseLink = "text-sm font-medium transition-colors hover:text-primary dark:hover:text-white";
   const navLink = ({ isActive }: { isActive: boolean }) =>
-    cn(baseLink, isActive ? "text-primary font-semibold" : "text-muted-foreground");
+    cn(baseLink, isActive ? "text-primary dark:text-white font-semibold" : "text-muted-foreground");
 
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -141,9 +141,9 @@ export function Header() {
                 </>
               ) : (
                 <>
-                  <a href="/home#home" className={cn(baseLink, activeSection === "home" && location.pathname === "/home" ? "text-primary font-semibold" : "text-muted-foreground")}>Home</a>
-                  <a href="/home#opportunities" className={cn(baseLink, activeSection === "opportunities" && location.pathname === "/home" ? "text-primary font-semibold" : "text-muted-foreground")}>Opportunities</a>
-                  <a href="/home#how-it-works" className={cn(baseLink, activeSection === "how-it-works" && location.pathname === "/home" ? "text-primary font-semibold" : "text-muted-foreground")}>How it Works</a>
+                  <a href="/home#home" className={cn(baseLink, activeSection === "home" && location.pathname === "/home" ? "text-primary dark:text-white font-semibold" : "text-muted-foreground")}>Home</a>
+                  <a href="/home#opportunities" className={cn(baseLink, activeSection === "opportunities" && location.pathname === "/home" ? "text-primary dark:text-white font-semibold" : "text-muted-foreground")}>Opportunities</a>
+                  <a href="/home#how-it-works" className={cn(baseLink, activeSection === "how-it-works" && location.pathname === "/home" ? "text-primary dark:text-white font-semibold" : "text-muted-foreground")}>How it Works</a>
                   <NavLink to="/about" className={navLink}>About</NavLink>
                 </>
               )}
@@ -172,7 +172,7 @@ export function Header() {
                   <Button variant="ghost" className="relative h-9 w-9 rounded-full">
                     <Avatar className="h-9 w-9 border border-slate-200 dark:border-slate-700">
                       <AvatarImage src="" alt={userInitials} />
-                      <AvatarFallback className="bg-primary/10 text-primary font-medium">{userInitials}</AvatarFallback>
+                      <AvatarFallback className="bg-primary/10 text-primary dark:bg-primary/80 dark:text-white font-medium">{userInitials}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>

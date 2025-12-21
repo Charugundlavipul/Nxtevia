@@ -263,7 +263,7 @@ export default function SeekerDashboard() {
                           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div className="space-y-2 flex-1">
                               <div className="flex items-start justify-between md:justify-start md:gap-4">
-                                <h3 className="font-bold text-lg text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-1">
+                                <h3 className="font-bold text-lg text-slate-900 dark:text-white group-hover:text-primary dark:group-hover:text-white dark:hover:text-white transition-colors line-clamp-1">
                                   {meta?.title || "Opportunity"}
                                 </h3>
                                 <Badge variant="outline" className={cn("capitalize flex items-center gap-1.5 px-2.5 py-0.5 backdrop-blur-sm", getStatusColor(a.status))}>
