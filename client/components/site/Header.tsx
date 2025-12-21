@@ -22,6 +22,7 @@ type Role = "student" | "company" | null;
 export function Header() {
   const [role, setRole] = useState<Role>(null);
   const [authed, setAuthed] = useState(false);
+  const [name, setName] = useState("");
   const { admin: adminAuthed } = useAdminSession();
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
@@ -29,8 +30,10 @@ export function Header() {
   useEffect(() => {
     const a = localStorage.getItem("eaas_authed") === "true";
     const r = (localStorage.getItem("eaas_role") as Role) || null;
+    const n = localStorage.getItem("eaas_name") || "";
     setAuthed(a);
     setRole(r);
+    setName(n);
 
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
@@ -179,7 +182,7 @@ export function Header() {
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{isAdmin ? "Administrator" : (role === "company" ? "Company Account" : "Seeker Account")}</p>
+                      <p className="text-sm font-medium leading-none">{isAdmin ? "Administrator" : (name || (role === "company" ? "Company Account" : "Seeker Account"))}</p>
                       <p className="text-xs leading-none text-muted-foreground">
                         {isAdmin ? "admin@nxtevia.com" : "Signed in"}
                       </p>

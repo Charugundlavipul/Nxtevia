@@ -77,7 +77,7 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center lg:text-left space-y-8"
+          className="text-center lg:text-left space-y-8 relative z-10"
         >
 
 
@@ -130,13 +130,13 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="relative hidden lg:block"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-40 z-0 scale-[0.8] sm:scale-90 pointer-events-none lg:relative lg:opacity-100 lg:scale-100 lg:block lg:inset-auto lg:translate-none lg:pointer-events-auto filter blur-[2px] lg:blur-0"
         >
           <div className="relative w-full aspect-square max-w-lg mx-auto">
             {/* Orbit Animation Container */}
-            <div className="absolute inset-0 rounded-full border border-slate-200 dark:border-slate-800/50"></div>
-            <div className="absolute inset-[15%] rounded-full border border-slate-200 dark:border-slate-800/50"></div>
-            <div className="absolute inset-[30%] rounded-full border border-slate-200 dark:border-slate-800/50"></div>
+            <div className="absolute inset-0 rounded-full border-2 border-slate-300 dark:border-slate-700/50 lg:border lg:border-slate-200 lg:dark:border-slate-800/50"></div>
+            <div className="absolute inset-[15%] rounded-full border-2 border-slate-300 dark:border-slate-700/50 lg:border lg:border-slate-200 lg:dark:border-slate-800/50"></div>
+            <div className="absolute inset-[30%] rounded-full border-2 border-slate-300 dark:border-slate-700/50 lg:border lg:border-slate-200 lg:dark:border-slate-800/50"></div>
 
             {/* Floating Icons */}
             <div className="absolute inset-0 orbit-spin orbit-slow">
@@ -651,20 +651,11 @@ function FeaturedProjects({ companyMode }: { companyMode: boolean }) {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">
+                    <div className="grid grid-cols-2 gap-3 mt-4">
                       <Button asChild className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100">
                         <Link to={applyHref(p.id)}>Apply Now</Link>
                       </Button>
                       <Button asChild variant="outline" className="w-full border-slate-200 dark:border-slate-700">
-                        <Link to={`/seekers/opportunities/${p.id}`}>Details</Link>
-                      </Button>
-                    </div>
-                    {/* Always visible on mobile since hover doesn't work well */}
-                    <div className="grid grid-cols-2 gap-3 lg:hidden">
-                      <Button asChild className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900">
-                        <Link to={applyHref(p.id)}>Apply Now</Link>
-                      </Button>
-                      <Button asChild variant="outline" className="w-full">
                         <Link to={`/seekers/opportunities/${p.id}`}>Details</Link>
                       </Button>
                     </div>
