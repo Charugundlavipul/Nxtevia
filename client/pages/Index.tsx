@@ -125,12 +125,14 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
             </div>
           </div>
         </motion.div>
+      </div>
 
+      <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[300px] sm:w-[400px] pointer-events-none lg:relative lg:w-full lg:inset-auto lg:transform-none lg:pointer-events-auto lg:block">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-40 z-0 scale-[0.8] sm:scale-90 pointer-events-none lg:relative lg:opacity-100 lg:scale-100 lg:block lg:inset-auto lg:translate-none lg:pointer-events-auto filter blur-[2px] lg:blur-0"
+          className="w-full h-full opacity-40 lg:opacity-100 filter blur-[2px] lg:blur-0"
         >
           <div className="relative w-full aspect-square max-w-lg mx-auto">
             {/* Orbit Animation Container */}
