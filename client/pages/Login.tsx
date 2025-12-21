@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { trackEvent } from "@/lib/analytics";
 import { supabase } from "@/lib/supabase";
+import { readPendingSignup } from "@/lib/auth";
 import { BadgeCheck, BellRing, Globe2, ArrowRight, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -102,25 +103,80 @@ export default function Login() {
     return raw;
   };
 
-  const resolveRedirect = (
+  const needsProfileSetup = async (
+    mappedRole: "student" | "company" | "admin",
+    userId: string,
+  ): Promise<boolean> => {
+    if (mappedRole === "admin") return false;
+    try {
+      if (mappedRole === "company") {
+        const { data, error } = await supabase
+          .from("company_profiles")
+          .select("about, industry, size_range, base_location, website, project_types, hiring_goal")
+          .eq("user_id", userId)
+          .maybeSingle();
+        if (error) return false;
+        if (!data) return true;
+        const hasDetails = Boolean(
+          (data.about && data.about.trim()) ||
+          data.industry ||
+          data.size_range ||
+          data.base_location ||
+          data.website ||
+          data.hiring_goal ||
+          (Array.isArray(data.project_types) && data.project_types.length > 0)
+        );
+        return !hasDetails;
+      }
+      const { data, error } = await supabase
+        .from("seeker_profiles")
+        .select("about, skills, country, state, resume_url, portfolio, experiences")
+        .eq("user_id", userId)
+        .maybeSingle();
+      if (error) return false;
+      if (!data) return true;
+      const hasDetails = Boolean(
+        (data.about && data.about.trim()) ||
+        (Array.isArray(data.skills) && data.skills.length > 0) ||
+        data.country ||
+        data.state ||
+        data.resume_url ||
+        (Array.isArray(data.portfolio) && data.portfolio.length > 0) ||
+        (Array.isArray(data.experiences) && data.experiences.length > 0)
+      );
+      return !hasDetails;
+    } catch {
+      return false;
+    }
+  };
+
+  const resolveRedirect = async (
     mappedRole: "student" | "company" | "admin",
     createdProfile: boolean,
+    userId: string,
   ) => {
-    const next = getNextPath();
+    let next = getNextPath();
     if (mappedRole === "admin") return "/admin/profile";
     const onboarding = `/signup/complete?role=${mappedRole}`;
-    const shouldOnboard =
-      createdProfile && (!next || next.startsWith("/signup/verify") || next.startsWith("/login"));
+    const pending = readPendingSignup();
+    const pendingMatches = pending?.role === mappedRole;
+    const needsSetup = createdProfile || pendingMatches || (await needsProfileSetup(mappedRole, userId));
+    if (next?.startsWith("/signup/complete") && !needsSetup) {
+      next = null;
+    }
+    const shouldOnboard = needsSetup && (!next || next.startsWith("/signup/verify") || next.startsWith("/login"));
     if (shouldOnboard) return onboarding;
     if (next) return next;
     return mappedRole === "company" ? "/company/home" : "/seekers/home";
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data }) => {
-      const session = data.session;
-      const user = session?.user;
-      if (!session || !user) return;
+    let handled = false;
+    const handleSession = async (session: any) => {
+      if (!session || handled) return;
+      handled = true;
+      const user = session.user;
+      if (!user) return;
 
       const role = (user.app_metadata as any)?.role || (user.user_metadata as any)?.role || "student";
 
@@ -142,9 +198,21 @@ export default function Login() {
         localStorage.setItem("supabase_access_token", session.access_token);
         localStorage.setItem("supabase_refresh_token", session.refresh_token ?? "");
       }
-      const redirectTo = resolveRedirect(mappedRole, ensured.createdProfile);
+      const redirectTo = await resolveRedirect(mappedRole, ensured.createdProfile, user.id);
       navigate(redirectTo, { replace: true });
+    };
+
+    supabase.auth.getSession().then(({ data }) => {
+      handleSession(data.session);
     });
+    const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+        handleSession(session);
+      }
+    });
+    return () => {
+      subscription?.subscription?.unsubscribe();
+    };
   }, [navigate]);
 
   const setLocalSession = (session: any, mappedRole: "student" | "company" | "admin", name?: string, email?: string, userId?: string) => {
@@ -166,11 +234,13 @@ export default function Login() {
     if (!lastEmail) return;
     setLoading(true);
     try {
+      const pending = readPendingSignup();
+      const next = pending?.role ? `/signup/complete?role=${pending.role}` : "/signup/complete";
       const { error } = await supabase.auth.resend({
         type: "signup",
         email: lastEmail,
         options: {
-          emailRedirectTo: `${window.location.origin}/login`,
+          emailRedirectTo: `${window.location.origin}/login?next=${encodeURIComponent(next)}`,
         },
       });
       if (error) throw error;
@@ -243,7 +313,7 @@ export default function Login() {
       setLocalSession(data.session, mappedRole as any, name, email, userId);
 
       toast({ title: "Signed in", description: "Welcome back!", duration: 2000 });
-      const redirectTo = resolveRedirect(mappedRole, ensured.createdProfile);
+      const redirectTo = await resolveRedirect(mappedRole, ensured.createdProfile, userId);
       navigate(redirectTo);
     } catch (err) {
       toast({ title: "Sign in failed", description: err instanceof Error ? err.message : "Unexpected error", duration: 3500 });
@@ -254,10 +324,14 @@ export default function Login() {
 
   const startSocial = async (provider: "google" | "azure") => {
     trackEvent("signup_start", { provider, role: "auto" });
+    const next = getNextPath();
+    const redirectTo = next
+      ? `${window.location.origin}/login?next=${encodeURIComponent(next)}`
+      : `${window.location.origin}/login`;
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${window.location.origin}/login`,
+        redirectTo,
         queryParams: { access_type: "offline", prompt: "consent" },
       },
     });

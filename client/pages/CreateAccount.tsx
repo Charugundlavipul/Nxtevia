@@ -28,7 +28,8 @@ export default function CreateAccount() {
   const apiRole = role === "student" ? "seeker" : "company";
 
   const connect = async (provider: "google" | "azure") => {
-    const redirectTo = `${window.location.origin}/login`;
+    const next = `/signup/complete?role=${role}`;
+    const redirectTo = `${window.location.origin}/login?next=${encodeURIComponent(next)}`;
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: { redirectTo, queryParams: { access_type: "offline", prompt: "consent" } },
@@ -51,7 +52,8 @@ export default function CreateAccount() {
     if (password !== confirmPassword) { toast({ title: "Passwords do not match", description: "Please make sure both passwords match.", duration: 3000 }); setLoading(false); return; }
     try {
       // Use window.location.origin to ensure it points to the current domain (e.g. Vercel)
-      const emailRedirectTo = `${window.location.origin}/login`;
+      const next = `/signup/complete?role=${role}`;
+      const emailRedirectTo = `${window.location.origin}/login?next=${encodeURIComponent(next)}`;
       const { data, error } = await supabase.auth.signUp({
         email,
         password,

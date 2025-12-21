@@ -17,6 +17,7 @@ export default function SignupVerify() {
   const [checking, setChecking] = useState(false);
   const [pending, setPending] = useState<PendingSignup | null>(() => readPendingSignup());
   const [missingInfo, setMissingInfo] = useState(false);
+  const [needsSignIn, setNeedsSignIn] = useState(false);
 
   useEffect(() => {
     if (pending) return;
@@ -87,6 +88,7 @@ export default function SignupVerify() {
     if (!session) {
       const loginPath = buildSignInPath();
       setChecking(false);
+      setNeedsSignIn(true);
       toast({
         title: "Sign in to continue",
         description: "We couldn't find a signed-in session on this device. If you verified on another device, please sign in to finish setup.",
@@ -99,6 +101,7 @@ export default function SignupVerify() {
       });
       return;
     }
+    setNeedsSignIn(false);
     const isConfirmed = Boolean(session.user.email_confirmed_at || session.user.confirmed_at);
     if (!isConfirmed) {
       setChecking(false);
@@ -147,6 +150,19 @@ export default function SignupVerify() {
                 <p>Keep this tab open while you verify your email.</p>
                 <p>Once confirmed, clicking below will finish your setup.</p>
               </div>
+              {needsSignIn ? (
+                <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                  <div className="font-semibold">Verified on another device?</div>
+                  <p className="mt-1">Sign in on this device to finish setup.</p>
+                  <Button
+                    variant="outline"
+                    className="mt-3 w-full border-amber-300 text-amber-900 hover:bg-amber-100"
+                    onClick={() => navigate(buildSignInPath())}
+                  >
+                    Sign in to continue
+                  </Button>
+                </div>
+              ) : null}
               <Button className="w-full" onClick={refreshStatus} disabled={checking}>
                 {checking ? "Checking status..." : "I verified my email"}
               </Button>
