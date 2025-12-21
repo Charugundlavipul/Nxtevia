@@ -314,14 +314,14 @@ export default function Login() {
         </aside>
 
         {/* Right Side - Login Form */}
-        <div className="flex items-center justify-center bg-slate-50/50 p-6 lg:p-12">
+        <div className="flex items-center justify-center bg-slate-50/50 dark:bg-slate-950 p-6 lg:p-12">
           <div className="w-full max-w-md space-y-8">
             <div className="text-center lg:text-left space-y-2">
-              <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Welcome back</h1>
-              <p className="text-slate-500">Sign in to access your dashboard and opportunities.</p>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Welcome back</h1>
+              <p className="text-slate-500 dark:text-slate-400">Sign in to access your dashboard and opportunities.</p>
             </div>
 
-            <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-xl overflow-hidden">
+            <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/60 dark:border-slate-800 shadow-xl overflow-hidden">
               <CardContent className="p-8 space-y-6">
                 {needsVerification && (
                   <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800">
@@ -342,20 +342,20 @@ export default function Login() {
                 )}
                 <form onSubmit={onSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-slate-700 font-semibold">Email address</Label>
+                    <Label htmlFor="email" className="text-slate-700 dark:text-slate-300 font-semibold">Email address</Label>
                     <Input
                       id="email"
                       name="email"
                       type="email"
                       placeholder="name@example.com"
                       required
-                      className="bg-white border-slate-200 h-11 focus:ring-2 focus:ring-blue-500/20"
+                      className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-11 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white"
                     />
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="password" className="text-slate-700 font-semibold">Password</Label>
-                      <Link to="#" className="text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline">
+                      <Label htmlFor="password" className="text-slate-700 dark:text-slate-300 font-semibold">Password</Label>
+                      <Link to="#" className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline">
                         Forgot password?
                       </Link>
                     </div>
@@ -365,7 +365,7 @@ export default function Login() {
                       type="password"
                       placeholder="••••••••"
                       required
-                      className="bg-white border-slate-200 h-11 focus:ring-2 focus:ring-blue-500/20"
+                      className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-11 focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white"
                     />
                   </div>
 
@@ -380,34 +380,34 @@ export default function Login() {
 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-slate-200" />
+                    <span className="w-full border-t border-slate-200 dark:border-slate-800" />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white px-2 text-slate-500">Or continue with</span>
+                    <span className="bg-white dark:bg-slate-900 px-2 text-slate-500 dark:text-slate-400">Or continue with</span>
                   </div>
                 </div>
 
                 <div className="grid gap-3">
                   <Button
                     variant="outline"
-                    className="w-full h-11 justify-start bg-white hover:bg-slate-50 border-slate-200 text-slate-700 font-medium"
+                    className="w-full h-11 justify-start bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-medium"
                     onClick={() => startSocial("google")}
                   >
                     <GoogleIcon /> <span className="ml-3">Google</span>
                   </Button>
                   <Button
                     variant="outline"
-                    className="w-full h-11 justify-start bg-white hover:bg-slate-50 border-slate-200 text-slate-700 font-medium"
+                    className="w-full h-11 justify-start bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-medium"
                     onClick={() => startSocial("azure")}
                   >
                     <MicrosoftIcon /> <span className="ml-3">Microsoft</span>
                   </Button>
                 </div>
               </CardContent>
-              <div className="bg-slate-50/50 p-4 text-center border-t border-slate-100">
-                <p className="text-sm text-slate-600">
+              <div className="bg-slate-50/50 dark:bg-slate-900/50 p-4 text-center border-t border-slate-100 dark:border-slate-800">
+                <p className="text-sm text-slate-600 dark:text-slate-400">
                   Don't have an account?{" "}
-                  <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-700 hover:underline">
+                  <Link to="/signup" className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline">
                     Get started
                   </Link>
                 </p>

@@ -50,7 +50,8 @@ export default function CreateAccount() {
     if (password.length < 6) { toast({ title: "Password too short", description: "Use at least 6 characters.", duration: 3000 }); setLoading(false); return; }
     if (password !== confirmPassword) { toast({ title: "Passwords do not match", description: "Please make sure both passwords match.", duration: 3000 }); setLoading(false); return; }
     try {
-      const emailRedirectTo = `${window.location.origin}/signup/verify`;
+      // Use window.location.origin to ensure it points to the current domain (e.g. Vercel)
+      const emailRedirectTo = `${window.location.origin}/login`;
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -81,24 +82,24 @@ export default function CreateAccount() {
   return (
     <Layout>
       <Seo title="Create your account - NxteVia" description="Sign up with Google, Microsoft, or email." canonical={window.location.href} />
-      <div className="min-h-screen bg-slate-50/50 flex items-center justify-center py-12 px-4">
+      <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 flex items-center justify-center py-12 px-4">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Create your account</h1>
-            <p className="text-slate-500">Join NxteVia to connect with opportunities.</p>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Create your account</h1>
+            <p className="text-slate-500 dark:text-slate-400">Join NxteVia to connect with opportunities.</p>
           </div>
 
-          <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-xl">
+          <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/60 dark:border-slate-800 shadow-xl">
             <CardContent className="p-8 space-y-6">
 
-              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100/50 rounded-xl border border-slate-200">
+              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100/50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800">
                 <button
                   onClick={() => setRole("student")}
                   className={cn(
                     "flex items-center justify-center gap-2 py-2.5 text-sm font-medium rounded-lg transition-all",
                     role === "student"
-                      ? "bg-white text-blue-600 shadow-sm ring-1 ring-black/5"
-                      : "text-slate-600 hover:bg-slate-200/50"
+                      ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm ring-1 ring-black/5 dark:ring-white/10"
+                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50"
                   )}
                 >
                   <User className="h-4 w-4" />
@@ -109,8 +110,8 @@ export default function CreateAccount() {
                   className={cn(
                     "flex items-center justify-center gap-2 py-2.5 text-sm font-medium rounded-lg transition-all",
                     role === "company"
-                      ? "bg-white text-blue-600 shadow-sm ring-1 ring-black/5"
-                      : "text-slate-600 hover:bg-slate-200/50"
+                      ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm ring-1 ring-black/5 dark:ring-white/10"
+                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50"
                   )}
                 >
                   <Building2 className="h-4 w-4" />
@@ -119,20 +120,20 @@ export default function CreateAccount() {
               </div>
 
               <div className="space-y-3">
-                <Button variant="outline" size="lg" className="w-full justify-start h-12 bg-white hover:bg-slate-50 border-slate-200 text-slate-700 font-medium" onClick={() => connect("google")}>
+                <Button variant="outline" size="lg" className="w-full justify-start h-12 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-medium" onClick={() => connect("google")}>
                   <GoogleIcon /> <span className="ml-3">Sign up with Google</span>
                 </Button>
-                <Button variant="outline" size="lg" className="w-full justify-start h-12 bg-white hover:bg-slate-50 border-slate-200 text-slate-700 font-medium" onClick={() => connect("azure")}>
+                <Button variant="outline" size="lg" className="w-full justify-start h-12 bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-medium" onClick={() => connect("azure")}>
                   <MicrosoftIcon /> <span className="ml-3">Sign up with Microsoft</span>
                 </Button>
               </div>
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t border-slate-200" />
+                  <span className="w-full border-t border-slate-200 dark:border-slate-800" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-white px-2 text-slate-500">Or continue with email</span>
+                  <span className="bg-white dark:bg-slate-900 px-2 text-slate-500 dark:text-slate-400">Or continue with email</span>
                 </div>
               </div>
 
@@ -140,7 +141,7 @@ export default function CreateAccount() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="w-full h-12 border-dashed border-slate-300 text-slate-600 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50/50"
+                  className="w-full h-12 border-dashed border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50/50 dark:hover:bg-blue-900/20"
                   onClick={() => setManualMode(true)}
                 >
                   <Mail className="mr-2 h-4 w-4" /> Sign up with email
@@ -148,43 +149,43 @@ export default function CreateAccount() {
               ) : (
                 <form onSubmit={handleManual} className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="space-y-2">
-                    <Label className="text-sm font-semibold text-slate-700">{role === "company" ? "Company Name" : "Full Name"}</Label>
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">{role === "company" ? "Company Name" : "Full Name"}</Label>
                     <Input
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder={role === "company" ? "Acme Inc." : "John Doe"}
-                      className="bg-white border-slate-200 h-10"
+                      className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-10 text-slate-900 dark:text-white"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-sm font-semibold text-slate-700">Email</Label>
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Email</Label>
                     <Input
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       type="email"
                       placeholder={role === "company" ? "contact@company.com" : "name@example.com"}
-                      className="bg-white border-slate-200 h-10"
+                      className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-10 text-slate-900 dark:text-white"
                     />
                   </div>
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Password</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Password</Label>
                       <Input
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         type="password"
                         placeholder="••••••••"
-                        className="bg-white border-slate-200 h-10"
+                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-10 text-slate-900 dark:text-white"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Confirm</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Confirm</Label>
                       <Input
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         type="password"
                         placeholder="••••••••"
-                        className="bg-white border-slate-200 h-10"
+                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-10 text-slate-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -200,7 +201,7 @@ export default function CreateAccount() {
                       variant="ghost"
                       type="button"
                       onClick={() => setManualMode(false)}
-                      className="h-11 rounded-xl text-slate-600 hover:bg-slate-100"
+                      className="h-11 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
                     >
                       Cancel
                     </Button>
@@ -208,9 +209,9 @@ export default function CreateAccount() {
                 </form>
               )}
 
-              <div className="text-center text-sm text-slate-500">
+              <div className="text-center text-sm text-slate-500 dark:text-slate-400">
                 Already have an account?{" "}
-                <Link to="/login" className="font-medium text-blue-600 hover:text-blue-700 hover:underline">
+                <Link to="/login" className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:underline">
                   Sign in
                 </Link>
               </div>
