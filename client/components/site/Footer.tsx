@@ -28,7 +28,7 @@ export function Footer() {
               />
             </div>
             <p className="text-sm text-slate-400 max-w-xs leading-relaxed">
-              Empowering every individual to grow through real-world experience
+              A web-based platform where seekers connect with companies to gain real-world experience and build their resumes.
             </p>
             <div className="flex gap-4 pt-2">
               <SocialLink href="#" icon={<Linkedin className="h-4 w-4" />} label="LinkedIn" />

@@ -192,7 +192,7 @@ function Mission() {
         <div className="max-w-3xl mx-auto text-center mb-12">
           <Badge variant="outline" className="mb-4 border-primary/20 text-primary bg-primary/5">Our Vision</Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">
-            A web-based platform where seekers connect with companies to gain real-world experience and build their resumes.
+            Empowering every individual to grow through real-world experience.
           </h2>
 
         </div>
