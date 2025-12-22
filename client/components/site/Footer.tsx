@@ -62,7 +62,7 @@ export function Footer() {
               <li><FooterLink to="/about">About Us</FooterLink></li>
               <li><FooterLink to="/contact">Contact</FooterLink></li>
               <li><FooterLink to={authed && role === "company" ? "/company/faq" : "/#faq"}>FAQ</FooterLink></li>
-              <li><FooterLink to="/blog">Blog</FooterLink></li>
+
             </ul>
           </div>
 
@@ -71,7 +71,7 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li><FooterLink to="/privacy">Privacy Policy</FooterLink></li>
               <li><FooterLink to="/terms">Terms of Service</FooterLink></li>
-              <li><FooterLink to="/cookies">Cookie Policy</FooterLink></li>
+
             </ul>
           </div>
         </div>
@@ -82,7 +82,7 @@ export function Footer() {
           <div className="flex gap-6">
             <a href="#" className="hover:text-slate-300 transition-colors">Privacy</a>
             <a href="#" className="hover:text-slate-300 transition-colors">Terms</a>
-            <a href="#" className="hover:text-slate-300 transition-colors">Sitemap</a>
+
           </div>
         </div>
       </div>

@@ -14,6 +14,7 @@ import {
   useParams,
 } from "react-router-dom";
 import Index from "./pages/Index";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -67,12 +68,11 @@ import {
   CA,
   Blog,
   BlogPost,
-  About,
-  Contact,
-  FAQ,
+
   Privacy,
   Terms,
 } from "./pages/StaticPages";
+import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import AuthGate from "@/components/AuthGate";
 import Profile from "./pages/Profile";
@@ -273,7 +273,7 @@ const App = () => (
               <Route path="/blog/:post" element={<BlogPost />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/faq" element={<FAQ />} />
+
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/admin" element={<AdminIndex />} />

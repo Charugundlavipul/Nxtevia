@@ -192,11 +192,9 @@ function Mission() {
         <div className="max-w-3xl mx-auto text-center mb-12">
           <Badge variant="outline" className="mb-4 border-primary/20 text-primary bg-primary/5">Our Vision</Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">
-            Empowering every individual to grow through real-world experience
+            A web-based platform where seekers connect with companies to gain real-world experience and build their resumes.
           </h2>
-          <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-            We're bridging the gap between education and employment by connecting ambitious talent with forward-thinking companies.
-          </p>
+
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
@@ -681,6 +679,10 @@ function FeaturedProjects({ companyMode }: { companyMode: boolean }) {
 function FAQ({ companyMode }: { companyMode?: boolean }) {
   const baseFaqs = [
     {
+      q: "Who can join NxteVia?",
+      a: "Anyone can join NxteVia. Whether you’re a student, a newcomer to a country, or a professional exploring a new field — NxteVia helps you connect with organizations seeking emerging talent. Employers can also post opportunities to find motivated individuals eager to learn and contribute.",
+    },
+    {
       q: "What is NxteVia?",
       a: "NxteVia is a platform that connects students, newcomers to a country, and career changers with real-world work opportunities to help them gain hands-on experience. Each opportunity is offered by a verified company on NxteVia, so your skills and contributions hold real value when showcasing them to future employers.",
     },
@@ -698,7 +700,7 @@ function FAQ({ companyMode }: { companyMode?: boolean }) {
     },
     {
       q: "Is NxteVia available in my country?",
-      a: "NxteVia is expanding globally, starting with opportunities in Canada, United States of America and India. As we grow, more regions will be added — so stay tuned!",
+      a: "NxteVia is expanding globally, starting with opportunities in Canada and India. As we grow, more regions will be added — so stay tuned!",
     },
   ];
 

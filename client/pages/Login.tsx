@@ -366,7 +366,7 @@ export default function Login() {
               <span className="text-white/80">real-world opportunities</span>
             </h2>
             <p className="mt-6 text-lg text-white/90 max-w-md leading-relaxed">
-              Join thousands of students and companies building the future of work together. Find opportunities, gain experience, and get hired.
+              Find opportunities, build the experience you need and get noticed by future employers
             </p>
           </div>
 
@@ -387,6 +387,15 @@ export default function Login() {
               <div>
                 <h3 className="font-semibold text-white">Global Opportunities</h3>
                 <p className="text-sm text-white/80">Work with companies from around the world</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 transition-transform hover:scale-[1.02]">
+              <div className="bg-white/20 p-2.5 rounded-xl">
+                <BellRing className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-white">Deadline alerts and updates</h3>
+                <p className="text-sm text-white/80">Stay informed about application status</p>
               </div>
             </div>
           </div>
