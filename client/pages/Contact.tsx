@@ -71,7 +71,7 @@ export default function Contact() {
                                             <div>
                                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Email Us</h3>
                                                 <p className="text-slate-500 dark:text-slate-400 mb-2">Our friendly team is here to help.</p>
-                                                <a href="mailto:hello@nxtevia.com" className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline text-lg">hello@nxtevia.com</a>
+                                                <a href="mailto:support@NxteVia.com" className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline text-lg">support@NxteVia.com</a>
                                             </div>
                                         </CardContent>
                                     </Card>
@@ -85,7 +85,7 @@ export default function Contact() {
                                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Location</h3>
                                                 <p className="text-slate-500 dark:text-slate-400 mb-2">Come say hello at our office HQ.</p>
                                                 <p className="text-slate-900 dark:text-slate-200 font-medium text-lg">
-                                                    Buffalo, New York <br className="hidden md:block" /> United States
+                                                    Toronto, Ontario, Canada
                                                 </p>
                                             </div>
                                         </CardContent>

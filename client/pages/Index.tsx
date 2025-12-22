@@ -89,7 +89,7 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
           </h1>
 
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-            Join thousands of students and companies building the future of work. Gain verifiable experience, build your portfolio, and get hired.
+            Join students and companies building the future of work. Gain verifiable experience, build your portfolio, and get hired.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
@@ -679,12 +679,12 @@ function FeaturedProjects({ companyMode }: { companyMode: boolean }) {
 function FAQ({ companyMode }: { companyMode?: boolean }) {
   const baseFaqs = [
     {
-      q: "Who can join NxteVia?",
-      a: "Anyone can join NxteVia. Whether you’re a student, a newcomer to a country, or a professional exploring a new field — NxteVia helps you connect with organizations seeking emerging talent. Employers can also post opportunities to find motivated individuals eager to learn and contribute.",
-    },
-    {
       q: "What is NxteVia?",
       a: "NxteVia is a platform that connects students, newcomers to a country, and career changers with real-world work opportunities to help them gain hands-on experience. Each opportunity is offered by a verified company on NxteVia, so your skills and contributions hold real value when showcasing them to future employers.",
+    },
+    {
+      q: "Who can join NxteVia?",
+      a: "Anyone can join NxteVia. Whether you’re a student, a newcomer to a country, or a professional exploring a new field — NxteVia helps you connect with organizations seeking emerging talent. Employers can also post opportunities to find motivated individuals eager to learn and contribute.",
     },
     {
       q: "Are the opportunities paid?",

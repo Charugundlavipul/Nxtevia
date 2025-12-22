@@ -61,7 +61,7 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li><FooterLink to="/about">About Us</FooterLink></li>
               <li><FooterLink to="/contact">Contact</FooterLink></li>
-              <li><FooterLink to={authed && role === "company" ? "/company/faq" : "/#faq"}>FAQ</FooterLink></li>
+              <li><FooterLink to={authed ? (role === "company" ? "/company/home#faq" : "/seekers/home#faq") : "/home#faq"}>FAQ</FooterLink></li>
 
             </ul>
           </div>

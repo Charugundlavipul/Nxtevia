@@ -92,7 +92,7 @@ export function Header() {
     }
   };
 
-  const userInitials = isAdmin ? "A" : ((role ?? "").slice(0, 1).toUpperCase() || "U");
+  const userInitials = isAdmin ? "A" : (name ? name.slice(0, 1).toUpperCase() : ((role ?? "").slice(0, 1).toUpperCase() || "U"));
 
   return (
     <header

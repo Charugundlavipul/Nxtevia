@@ -95,6 +95,7 @@ import { RoleGate } from "@/components/RoleGate";
 import { useAdminSession } from "@/hooks/useAdminSession";
 import { ensureSupabaseSession } from "@/lib/auth";
 import { PresenceProvider } from "@/lib/presence";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -145,6 +146,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTop />
           <GlobalAuthGuard>
             <Routes>
               <Route path="/" element={<Navigate to="/home" replace />} />
