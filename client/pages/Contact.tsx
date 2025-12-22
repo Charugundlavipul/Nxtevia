@@ -5,10 +5,60 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Send, MessageSquare } from "lucide-react";
+import { Mail, MapPin, Send, MessageSquare, Loader2 } from "lucide-react";
 import Layout from "@/components/Layout";
+import { useState, type FormEvent } from "react";
+import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
 
 export default function Contact() {
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        subject: "",
+        message: ""
+    });
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            // Invoke Supabase Edge Function to send email
+            const { data, error } = await supabase.functions.invoke('send-contact-email', {
+                body: { record: formData }
+            });
+
+            if (error) throw error;
+
+            toast.success("Message sent successfully!", {
+                description: "We'll get back to you as soon as possible."
+            });
+
+            setFormData({ name: "", email: "", subject: "", message: "" });
+        } catch (error: any) {
+            console.error('Error submitting contact form:', error);
+
+            // Helpful error for development if function is missing
+            if (error.message?.includes("FunctionsFetchError")) {
+                toast.error("System Error", {
+                    description: "The email service is not currently active. Please try again later."
+                });
+            } else {
+                toast.error("Failed to send message", {
+                    description: error.message || "Please try again later or email us directly."
+                });
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
+    };
+
     return (
         <Layout>
             <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-300">
@@ -105,30 +155,64 @@ export default function Contact() {
 
                                     <CardContent className="p-8 md:p-10">
                                         <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8">Send us a message</h2>
-                                        <form className="space-y-6">
+                                        <form onSubmit={handleSubmit} className="space-y-6">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                 <div className="space-y-2">
                                                     <Label htmlFor="name">Full Name</Label>
-                                                    <Input id="name" placeholder="John Doe" className="bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700" />
+                                                    <Input
+                                                        id="name"
+                                                        value={formData.name}
+                                                        onChange={handleChange}
+                                                        placeholder="John Doe"
+                                                        className="bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700"
+                                                        required
+                                                    />
                                                 </div>
                                                 <div className="space-y-2">
                                                     <Label htmlFor="email">Email Address</Label>
-                                                    <Input id="email" type="email" placeholder="john@example.com" className="bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700" />
+                                                    <Input
+                                                        id="email"
+                                                        type="email"
+                                                        value={formData.email}
+                                                        onChange={handleChange}
+                                                        placeholder="john@example.com"
+                                                        className="bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700"
+                                                        required
+                                                    />
                                                 </div>
                                             </div>
 
                                             <div className="space-y-2">
                                                 <Label htmlFor="subject">Subject</Label>
-                                                <Input id="subject" placeholder="How can we help?" className="bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700" />
+                                                <Input
+                                                    id="subject"
+                                                    value={formData.subject}
+                                                    onChange={handleChange}
+                                                    placeholder="How can we help?"
+                                                    className="bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700"
+                                                    required
+                                                />
                                             </div>
 
                                             <div className="space-y-2">
                                                 <Label htmlFor="message">Message</Label>
-                                                <Textarea id="message" placeholder="Tell us about your project..." className="min-h-[150px] bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 resize-none" />
+                                                <Textarea
+                                                    id="message"
+                                                    value={formData.message}
+                                                    onChange={handleChange}
+                                                    placeholder="Tell us about your project..."
+                                                    className="min-h-[150px] bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 resize-none"
+                                                    required
+                                                />
                                             </div>
 
-                                            <Button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold h-12 text-lg shadow-lg hover:shadow-indigo-500/25 transition-all">
-                                                <Send className="w-4 h-4 mr-2" /> Send Message
+                                            <Button
+                                                type="submit"
+                                                disabled={loading}
+                                                className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold h-12 text-lg shadow-lg hover:shadow-indigo-500/25 transition-all"
+                                            >
+                                                {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Send className="w-4 h-4 mr-2" />}
+                                                {loading ? "Sending..." : "Send Message"}
                                             </Button>
                                         </form>
                                     </CardContent>
