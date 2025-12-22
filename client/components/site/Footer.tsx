@@ -22,7 +22,7 @@ export function Footer() {
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2">
               <img
-                src="https://cdn.builder.io/api/v1/image/assets%2F92b357447c84469e810f664e6a70c853%2F5593aaa912284d02ba58fbc881de80a0?format=webp&width=240"
+                src="/assets/nxtevia-logo-dark.webp"
                 alt="NxteVia"
                 className="h-8 w-auto"
               />

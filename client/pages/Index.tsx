@@ -158,12 +158,12 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-32 h-32 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 dark:border-slate-700 flex items-center justify-center">
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2F92b357447c84469e810f664e6a70c853%2F38cb528327ce42aaad0ef44c24b7d60a?format=webp&width=240"
+                  src="/assets/nxtevia-logo-light.webp"
                   alt="NxteVia"
                   className="w-20 h-auto dark:hidden"
                 />
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2F92b357447c84469e810f664e6a70c853%2F5593aaa912284d02ba58fbc881de80a0?format=webp&width=240"
+                  src="/assets/nxtevia-logo-dark.webp"
                   alt="NxteVia"
                   className="w-20 h-auto hidden dark:block"
                 />
@@ -850,7 +850,7 @@ export default function HomePage() {
   return (
     <Layout>
       <Seo
-        title="NxteVia – Your pathway to what's next"
+        title="NxteVia"
         description="Gain real project experience you can showcase on your CV—at home or in a new country."
         canonical={window.location.href}
       />

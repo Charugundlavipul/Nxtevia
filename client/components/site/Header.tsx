@@ -108,7 +108,7 @@ export function Header() {
           <Link to={authed ? (role === "company" ? "/company/home" : "/seekers/home") : "/home"} className="flex items-center gap-2 transition-opacity hover:opacity-90">
             {/* Light mode logo */}
             <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F92b357447c84469e810f664e6a70c853%2F38cb528327ce42aaad0ef44c24b7d60a?format=webp&width=240"
+              src="/assets/nxtevia-logo-light.webp"
               alt="NxteVia"
               className="h-8 w-auto block dark:hidden"
               fetchPriority="high"
@@ -116,7 +116,7 @@ export function Header() {
             />
             {/* Dark mode logo */}
             <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F92b357447c84469e810f664e6a70c853%2F5593aaa912284d02ba58fbc881de80a0?format=webp&width=240"
+              src="/assets/nxtevia-logo-dark.webp"
               alt="NxteVia"
               className="h-8 w-auto hidden dark:block"
               decoding="async"

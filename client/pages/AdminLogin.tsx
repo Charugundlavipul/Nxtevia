@@ -64,7 +64,7 @@ export default function AdminLogin() {
           <div className="container flex h-16 items-center justify-between">
             <Link to="/home" className="flex items-center gap-2">
               <img
-                src="https://cdn.builder.io/api/v1/image/assets%2F92b357447c84469e810f664e6a70c853%2F38cb528327ce42aaad0ef44c24b7d60a?format=webp&width=240"
+                src="/assets/nxtevia-logo-light.webp"
                 alt="NxteVia"
                 className="h-8 w-auto"
                 fetchPriority="high"

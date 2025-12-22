@@ -402,7 +402,7 @@ export const Students = () => (
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-blue-500/20 rounded-3xl blur-2xl transform -rotate-3"></div>
             <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F92b357447c84469e810f664e6a70c853%2F6b15eb6b61ee43e4a34ed444fdfa942d?format=webp&width=1200"
+              src="/assets/static-1.webp"
               alt="Student showcasing verifiable credential"
               className="relative w-full h-[500px] object-cover rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800"
             />
@@ -426,7 +426,7 @@ export const Companies = () => (
           <div className="order-2 md:order-1 relative">
             <div className="absolute inset-0 bg-gradient-to-bl from-indigo-500/20 to-purple-500/20 rounded-3xl blur-2xl transform rotate-3"></div>
             <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F92b357447c84469e810f664e6a70c853%2F7027146bff9d41e88200bf79e21206a0?format=webp&width=1200"
+              src="/assets/static-2.webp"
               alt="Hiring meeting success"
               className="relative w-full h-[500px] object-cover rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800"
             />
