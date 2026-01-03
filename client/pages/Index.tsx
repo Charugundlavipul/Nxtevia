@@ -141,16 +141,16 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
             {/* Floating Icons */}
             <div className="absolute inset-0 orbit-spin orbit-slow">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 p-4 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800">
-                <Briefcase className="h-8 w-8 text-primary" />
+                <Briefcase className="h-8 w-8 text-primary dark:text-purple-500" />
               </div>
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 p-4 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800">
-                <GraduationCap className="h-8 w-8 text-primary" />
+                <GraduationCap className="h-8 w-8 text-primary dark:text-purple-500" />
               </div>
               <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 p-4 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800">
-                <Globe className="h-8 w-8 text-primary" />
+                <Globe className="h-8 w-8 text-primary dark:text-purple-500" />
               </div>
               <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 p-4 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800">
-                <Building2 className="h-8 w-8 text-purple-500" />
+                <Building2 className="h-8 w-8 text-primary dark:text-purple-500" />
               </div>
             </div>
 
@@ -186,11 +186,16 @@ function Mission() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6 }}
-      className="py-16 bg-white dark:bg-slate-900 transition-colors duration-300"
+      className="py-16 bg-slate-50 dark:bg-slate-950 transition-colors duration-300"
     >
       <div className="container">
         <div className="max-w-3xl mx-auto text-center mb-12">
-          <Badge variant="outline" className="mb-4 border-primary/20 text-primary bg-primary/5">Our Vision</Badge>
+          <Badge
+            variant="outline"
+            className="mb-4 border-primary/20 text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/10"
+          >
+            Our Vision
+          </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">
             Empowering every individual to grow through real-world experience.
           </h2>
@@ -198,7 +203,7 @@ function Mission() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <Card className="relative overflow-hidden bg-slate-50 dark:bg-slate-950 border-slate-100 dark:border-slate-800">
+          <Card className="relative overflow-hidden bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
             <div className="absolute inset-0">
               <img
                 src={seekerBg}
@@ -208,7 +213,7 @@ function Mission() {
                 loading="lazy"
                 decoding="async"
               />
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-slate-50/80 to-transparent dark:from-slate-950 dark:via-slate-950/80 dark:to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-slate-50/80 to-transparent dark:from-slate-900 dark:via-slate-900/80 dark:to-transparent" />
             </div>
             <CardContent className="relative p-8">
               <div className="h-12 w-12 bg-primary/10 dark:bg-primary/20 rounded-xl flex items-center justify-center mb-6">
@@ -232,7 +237,7 @@ function Mission() {
             </CardContent>
           </Card>
 
-          <Card className="relative overflow-hidden bg-slate-50 dark:bg-slate-950 border-slate-100 dark:border-slate-800">
+          <Card className="relative overflow-hidden bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800">
             <div className="absolute inset-0">
               <img
                 src={companyBg}
@@ -242,7 +247,7 @@ function Mission() {
                 loading="lazy"
                 decoding="async"
               />
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-slate-50/80 to-transparent dark:from-slate-950 dark:via-slate-950/80 dark:to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-slate-50/80 to-transparent dark:from-slate-900 dark:via-slate-900/80 dark:to-transparent" />
             </div>
             <CardContent className="relative p-8">
               <div className="h-12 w-12 bg-primary/10 dark:bg-primary/20 rounded-xl flex items-center justify-center mb-6">
@@ -277,22 +282,22 @@ function Highlights() {
       t: "Find Opportunities",
       d: "Discover short-term opportunities matched to your skills and gain real-world experience.",
       i: Compass,
-      c: "text-primary",
-      b: "bg-primary/10 dark:bg-primary/20"
+      c: "text-indigo-600 dark:text-indigo-400",
+      b: "bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10"
     },
     {
       t: "Showcase Skills",
       d: "Utilize your skills by working on real opportunities and stand out to potential employers.",
       i: Sparkles,
-      c: "text-purple-500",
-      b: "bg-purple-50 dark:bg-purple-900/10"
+      c: "text-indigo-600 dark:text-indigo-400",
+      b: "bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10"
     },
     {
       t: "Get Hired",
       d: "Turn experience into opportunity - get noticed and land your next role.",
       i: Rocket,
-      c: "text-orange-500",
-      b: "bg-orange-50 dark:bg-orange-900/10"
+      c: "text-indigo-600 dark:text-indigo-400",
+      b: "bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10"
     },
   ];
   return (
@@ -332,7 +337,7 @@ function HowItWorks({ seekerMode, companyMode }: { seekerMode: boolean; companyM
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6 }}
         id="how-it-works"
-        className="py-16 bg-white dark:bg-slate-900 transition-colors duration-300 scroll-mt-24"
+        className="py-16 bg-white dark:bg-slate-950 transition-colors duration-300 scroll-mt-24"
       >
         <div className="container">
           <div className="text-center mb-12">
@@ -342,7 +347,7 @@ function HowItWorks({ seekerMode, companyMode }: { seekerMode: boolean; companyM
 
           <div className="relative max-w-5xl mx-auto">
             {/* Connecting Line (Desktop) */}
-            <div className="absolute top-24 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-slate-200 via-primary/20 to-slate-200 dark:from-slate-800 dark:via-primary/20 dark:to-slate-800 hidden md:block" />
+            {/* Removed connecting line for cleaner dark mode styling */}
 
             <div className="grid md:grid-cols-3 gap-8 relative z-10">
               {[
@@ -370,18 +375,18 @@ function HowItWorks({ seekerMode, companyMode }: { seekerMode: boolean; companyM
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="group relative bg-white dark:bg-slate-950 p-8 pt-12 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center"
+                  className="group relative bg-white dark:bg-slate-950/70 p-8 pt-12 rounded-2xl shadow-sm dark:shadow-lg dark:shadow-slate-950/30 border border-slate-200 dark:border-slate-800 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center"
                   style={{ animationDelay: `${item.delay}ms` }}
                 >
                   <div className="absolute -top-6 left-1/2 -translate-x-1/2">
-                    <div className="h-12 w-12 bg-white dark:bg-slate-950 rounded-full flex items-center justify-center border-4 border-slate-50 dark:border-slate-900 shadow-sm relative z-10">
-                      <div className="h-8 w-8 bg-primary/10 text-primary rounded-full flex items-center justify-center font-bold text-sm">
+                    <div className="h-12 w-12 bg-white dark:bg-slate-950 rounded-full flex items-center justify-center border-4 border-slate-50 dark:border-slate-800 shadow-sm relative z-10">
+                      <div className="h-8 w-8 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 rounded-full flex items-center justify-center font-bold text-sm">
                         {i + 1}
                       </div>
                     </div>
                   </div>
 
-                  <div className="h-16 w-16 mx-auto bg-slate-50 dark:bg-slate-900/50 text-primary rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-primary/5 transition-all duration-300">
+                  <div className="h-16 w-16 mx-auto bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-indigo-100/80 dark:group-hover:bg-indigo-900/20 transition-all duration-300">
                     <item.icon className="h-8 w-8" />
                   </div>
 
@@ -537,10 +542,10 @@ function FeaturedProjects({ companyMode }: { companyMode: boolean }) {
   return (
     <section
       id="opportunities"
-      className="relative py-24 bg-slate-50 dark:bg-slate-900 overflow-hidden"
+      className="relative py-24 bg-slate-50 dark:bg-slate-950 overflow-hidden"
     >
       {/* Background Decor */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none dark:hidden">
         <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 dark:bg-primary/10 rounded-full blur-[100px]" />
         <div className="absolute bottom-0 right-0 translate-x-1/3 translate-y-1/3 w-[600px] h-[600px] bg-purple-500/5 dark:bg-purple-500/10 rounded-full blur-[100px]" />
       </div>
@@ -548,7 +553,10 @@ function FeaturedProjects({ companyMode }: { companyMode: boolean }) {
       <div className="container relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div className="max-w-2xl">
-            <Badge variant="outline" className="mb-4 border-primary/20 text-primary bg-primary/5">
+            <Badge
+              variant="outline"
+              className="mb-4 border-primary/20 text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/10"
+            >
               Curated Opportunities
             </Badge>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-white mb-6">
@@ -568,7 +576,7 @@ function FeaturedProjects({ companyMode }: { companyMode: boolean }) {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {loading ? (
             [1, 2, 3].map((i) => (
-              <Card key={i} className="h-full bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800">
+              <Card key={i} className="h-full bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
                 <CardContent className="p-8 space-y-6">
                   <div className="flex justify-between">
                     <div className="h-6 w-24 bg-slate-100 dark:bg-slate-800 rounded animate-pulse" />
@@ -590,7 +598,7 @@ function FeaturedProjects({ companyMode }: { companyMode: boolean }) {
             opportunities.map((p) => (
               <Card
                 key={p.id}
-                className="group relative h-full flex flex-col overflow-hidden bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1"
+                className="group relative h-full flex flex-col overflow-hidden bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1"
               >
                 {/* Gradient Top Line */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
@@ -654,7 +662,7 @@ function FeaturedProjects({ companyMode }: { companyMode: boolean }) {
                         <Link to={applyHref(p.id)}>Apply Now</Link>
                       </Button>
                       <Button asChild variant="outline" className="w-full border-slate-200 dark:border-slate-700">
-                        <Link to={`/seekers/opportunities/${p.id}`}>Details</Link>
+                        <Link to={`/opportunities/${p.id}`}>Details</Link>
                       </Button>
                     </div>
                   </div>
@@ -775,7 +783,7 @@ function FAQ({ companyMode }: { companyMode?: boolean }) {
       <div className="mt-12 text-center">
         <p className="text-slate-600 dark:text-slate-400">
           Still have questions?{" "}
-          <Link className="text-primary font-medium hover:underline" to="/contact">
+          <Link className="text-primary dark:text-indigo-300 font-medium hover:underline" to="/contact">
             Contact our support team
           </Link>
         </p>

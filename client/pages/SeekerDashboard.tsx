@@ -12,6 +12,7 @@ import * as React from "react";
 import { FileText, Clock, CheckCircle, XCircle, AlertCircle, ArrowRight, LayoutDashboard, Briefcase, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { SavedOpportunitiesSection } from "@/components/SavedOpportunitiesSection";
 
 type OppMap = Record<string, { title: string; summary?: string }>;
 
@@ -214,6 +215,8 @@ export default function SeekerDashboard() {
               </Button>
             </div>
           </motion.div>
+
+          <SavedOpportunitiesSection />
 
           {loading ? (
             <div className="space-y-4">

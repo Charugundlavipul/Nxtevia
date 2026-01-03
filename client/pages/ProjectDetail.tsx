@@ -12,15 +12,17 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { fetchOpportunityPublic, type Opportunity } from "@/lib/opportunities";
 import { checkIfApplied } from "@/lib/applications";
 import { supabase } from "@/lib/supabase";
-import { Clock, MapPin, Briefcase, DollarSign, CheckCircle2, ArrowRight, Building2, Calendar, Share2, Bookmark, ChevronLeft } from "lucide-react";
+import { Clock, MapPin, Briefcase, DollarSign, CheckCircle2, ArrowRight, Building2, Calendar, Link, Bookmark, ChevronLeft } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { toggleBookmark, checkIsBookmarked } from "@/lib/bookmarks";
 
 export default function ProjectDetail() {
   const { id } = useParams();
-  // ... (keep existing state hooks) ...
   const [project, setProject] = React.useState<Opportunity | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [profileLoaded, setProfileLoaded] = useState(false);
   const [hasApplied, setHasApplied] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const applyRef = useRef<HTMLDivElement | null>(null);
@@ -34,6 +36,7 @@ export default function ProjectDetail() {
       .finally(() => setLoading(false));
 
     checkIfApplied(id).then(setHasApplied);
+    checkIsBookmarked(id).then(setIsBookmarked);
   }, [id]);
 
   useEffect(() => {
@@ -142,13 +145,31 @@ export default function ProjectDetail() {
                     navigator.clipboard.writeText(window.location.href);
                     toast({ title: "Link copied", description: "Share this opportunity with others." });
                   }}>
-                    <Share2 className="h-4 w-4" />
+                    <Link className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="icon" className="rounded-xl bg-white/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700" onClick={() => {
-                    trackEvent("save_for_later", { projectId: project.id });
-                    toast({ title: "Saved", description: "Added to your saved items." });
-                  }}>
-                    <Bookmark className="h-4 w-4" />
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="rounded-xl bg-white/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700"
+                    onClick={async () => {
+                      try {
+                        const newState = await toggleBookmark(project.id);
+                        setIsBookmarked(newState);
+                        toast({
+                          title: newState ? "Saved" : "Removed",
+                          description: newState ? "Added to your saved items." : "Removed from saved items."
+                        });
+                        trackEvent("toggle_bookmark", { projectId: project.id, action: newState ? "add" : "remove" });
+                      } catch (err: any) {
+                        if (err.message?.includes("Must be logged in")) {
+                          navigate(`/login?next=${encodeURIComponent(window.location.pathname)}`);
+                        } else {
+                          toast({ title: "Error", description: "Failed to update bookmark", variant: "destructive" });
+                        }
+                      }
+                    }}
+                  >
+                    <Bookmark className={cn("h-4 w-4", isBookmarked && "fill-current text-blue-600 dark:text-blue-400")} />
                   </Button>
                 </div>
               </div>

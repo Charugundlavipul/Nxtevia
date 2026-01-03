@@ -69,7 +69,7 @@ export function ProjectCard({ project }: { project: UiProject }) {
             variant="details"
             aria-label={`View details for ${project.title}`}
           >
-            <Link to={`/seekers/opportunities/${encodeURIComponent(project.id)}`}>
+            <Link to={`/opportunities/${encodeURIComponent(project.id)}`}>
               Details
             </Link>
           </Button>

@@ -186,6 +186,20 @@ export default function Login() {
         (user.user_metadata as any)?.name,
         role,
       );
+
+      // Check for ban
+      const { data: banCheck } = await supabase
+        .from(ensured.mappedRole === "company" ? "company_profiles" : "seeker_profiles")
+        .select("status")
+        .eq("user_id", user.id)
+        .single();
+
+      if (banCheck?.status === "banned") {
+        // Do NOT sign out. Let them proceed so they hit the /banned page redirect in App.tsx
+        // But maybe warn them
+        toast({ title: "Account Suspended", description: "You are being redirected to the appeal page.", variant: "destructive", duration: 3000 });
+      }
+
       const mappedRole = ensured.mappedRole;
       const name = ensured.displayName || (user.user_metadata as any)?.name;
       const email = user.email ?? "";

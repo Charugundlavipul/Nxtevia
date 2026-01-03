@@ -13,7 +13,10 @@ export function RoleGate({ children, allowed }: PropsWithChildren<{ allowed: Use
   const { authed, role } = getAuth();
   const loc = useLocation();
 
-  if (!authed) return children as any; // public access when not signed in
+  if (!authed) {
+    const next = encodeURIComponent(loc.pathname + loc.search);
+    return <Navigate to={`/login?next=${next}`} replace state={{ from: loc }} />;
+  }
   if (role && allowed.includes(role)) return children as any;
 
   // Redirect authed users to their area

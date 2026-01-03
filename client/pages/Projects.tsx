@@ -59,7 +59,17 @@ export default function Projects() {
   const filtered = useMemo(() => {
     let rows = (list || []).filter((p) => {
       if (filters.modality && p.modality !== filters.modality) return false;
-      if (filters.stipend && p.stipend !== filters.stipend) return false;
+      if (filters.stipend) {
+        if (filters.stipend === "none") {
+          if (p.stipend !== "none" && p.stipend !== "unpaid") return false;
+        } else if (filters.stipend === "micro") {
+          if (p.stipend !== "micro" && p.stipend !== "stipend") return false;
+        } else if (filters.stipend === "modest") {
+          if (p.stipend !== "modest" && p.stipend !== "paid") return false;
+        } else if (p.stipend !== filters.stipend) {
+          return false;
+        }
+      }
       if (filters.duration) {
         const w = durationWeeksFromLabel(p.duration);
         const inRange = (min: number, max: number) => w >= min && w <= max;
@@ -293,10 +303,10 @@ export default function Projects() {
                             <Badge
                               variant="secondary"
                               className={cn(
-                                "mb-2 font-normal backdrop-blur-sm",
-                                p.modality === 'remote' ? "bg-green-100/80 text-green-700 dark:bg-green-900/30 dark:text-green-400 border-green-200/50" :
-                                  p.modality === 'hybrid' ? "bg-purple-100/80 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 border-purple-200/50" :
-                                    "bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary border-primary/20"
+                                "mb-2 capitalize font-medium",
+                                p.modality === 'remote' ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-900/50" :
+                                  p.modality === 'hybrid' ? "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-900/50" :
+                                    "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/50"
                               )}
                             >
                               {p.modality}

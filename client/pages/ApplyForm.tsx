@@ -265,7 +265,7 @@ export default function ApplyForm() {
                           </Button>
                         </div>
                       ) : (
-                        <div className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-6 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors text-center">
+                        <div className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-6 bg-white/60 dark:bg-slate-900/60 hover:bg-slate-50/60 dark:hover:bg-slate-800/70 transition-colors text-center">
                           <Input
                             type="file"
                             accept=".pdf,.doc,.docx"
@@ -275,10 +275,10 @@ export default function ApplyForm() {
                             onChange={(e) => setForm((f) => ({ ...f, resumeFile: e.target.files?.[0] || null }))}
                           />
                           <label htmlFor="resume-upload" className="cursor-pointer flex flex-col items-center gap-2">
-                            <div className="bg-primary/5 dark:bg-primary/20 p-3 rounded-full">
-                              <UploadCloud className="h-6 w-6 text-primary dark:text-primary" />
+                            <div className="bg-indigo-50/80 dark:bg-indigo-900/20 p-3 rounded-full">
+                              <UploadCloud className="h-6 w-6 text-indigo-600 dark:text-indigo-300" />
                             </div>
-                            <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Click to upload resume</span>
+                            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">Click to upload resume</span>
                             <span className="text-xs text-slate-400 dark:text-slate-500">PDF, DOC, DOCX up to 5MB</span>
                           </label>
                           {form.resumeFile && (

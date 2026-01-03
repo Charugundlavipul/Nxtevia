@@ -12,7 +12,9 @@ import {
   Route,
   Navigate,
   useParams,
+  useLocation,
 } from "react-router-dom";
+import Banned from "./pages/Banned";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
@@ -96,6 +98,7 @@ import { useAdminSession } from "@/hooks/useAdminSession";
 import { ensureSupabaseSession } from "@/lib/auth";
 import { PresenceProvider } from "@/lib/presence";
 import ScrollToTop from "./components/ScrollToTop";
+import { supabase } from "@/lib/supabase";
 
 const queryClient = new QueryClient();
 
@@ -112,15 +115,70 @@ function SignInRequired({ to }: { to: string }) {
 }
 
 function GlobalAuthGuard({ children }: { children: React.ReactNode }) {
-  const pathname = typeof window !== "undefined" ? window.location.pathname : "/";
-  const search = typeof window !== "undefined" ? window.location.search : "";
+  const { pathname, search } = useLocation();
   const isAdmin = pathname.startsWith("/admin");
   const userAuthed = typeof window !== "undefined" && localStorage.getItem("eaas_authed") === "true";
   const { admin: adminAuthed, checking: adminChecking } = useAdminSession();
+  const [checkingBan, setCheckingBan] = React.useState(true);
 
   React.useEffect(() => {
     ensureSupabaseSession();
-  }, []);
+
+    // Ban check
+    const checkBan = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setCheckingBan(false);
+        return;
+      }
+
+      const role = localStorage.getItem("eaas_role") || "student";
+      if (role === 'admin') {
+        setCheckingBan(false);
+        return;
+      }
+
+      const table = role === "company" ? "company_profiles" : "seeker_profiles";
+      const { data } = await supabase
+        .from(table)
+        .select("status")
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+
+      const isBanned = data?.status === "banned";
+
+      if (isBanned && pathname !== "/banned") {
+        window.location.href = "/banned";
+      } else if (!isBanned && pathname === "/banned") {
+        window.location.href = "/home";
+      }
+      setCheckingBan(false);
+    };
+
+    checkBan();
+    const interval = setInterval(checkBan, 30000); // Check every 30s
+    // Also listen for focus
+    window.addEventListener("focus", checkBan);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("focus", checkBan);
+    };
+  }, [pathname]); // Re-run on route change
+
+  // Block rendering until initial ban check is done (for authenticated users)
+  // Only block if we are actually logged in, otherwise we might block public pages unnecessarily
+  if (userAuthed && checkingBan && pathname !== "/banned" && !isAdmin) {
+    return <div className="min-h-screen grid place-items-center bg-white dark:bg-slate-950">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    </div>;
+  }
+
+  if (pathname === "/banned") {
+    // Determine if we should render Banned page or not (AuthGuard logic)
+    // Actually GlobalAuthGuard wraps everything. If we are banned we want to show children (which will match /banned route)
+    // If we are NOT banned, we already redirected above.
+    return <>{children}</>;
+  }
 
   if (isAdmin) {
     if (adminChecking) return null;
@@ -150,6 +208,7 @@ const App = () => (
           <GlobalAuthGuard>
             <Routes>
               <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/banned" element={<Banned />} />
               <Route
                 path="/seekers/opportunities"
                 element={
@@ -179,7 +238,7 @@ const App = () => (
                 </AuthGate>
               } />
               <Route path="/company/home" element={<RoleGate allowed={["company"]}><CompanyHome /></RoleGate>} />
-              <Route path="/opportunities/:id" element={<LegacyOppRedirect />} />
+              <Route path="/opportunities/:id" element={<ProjectDetail />} />
               <Route path="/seekers/opportunities/:id" element={<RoleGate allowed={["student"]}><ProjectDetail /></RoleGate>} />
               {/* Legacy redirects */}
               <Route
@@ -586,11 +645,7 @@ const App = () => (
 
 function LegacyProjectRedirect() {
   const { id } = useParams();
-  return <Navigate to={`/seekers/opportunities/${id ?? ""}`} replace />;
-}
-function LegacyOppRedirect() {
-  const { id } = useParams();
-  return <Navigate to={`/seekers/opportunities/${id ?? ""}`} replace />;
+  return <Navigate to={`/opportunities/${id ?? ""}`} replace />;
 }
 
 const container = document.getElementById("root")!;

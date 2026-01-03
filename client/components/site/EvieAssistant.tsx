@@ -224,7 +224,7 @@ export function EvieAssistant() {
                   <button
                     key={i}
                     onClick={() => handleQuestionClick(faq)}
-                    className="w-full text-left p-3 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl transition-all text-sm text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary"
+                    className="w-full text-left p-3 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl transition-all text-sm text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-indigo-300"
                   >
                     {faq.q}
                   </button>

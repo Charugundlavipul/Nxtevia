@@ -612,7 +612,7 @@ export const FAQ = () => {
           <div className="mt-12 text-center">
             <p className="text-slate-600 dark:text-slate-400">
               Still have questions?{" "}
-              <a href="/contact" className="text-primary font-medium hover:underline">
+              <a href="/contact" className="text-primary dark:text-indigo-300 font-medium hover:underline">
                 Contact our support team
               </a>
             </p>

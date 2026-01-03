@@ -13,6 +13,22 @@ begin
   ) then
     create type public.user_role as enum ('seeker', 'company', 'admin');
   end if;
+
+  if not exists (
+    select 1 from pg_type t
+    join pg_namespace n on n.oid = t.typnamespace
+    where t.typname = 'opportunity_modality' and n.nspname = 'public'
+  ) then
+    create type public.opportunity_modality as enum ('remote', 'hybrid', 'on-site');
+  end if;
+
+  if not exists (
+    select 1 from pg_type t
+    join pg_namespace n on n.oid = t.typnamespace
+    where t.typname = 'opportunity_stipend' and n.nspname = 'public'
+  ) then
+    create type public.opportunity_stipend as enum ('unpaid', 'stipend', 'paid');
+  end if;
 end
 $$;
 
@@ -92,10 +108,10 @@ create table if not exists public.opportunities (
   title text not null,
   problem text not null,
   scope text not null,
-  modality text not null,
-  duration text not null,
+  modality public.opportunity_modality not null,
+  duration text not null check (duration in ('0-3m', '4-6m', '7-9m', '10-12m', '>12m')),
   hours text not null,
-  stipend text not null,
+  stipend public.opportunity_stipend not null,
   skills text[] not null default '{}',
   status text not null default 'pending',
   requirements jsonb default '[]',
@@ -203,6 +219,21 @@ alter table public.company_requirements
   add column if not exists custom_questions jsonb default '[]',
   add column if not exists updated_at timestamptz default now();
 
+
+-- Helper to check if user is banned
+create or replace function public.check_if_banned()
+returns boolean as $$
+begin
+  if exists (select 1 from public.seeker_profiles where user_id = auth.uid() and status = 'banned') then
+    return true;
+  end if;
+  if exists (select 1 from public.company_profiles where user_id = auth.uid() and status = 'banned') then
+    return true;
+  end if;
+  return false;
+end;
+$$ language plpgsql security definer;
+
 alter table public.opportunities
   add column if not exists title text,
   add column if not exists problem text,
@@ -250,11 +281,18 @@ create policy profiles_select_own on public.profiles
 
 drop policy if exists profiles_insert_own on public.profiles;
 create policy profiles_insert_own on public.profiles
-  for insert with check (auth.uid() = user_id);
+  for insert with check (auth.uid() = user_id AND NOT public.check_if_banned());
 
 drop policy if exists profiles_update_own on public.profiles;
 create policy profiles_update_own on public.profiles
-  for update using (auth.uid() = user_id);
+  for update using (auth.uid() = user_id AND NOT public.check_if_banned());
+
+drop policy if exists profiles_update_admin on public.profiles;
+create policy profiles_update_admin on public.profiles
+  for update using (
+    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
+    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
+  );
 
 -- Allow authenticated users to view profiles (needed for search)
 drop policy if exists profiles_view_authenticated on public.profiles;
@@ -267,11 +305,18 @@ create policy seeker_select_own on public.seeker_profiles
 
 drop policy if exists seeker_insert_own on public.seeker_profiles;
 create policy seeker_insert_own on public.seeker_profiles
-  for insert with check (auth.uid() = user_id);
+  for insert with check (auth.uid() = user_id AND NOT public.check_if_banned());
 
 drop policy if exists seeker_update_own on public.seeker_profiles;
 create policy seeker_update_own on public.seeker_profiles
-  for update using (auth.uid() = user_id);
+  for update using (auth.uid() = user_id AND NOT public.check_if_banned());
+
+drop policy if exists seeker_update_admin on public.seeker_profiles;
+create policy seeker_update_admin on public.seeker_profiles
+  for update using (
+    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
+    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
+  );
 
 -- Allow authenticated users to view seeker profiles
 drop policy if exists seeker_view_authenticated on public.seeker_profiles;
@@ -284,11 +329,18 @@ create policy company_select_own on public.company_profiles
 
 drop policy if exists company_insert_own on public.company_profiles;
 create policy company_insert_own on public.company_profiles
-  for insert with check (auth.uid() = user_id);
+  for insert with check (auth.uid() = user_id AND NOT public.check_if_banned());
 
 drop policy if exists company_update_own on public.company_profiles;
 create policy company_update_own on public.company_profiles
-  for update using (auth.uid() = user_id);
+  for update using (auth.uid() = user_id AND NOT public.check_if_banned());
+
+drop policy if exists company_update_admin on public.company_profiles;
+create policy company_update_admin on public.company_profiles
+  for update using (
+    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
+    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
+  );
 
 -- Allow authenticated users to view company profiles
 drop policy if exists company_view_authenticated on public.company_profiles;
@@ -321,11 +373,11 @@ create policy opportunities_select_own on public.opportunities
 
 drop policy if exists opportunities_insert_own on public.opportunities;
 create policy opportunities_insert_own on public.opportunities
-  for insert with check (auth.uid() = user_id);
+  for insert with check (auth.uid() = user_id AND NOT public.check_if_banned());
 
 drop policy if exists opportunities_update_own on public.opportunities;
 create policy opportunities_update_own on public.opportunities
-  for update using (auth.uid() = user_id);
+  for update using (auth.uid() = user_id AND NOT public.check_if_banned());
 
 drop policy if exists opportunities_admin_select on public.opportunities;
 create policy opportunities_admin_select on public.opportunities
@@ -349,7 +401,7 @@ create policy opportunities_public_active_select on public.opportunities
 -- Applications policies
 drop policy if exists applications_insert_own on public.applications;
 create policy applications_insert_own on public.applications
-  for insert with check (auth.uid() = applicant_id);
+  for insert with check (auth.uid() = applicant_id AND NOT public.check_if_banned());
 
 drop policy if exists applications_select_own on public.applications;
 create policy applications_select_own on public.applications
@@ -382,15 +434,16 @@ create policy applications_status_update on public.applications
     )
     or coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
     or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  )
+  with check (NOT public.check_if_banned());
 
 drop policy if exists applications_update_own on public.applications;
 create policy applications_update_own on public.applications
-  for update using (auth.uid() = applicant_id);
+  for update using (auth.uid() = applicant_id AND NOT public.check_if_banned());
 
 drop policy if exists applications_delete_own on public.applications;
 create policy applications_delete_own on public.applications
-  for delete using (auth.uid() = applicant_id);
+  for delete using (auth.uid() = applicant_id AND NOT public.check_if_banned());
 
 -- Employee record policies
 drop policy if exists employee_records_company_select on public.employee_records;
@@ -399,7 +452,7 @@ create policy employee_records_company_select on public.employee_records
 
 drop policy if exists employee_records_company_insert on public.employee_records;
 create policy employee_records_company_insert on public.employee_records
-  for insert with check (auth.uid() = company_id);
+  for insert with check (auth.uid() = company_id AND NOT public.check_if_banned());
 
 drop policy if exists employee_records_admin_insert on public.employee_records;
 create policy employee_records_admin_insert on public.employee_records
@@ -410,11 +463,11 @@ create policy employee_records_admin_insert on public.employee_records
 
 drop policy if exists employee_records_company_update on public.employee_records;
 create policy employee_records_company_update on public.employee_records
-  for update using (auth.uid() = company_id);
+  for update using (auth.uid() = company_id AND NOT public.check_if_banned());
 
 drop policy if exists employee_records_company_delete on public.employee_records;
 create policy employee_records_company_delete on public.employee_records
-  for delete using (auth.uid() = company_id);
+  for delete using (auth.uid() = company_id AND NOT public.check_if_banned());
 
 drop policy if exists employee_records_admin_select on public.employee_records;
 create policy employee_records_admin_select on public.employee_records
@@ -537,7 +590,7 @@ drop policy if exists "Companies and Admins can create conversations" on public.
 drop policy if exists "Authenticated users can create conversations" on public.conversations;
 create policy "Authenticated users can create conversations"
   on public.conversations for insert
-  with check (auth.role() = 'authenticated');
+  with check (auth.role() = 'authenticated' AND NOT public.check_if_banned());
 
 -- Update: Users can update conversations they are part of (e.g. updating updated_at)
 drop policy if exists "Users can update their own conversations" on public.conversations;
@@ -585,7 +638,7 @@ create policy "Users can insert participants"
   on public.conversation_participants for insert
   with check (
     -- Allow if user is adding themselves OR if user is Company/Admin adding someone else
-    auth.uid() = user_id
+    (auth.uid() = user_id AND NOT public.check_if_banned())
     OR 
     coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') in ('company', 'admin')
     OR 
@@ -595,6 +648,7 @@ create policy "Users can insert participants"
       select 1 from public.profiles p
       where p.user_id = auth.uid()
       and p.role in ('company', 'admin')
+      and NOT public.check_if_banned()
     )
   );
 
@@ -617,6 +671,7 @@ create policy "Participants can send messages"
   on public.messages for insert
   with check (
     auth.uid() = sender_id
+    and NOT public.check_if_banned()
     and exists (
       select 1 from public.conversation_participants cp
       where cp.conversation_id = messages.conversation_id
@@ -631,6 +686,7 @@ create policy "Senders can update own messages"
   for update
   using (
     auth.uid() = sender_id
+    and NOT public.check_if_banned()
     and created_at > (now() - interval '30 minutes')
   );
 
@@ -641,6 +697,7 @@ create policy "Senders can delete own messages"
   for delete
   using (
     auth.uid() = sender_id
+    and NOT public.check_if_banned()
     and created_at > (now() - interval '30 minutes')
   );
 
@@ -713,3 +770,27 @@ create policy attestations_admin_select on public.legal_attestations
     coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
     or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
   );
+
+-- Bookmarks table
+create table if not exists public.bookmarks (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  opportunity_id uuid not null references public.opportunities(id) on delete cascade,
+  created_at timestamptz default now(),
+  unique(user_id, opportunity_id)
+);
+
+alter table public.bookmarks enable row level security;
+
+-- Policies
+drop policy if exists bookmarks_select_own on public.bookmarks;
+create policy bookmarks_select_own on public.bookmarks
+  for select using (auth.uid() = user_id);
+
+drop policy if exists bookmarks_insert_own on public.bookmarks;
+create policy bookmarks_insert_own on public.bookmarks
+  for insert with check (auth.uid() = user_id);
+
+drop policy if exists bookmarks_delete_own on public.bookmarks;
+create policy bookmarks_delete_own on public.bookmarks
+  for delete using (auth.uid() = user_id);
