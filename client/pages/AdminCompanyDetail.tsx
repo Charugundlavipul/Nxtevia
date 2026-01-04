@@ -37,6 +37,7 @@ import {
   Briefcase,
   Users,
   ArrowLeft,
+  ArrowRight,
   RefreshCw,
   Ban,
   CheckCircle,
@@ -457,24 +458,43 @@ export default function AdminCompanyDetail() {
                           <p>No job postings found.</p>
                         </div>
                       ) : (
-                        <div className="grid sm:grid-cols-2 gap-4">
+                        <div className="grid gap-3">
                           {postings.map((p) => (
-                            <div key={p.id} className="bg-white/50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700 hover:shadow-md transition-all group relative">
-                              <div className="font-semibold text-slate-900 dark:text-white mb-1 pr-16">{p.title}</div>
-                              <div className="flex flex-wrap gap-2 mb-2">
-                                <Badge variant="outline" className={cn(
-                                  "capitalize border-slate-200 dark:border-slate-700 text-xs",
-                                  p.status === 'open' ? "bg-green-50 text-green-700 dark:text-green-400 dark:bg-green-900/20" :
-                                    "text-slate-600 dark:text-slate-300"
-                                )}>
-                                  {p.status.replace("_", " ")}
-                                </Badge>
-                                <span className="text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">
-                                  {p.created_at ? new Date(p.created_at).toLocaleDateString() : "—"}
-                                </span>
+                            <div
+                              key={p.id}
+                              className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-white/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-800 transition-all hover:shadow-md hover:bg-white dark:hover:bg-slate-800"
+                            >
+                              <div className="flex items-center gap-4">
+                                <div className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-105 transition-transform duration-300">
+                                  <Briefcase className="h-5 w-5 sm:h-6 sm:w-6" />
+                                </div>
+                                <div className="space-y-1">
+                                  <div className="font-semibold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                    {p.title}
+                                  </div>
+                                  <div className="flex flex-wrap items-center gap-2">
+                                    <Badge variant="secondary" className={cn(
+                                      "capitalize text-xs font-medium border px-2 py-0.5 h-auto",
+                                      p.status === 'open'
+                                        ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800"
+                                        : "bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700"
+                                    )}>
+                                      {p.status === 'open' && <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse" />}
+                                      {p.status.replace("_", " ")}
+                                    </Badge>
+                                    <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                                      <span className="w-0.5 h-0.5 bg-slate-300 dark:bg-slate-600 rounded-full" />
+                                      <Clock className="w-3 h-3 text-slate-400" />
+                                      {p.created_at ? new Date(p.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : "—"}
+                                    </span>
+                                  </div>
+                                </div>
                               </div>
-                              <Button asChild size="sm" variant="ghost" className="absolute top-4 right-4 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30">
-                                <Link to={`/admin/jobs/${p.id}`}>Review</Link>
+
+                              <Button asChild size="sm" variant="ghost" className="shrink-0 text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 group-hover:translate-x-1 transition-all">
+                                <Link to={`/admin/jobs/${p.id}`} className="flex items-center gap-1">
+                                  Review <ArrowRight className="w-4 h-4" />
+                                </Link>
                               </Button>
                             </div>
                           ))}

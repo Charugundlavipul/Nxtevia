@@ -283,7 +283,7 @@ export default function AdminJobReview() {
     }
   };
 
-  const act = async (type: "approve" | "reject" | "revision" | "close") => {
+  const act = async (type: "approve" | "reject" | "revision" | "close" | "activate") => {
     if (!job) return;
     if (type === "close" && job.status !== "approved") {
       toast({ title: "Cannot close", description: "Only active jobs can be closed.", duration: 1500 });
@@ -300,8 +300,11 @@ export default function AdminJobReview() {
     if (type === "close") {
       note = window.prompt("Add note for closing (optional):") || undefined;
     }
+    if (type === "activate") {
+      if (!confirm("Are you sure you want to reactivate this job?")) return;
+    }
     const status =
-      type === "approve"
+      type === "approve" || type === "activate"
         ? "approved"
         : type === "reject"
           ? "rejected"
@@ -311,7 +314,16 @@ export default function AdminJobReview() {
     try {
       await updateOpportunityStatus(job.id, status as any, note, "admin");
       toast({ title: "Status updated", description: `Marked as ${status}.`, duration: 1500 });
-      navigate("/admin/jobs", { replace: true });
+      // navigate("/admin/jobs", { replace: true }); // Don't navigate away, let them see the updated status
+      // Instead of navigating, we should probably just reload or let the real-time subscription handle it if there is one. 
+      // But fetchAllOpportunities is called on mount. Let's just reload via window or re-fetch.
+      // The exiting code navigates to /admin/jobs. Let's keep that behavior for consistency for now, or maybe just refresh. 
+      // User might want to stay on page.
+      if (type === "activate") {
+        window.location.reload();
+      } else {
+        navigate("/admin/jobs", { replace: true });
+      }
     } catch (err) {
       toast({ title: "Update failed", description: err instanceof Error ? err.message : "Unexpected error", duration: 2000 });
     }
@@ -394,6 +406,7 @@ export default function AdminJobReview() {
               )}
               {(isPending || isRevision) && <Button variant="destructive" onClick={() => act("reject")} className="shadow-md shadow-red-500/20">Reject</Button>}
               {isApproved && !isClosed && <Button variant="secondary" onClick={() => act("close")} className="bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white">Close Job</Button>}
+              {isClosed && <Button onClick={() => act("activate")} className="bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-500/20">Activate Job</Button>}
             </div>
           </div>
 

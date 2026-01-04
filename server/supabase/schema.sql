@@ -224,13 +224,25 @@ alter table public.company_requirements
 create or replace function public.check_if_banned()
 returns boolean as $$
 begin
-  if exists (select 1 from public.seeker_profiles where user_id = auth.uid() and status = 'banned') then
-    return true;
-  end if;
   if exists (select 1 from public.company_profiles where user_id = auth.uid() and status = 'banned') then
     return true;
   end if;
   return false;
+end;
+$$ language plpgsql security definer;
+
+-- Secure helper to check if user is admin (avoids user_metadata)
+create or replace function public.is_admin()
+returns boolean as $$
+begin
+  return (
+    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
+    OR exists (
+      select 1 from public.profiles
+      where user_id = auth.uid()
+      and role = 'admin'
+    )
+  );
 end;
 $$ language plpgsql security definer;
 
@@ -289,10 +301,7 @@ create policy profiles_update_own on public.profiles
 
 drop policy if exists profiles_update_admin on public.profiles;
 create policy profiles_update_admin on public.profiles
-  for update using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for update using (public.is_admin());
 
 -- Allow authenticated users to view profiles (needed for search)
 drop policy if exists profiles_view_authenticated on public.profiles;
@@ -313,10 +322,7 @@ create policy seeker_update_own on public.seeker_profiles
 
 drop policy if exists seeker_update_admin on public.seeker_profiles;
 create policy seeker_update_admin on public.seeker_profiles
-  for update using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for update using (public.is_admin());
 
 -- Allow authenticated users to view seeker profiles
 drop policy if exists seeker_view_authenticated on public.seeker_profiles;
@@ -337,10 +343,7 @@ create policy company_update_own on public.company_profiles
 
 drop policy if exists company_update_admin on public.company_profiles;
 create policy company_update_admin on public.company_profiles
-  for update using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for update using (public.is_admin());
 
 -- Allow authenticated users to view company profiles
 drop policy if exists company_view_authenticated on public.company_profiles;
@@ -350,10 +353,7 @@ create policy company_view_authenticated on public.company_profiles
 -- Admins can read company profiles
 drop policy if exists company_admin_select on public.company_profiles;
 create policy company_admin_select on public.company_profiles
-  for select using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for select using (public.is_admin());
 
 drop policy if exists company_requirements_select_own on public.company_requirements;
 create policy company_requirements_select_own on public.company_requirements
@@ -381,17 +381,11 @@ create policy opportunities_update_own on public.opportunities
 
 drop policy if exists opportunities_admin_select on public.opportunities;
 create policy opportunities_admin_select on public.opportunities
-  for select using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for select using (public.is_admin());
 
 drop policy if exists opportunities_admin_update on public.opportunities;
 create policy opportunities_admin_update on public.opportunities
-  for update using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for update using (public.is_admin());
 
 -- Public/seekers can view active (approved) opportunities
 drop policy if exists opportunities_public_active_select on public.opportunities;
@@ -419,10 +413,7 @@ create policy applications_company_select on public.applications
 
 drop policy if exists applications_admin_select on public.applications;
 create policy applications_admin_select on public.applications
-  for select using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for select using (public.is_admin());
 
 drop policy if exists applications_status_update on public.applications;
 create policy applications_status_update on public.applications
@@ -432,8 +423,7 @@ create policy applications_status_update on public.applications
       where o.id = applications.opportunity_id
       and o.user_id = auth.uid()
     )
-    or coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
+    or public.is_admin()
   )
   with check (NOT public.check_if_banned());
 
@@ -456,10 +446,7 @@ create policy employee_records_company_insert on public.employee_records
 
 drop policy if exists employee_records_admin_insert on public.employee_records;
 create policy employee_records_admin_insert on public.employee_records
-  for insert with check (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for insert with check (public.is_admin());
 
 drop policy if exists employee_records_company_update on public.employee_records;
 create policy employee_records_company_update on public.employee_records
@@ -471,24 +458,15 @@ create policy employee_records_company_delete on public.employee_records
 
 drop policy if exists employee_records_admin_select on public.employee_records;
 create policy employee_records_admin_select on public.employee_records
-  for select using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for select using (public.is_admin());
 
 drop policy if exists employee_records_admin_update on public.employee_records;
 create policy employee_records_admin_update on public.employee_records
-  for update using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for update using (public.is_admin());
 
 drop policy if exists employee_records_admin_delete on public.employee_records;
 create policy employee_records_admin_delete on public.employee_records
-  for delete using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for delete using (public.is_admin());
 
 drop policy if exists tickets_creator_insert on public.tickets;
 create policy tickets_creator_insert on public.tickets
@@ -500,17 +478,11 @@ create policy tickets_creator_select on public.tickets
 
 drop policy if exists tickets_admin_select on public.tickets;
 create policy tickets_admin_select on public.tickets
-  for select using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for select using (public.is_admin());
 
 drop policy if exists tickets_admin_update on public.tickets;
 create policy tickets_admin_update on public.tickets
-  for update using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for update using (public.is_admin());
 drop policy if exists employee_records_applicant_select on public.employee_records;
 create policy employee_records_applicant_select on public.employee_records
   for select using (auth.uid() = applicant_id);
@@ -641,8 +613,6 @@ create policy "Users can insert participants"
     (auth.uid() = user_id AND NOT public.check_if_banned())
     OR 
     coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') in ('company', 'admin')
-    OR 
-    coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') in ('company', 'admin')
     OR
     exists (
       select 1 from public.profiles p
@@ -766,10 +736,7 @@ create policy attestations_select_own on public.legal_attestations
 -- Admins can view all attestations
 drop policy if exists attestations_admin_select on public.legal_attestations;
 create policy attestations_admin_select on public.legal_attestations
-  for select using (
-    coalesce((auth.jwt() -> 'app_metadata' ->> 'role'), '') = 'admin'
-    or coalesce((auth.jwt() -> 'user_metadata' ->> 'role'), '') = 'admin'
-  );
+  for select using (public.is_admin());
 
 -- Bookmarks table
 create table if not exists public.bookmarks (

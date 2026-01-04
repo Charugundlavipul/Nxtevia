@@ -93,7 +93,7 @@ function useAdminAnalytics(range: string) {
         const recentFormatted = (recents || []).map(r => ({ title: r.title, date: r.created_at }));
 
         // 8. Conversion
-        const conversionVal = users.count > 0 ? Math.round((apps.count / users.count) * 100) / 10 : 0;
+        const conversionVal = users.count > 0 ? Math.round((apps.count / users.count) * 10) / 10 : 0;
 
         // 9. Response Rate
         const { count: totalApps } = await supabase.from("applications").select("*", { count: "exact", head: true });

@@ -16,6 +16,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { fetchTickets, reopenTicket, updateTicketStatus, TICKET_CATEGORIES, type Ticket } from "@/lib/tickets";
 import Layout from "@/components/Layout";
+import { Link } from "react-router-dom";
 import * as React from "react";
 import {
   ChevronRight,
@@ -347,17 +348,39 @@ export default function AdminTickets() {
                   <CardContent className="p-0">
                     <div className="p-6 space-y-6">
                       {/* Reporter Info */}
-                      <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800">
-                        <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                          <User className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <div className="font-medium text-sm text-slate-900 dark:text-white">{selectedTicket.createdBy.name}</div>
-                          <div className="text-xs text-slate-500 dark:text-slate-400 capitalize">
-                            {selectedTicket.createdBy.role}
+                      {/* Reporter Info */}
+                      {(() => {
+                        const role = selectedTicket.createdBy.role;
+                        const targetLink = role === 'company'
+                          ? `/admin/companies/${selectedTicket.createdBy.id}`
+                          : role === 'student'
+                            ? `/admin/view_seekers/${selectedTicket.createdBy.id}`
+                            : null;
+
+                        const Content = (
+                          <div className={cn(
+                            "flex items-center gap-3 p-3 rounded-xl border transition-colors",
+                            targetLink
+                              ? "bg-slate-50 dark:bg-slate-800/50 border-slate-100 dark:border-slate-800 hover:border-blue-200 dark:hover:border-blue-800 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 cursor-pointer group"
+                              : "bg-slate-50 dark:bg-slate-800/50 border-slate-100 dark:border-slate-800"
+                          )}>
+                            <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-105 transition-transform">
+                              <User className="h-5 w-5" />
+                            </div>
+                            <div>
+                              <div className="font-medium text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                {selectedTicket.createdBy.name}
+                              </div>
+                              <div className="text-xs text-slate-500 dark:text-slate-400 capitalize">
+                                {selectedTicket.createdBy.role}
+                              </div>
+                            </div>
+                            {targetLink && <ChevronRight className="h-4 w-4 ml-auto text-slate-300 group-hover:text-blue-400 transition-colors" />}
                           </div>
-                        </div>
-                      </div>
+                        );
+
+                        return targetLink ? <Link to={targetLink}>{Content}</Link> : Content;
+                      })()}
 
                       {/* Description */}
                       <div className="space-y-2">
