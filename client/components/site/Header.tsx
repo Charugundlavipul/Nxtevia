@@ -173,7 +173,7 @@ export function Header() {
             <div className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                  <Button variant="ghost" className="relative h-9 w-9 rounded-full hover:bg-primary/10">
                     <Avatar className="h-9 w-9 border border-slate-200 dark:border-slate-700">
                       <AvatarImage src="" alt={userInitials} />
                       <AvatarFallback className="bg-primary/10 text-primary dark:bg-primary/80 dark:text-white font-medium">{userInitials}</AvatarFallback>
@@ -212,7 +212,7 @@ export function Header() {
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <Button asChild variant="ghost" className="hidden md:inline-flex text-muted-foreground hover:text-foreground">
+              <Button asChild variant="ghost" className="hidden md:inline-flex text-muted-foreground hover:bg-primary hover:text-white">
                 <Link to={isAdmin ? "/admin/login" : "/login"}>Sign in</Link>
               </Button>
               <Button asChild className="hidden md:inline-flex shadow-sm">

@@ -41,7 +41,7 @@ export function ThemeToggle() {
       onClick={toggle}
       variant="ghost"
       size="icon"
-      className="rounded-full"
+      className="rounded-full hover:bg-primary hover:text-white"
     >
       {mode === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
     </Button>

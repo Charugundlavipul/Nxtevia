@@ -311,6 +311,9 @@ export default function Projects() {
                             >
                               {p.modality}
                             </Badge>
+                            <div className="text-sm font-medium text-muted-foreground mb-0.5">
+                              {p.company_name}
+                            </div>
                             <CardTitle className="text-xl font-bold text-slate-900 dark:text-white leading-tight group-hover:text-primary dark:group-hover:text-white dark:hover:text-white dark:group-hover:text-primary dark:group-hover:text-white dark:hover:text-white transition-colors">
                               {p.title}
                             </CardTitle>

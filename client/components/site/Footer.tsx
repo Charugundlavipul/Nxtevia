@@ -42,7 +42,7 @@ export function Footer() {
             <h3 className="font-semibold text-white mb-4">Product</h3>
             <ul className="space-y-3 text-sm">
               {(!authed || role === "student") && (
-                <li><FooterLink to="/opportunities">Browse Opportunities</FooterLink></li>
+                <li><FooterLink to={authed ? "/seekers/opportunities" : "/home#opportunities"}>Browse Opportunities</FooterLink></li>
               )}
               {(!authed || role === "company") && (
                 <li><FooterLink to="/company/post-opportunity">Post an Opportunity</FooterLink></li>

@@ -21,6 +21,8 @@ export type Opportunity = {
   history: Array<{ at: string; action: string; by?: string; note?: string }>;
   created_at: string;
   updated_at: string;
+  company_name?: string;
+  company_id?: string;
 };
 
 export async function fetchMyOpportunities(): Promise<Opportunity[]> {
@@ -89,13 +91,31 @@ export async function fetchAllOpportunities(): Promise<Opportunity[]> {
 }
 
 export async function fetchActiveOpportunities(): Promise<Opportunity[]> {
-  const { data, error } = await supabase
+  const { data: opps, error } = await supabase
     .from("opportunities")
     .select("*")
     .eq("status", "approved")
     .order("created_at", { ascending: false });
   if (error) throw error;
-  return (data || []) as Opportunity[];
+  if (!opps || opps.length === 0) return [];
+
+  // Fetch company profiles
+  const userIds = Array.from(new Set(opps.map((o) => o.user_id)));
+  const { data: profiles } = await supabase
+    .from("company_profiles")
+    .select("user_id, name")
+    .in("user_id", userIds);
+
+  const map = new Map<string, string>();
+  profiles?.forEach((p) => {
+    if (p.name) map.set(p.user_id, p.name);
+  });
+
+  return opps.map((o) => ({
+    ...o,
+    company_name: map.get(o.user_id) || "Unknown Company",
+    company_id: o.user_id,
+  })) as Opportunity[];
 }
 
 export async function fetchOpportunityPublic(id: string): Promise<Opportunity | null> {
