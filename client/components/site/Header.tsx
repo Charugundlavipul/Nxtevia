@@ -148,6 +148,7 @@ export function Header() {
                   <a href="/home#opportunities" className={cn(baseLink, activeSection === "opportunities" && location.pathname === "/home" ? "text-primary dark:text-white font-semibold" : "text-muted-foreground")}>Opportunities</a>
                   <a href="/home#how-it-works" className={cn(baseLink, activeSection === "how-it-works" && location.pathname === "/home" ? "text-primary dark:text-white font-semibold" : "text-muted-foreground")}>How it Works</a>
                   <NavLink to="/about" className={navLink}>About</NavLink>
+                  <NavLink to="/contact" className={navLink}>Contact</NavLink>
                 </>
               )}
             </nav>
@@ -256,6 +257,7 @@ export function Header() {
                     <MobileLink href="/home#opportunities" onClick={() => setOpen(false)}>Opportunities</MobileLink>
                     <MobileLink href="/home#how-it-works" onClick={() => setOpen(false)}>How it Works</MobileLink>
                     <MobileLink to="/about" onClick={() => setOpen(false)}>About</MobileLink>
+                    <MobileLink to="/contact" onClick={() => setOpen(false)}>Contact</MobileLink>
                   </>
                 )}
               </>

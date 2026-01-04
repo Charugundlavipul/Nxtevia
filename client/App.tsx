@@ -189,7 +189,7 @@ function GlobalAuthGuard({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  const allowed = ["/", "/home", "/login", "/signup", "/signup/verify", "/admin/login", "/forgot-password", "/reset-password"];
+  const allowed = ["/", "/home", "/login", "/signup", "/signup/verify", "/admin/login", "/forgot-password", "/reset-password", "/about", "/contact"];
   if (!userAuthed && !allowed.includes(pathname)) {
     const next = encodeURIComponent(pathname + search);
     return <SignInRequired to={`/login?next=${next}`} />;

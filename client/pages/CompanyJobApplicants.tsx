@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { ToastAction } from "@/components/ui/toast";
 import {
   Dialog,
   DialogContent,
@@ -22,7 +23,7 @@ import {
   fetchEmployeeRecordsForOpportunity,
   createEmployeeRecord,
   updateEmployeeRecord,
-  deleteEmployeeRecord,
+  deleteEmployeeRecordAndRevertApplication,
   type EmployeeRecord,
 } from "@/lib/employeeRecords";
 import { supabase } from "@/lib/supabase";
@@ -38,7 +39,8 @@ import {
   Clock,
   Pencil,
   ArrowRight,
-  UserCheck
+  UserCheck,
+  XCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -207,12 +209,47 @@ export default function CompanyJobApplicants() {
 
   const onDelete = async (recordId: string) => {
     try {
-      await deleteEmployeeRecord(recordId);
+      await deleteEmployeeRecordAndRevertApplication(recordId);
       await refreshRecords();
+      if (id) {
+        const updatedApps = await fetchApplicationsForOpportunity(id);
+        setApps(updatedApps);
+      }
       toast({ title: "Removed", duration: 1500 });
     } catch (err) {
       toast({ title: "Delete failed", description: err instanceof Error ? err.message : "Could not delete", duration: 2200 });
     }
+  };
+
+  const rejectApplicant = async (applicationId: string) => {
+    try {
+      setSaving(true);
+      const { error } = await supabase
+        .from("applications")
+        .update({ status: "rejected" })
+        .eq("id", applicationId);
+
+      if (error) throw error;
+
+      setApps((prev) => prev.map(a => a.id === applicationId ? { ...a, status: "rejected" } : a));
+      toast({ title: "Applicant rejected", duration: 2000 });
+    } catch (err) {
+      toast({ title: "Action failed", description: "Could not reject applicant", variant: "destructive", duration: 2000 });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const confirmReject = (applicationId: string, name: string) => {
+    toast({
+      title: `Reject ${name}?`,
+      description: "This will mark the application as rejected. The candidate will see this status.",
+      action: (
+        <ToastAction altText="Confirm rejection" onClick={() => rejectApplicant(applicationId)}>
+          Reject
+        </ToastAction>
+      ),
+    });
   };
 
   const interviewing = records.filter((r) => r.status === "interviewing");
@@ -288,6 +325,17 @@ export default function CompanyJobApplicants() {
                               <Button size="sm" variant="outline" asChild className="rounded-lg h-8">
                                 <Link to={`/company/applications/${a.id}`}>Review</Link>
                               </Button>
+                              {(a.status === 'submitted' || a.status === 'pending' || a.status === 'interviewing') && (
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="h-8 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20"
+                                  onClick={() => confirmReject(a.id, name)}
+                                >
+                                  <XCircle className="h-4 w-4 mr-1.5" />
+                                  Reject
+                                </Button>
+                              )}
                             </td>
                           </tr>
                         );
