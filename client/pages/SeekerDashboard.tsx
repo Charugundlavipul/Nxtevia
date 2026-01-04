@@ -13,6 +13,12 @@ import { FileText, Clock, CheckCircle, XCircle, AlertCircle, ArrowRight, LayoutD
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { SavedOpportunitiesSection } from "@/components/SavedOpportunitiesSection";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type OppMap = Record<string, { title: string; summary?: string }>;
 
@@ -118,6 +124,13 @@ export default function SeekerDashboard() {
     show: { opacity: 1, y: 0 }
   };
 
+  const [filter, setFilter] = React.useState<"all" | "pending" | "accepted" | "rejected">("all");
+
+  const filteredApps = React.useMemo(() => {
+    if (filter === "all") return apps;
+    return apps.filter((a) => a.status === filter || (filter === "pending" && a.status === "submitted"));
+  }, [apps, filter]);
+
   return (
     <Layout>
       <Seo title="Your applications - NxteVia" canonical={window.location.href} />
@@ -210,9 +223,20 @@ export default function SeekerDashboard() {
           >
             <h2 className="text-xl font-bold text-slate-900 dark:text-white">Recent Applications</h2>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="h-9 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md border-slate-200/60 dark:border-slate-800/60">
-                <Search className="mr-2 h-4 w-4" /> Filter
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="h-9 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md border-slate-200/60 dark:border-slate-800/60">
+                    <Search className="mr-2 h-4 w-4" />
+                    {filter === 'all' ? 'Filter' : filter.charAt(0).toUpperCase() + filter.slice(1)}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setFilter("all")}>All Applications</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setFilter("pending")}>Pending</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setFilter("accepted")}>Accepted</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setFilter("rejected")}>Rejected</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </motion.div>
 
@@ -253,7 +277,7 @@ export default function SeekerDashboard() {
               className="grid gap-4"
             >
               <AnimatePresence mode="popLayout">
-                {apps.map((a) => {
+                {filteredApps.map((a) => {
                   const meta = oppMap[a.opportunity_id];
                   return (
                     <motion.div

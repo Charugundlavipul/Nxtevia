@@ -794,3 +794,13 @@ create policy bookmarks_insert_own on public.bookmarks
 drop policy if exists bookmarks_delete_own on public.bookmarks;
 create policy bookmarks_delete_own on public.bookmarks
   for delete using (auth.uid() = user_id);
+
+-- Enforce unique hired status per applicant per opportunity
+drop index if exists employee_records_one_hire_idx;
+create unique index employee_records_one_hire_idx on public.employee_records (opportunity_id, applicant_id) where status = 'hired';
+
+-- Enforce unique interviewing round per applicant per opportunity
+drop index if exists employee_records_unique_round_idx;
+create unique index employee_records_unique_round_idx on public.employee_records (opportunity_id, applicant_id, round) where status = 'interviewing';
+
+

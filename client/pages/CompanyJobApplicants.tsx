@@ -24,6 +24,7 @@ import {
   createEmployeeRecord,
   updateEmployeeRecord,
   deleteEmployeeRecordAndRevertApplication,
+  transitionToHired,
   type EmployeeRecord,
 } from "@/lib/employeeRecords";
 import { supabase } from "@/lib/supabase";
@@ -101,6 +102,16 @@ export default function CompanyJobApplicants() {
     [apps],
   );
 
+  const availableApplicantOptions = React.useMemo(
+    () =>
+      applicantOptions.filter((opt) => {
+        // Exclude if find usage in records
+        const hasRecord = records.some((r) => r.applicant_id === opt.value);
+        return !hasRecord;
+      }),
+    [applicantOptions, records]
+  );
+
   const createInterview = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!id || !ownerId || !newInterview.applicant_id) {
@@ -163,23 +174,17 @@ export default function CompanyJobApplicants() {
     }
     setSaving(true);
     try {
-      await createEmployeeRecord({
-        company_id: ownerId,
-        opportunity_id: id,
-        applicant_id: newHire.applicant_id,
-        status: "hired",
-        role: newHire.role || null,
-        start_date: newHire.start_date || null,
-        end_date: newHire.end_date || null,
+      await transitionToHired(ownerId, id, newHire.applicant_id, {
+        role: newHire.role,
+        start_date: newHire.start_date,
+        end_date: newHire.end_date
       });
-      await supabase
-        .from("applications")
-        .update({ status: "hired" })
-        .eq("opportunity_id", id)
-        .eq("applicant_id", newHire.applicant_id);
       setNewHire({ applicant_id: "", role: "", start_date: "", end_date: "" });
       await refreshRecords();
-      toast({ title: "Saved", description: "Hire recorded.", duration: 1800 });
+      toast({ title: "Saved", description: "Hire recorded and pipeline updated.", duration: 1800 });
+      // Refresh apps to show updated status
+      const updatedApps = await fetchApplicationsForOpportunity(id);
+      setApps(updatedApps);
     } catch (err) {
       toast({ title: "Save failed", description: err instanceof Error ? err.message : "Could not add", duration: 2200 });
     } finally {
@@ -404,7 +409,7 @@ export default function CompanyJobApplicants() {
                 <form className="grid gap-4 md:grid-cols-2 lg:grid-cols-4" onSubmit={createHire}>
                   <select className="rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 text-sm" value={newHire.applicant_id} onChange={(e) => setNewHire((s) => ({ ...s, applicant_id: e.target.value }))}>
                     <option value="">Select Candidate...</option>
-                    {applicantOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                    {availableApplicantOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                   </select>
                   <Input placeholder="Role Title" value={newHire.role} onChange={(e) => setNewHire((s) => ({ ...s, role: e.target.value }))} className="bg-white dark:bg-slate-950" />
                   <Input type="date" value={newHire.start_date} onChange={(e) => setNewHire((s) => ({ ...s, start_date: e.target.value }))} className="bg-white dark:bg-slate-950" />
@@ -485,7 +490,7 @@ export default function CompanyJobApplicants() {
                 <form className="grid gap-4 md:grid-cols-2 lg:grid-cols-5" onSubmit={createInterview}>
                   <select className="rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 text-sm" value={newInterview.applicant_id} onChange={(e) => setNewInterview((s) => ({ ...s, applicant_id: e.target.value }))}>
                     <option value="">Select Candidate...</option>
-                    {applicantOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                    {availableApplicantOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                   </select>
                   <Input placeholder="Round (e.g. Technical)" value={newInterview.round} onChange={(e) => setNewInterview((s) => ({ ...s, round: e.target.value }))} className="bg-white dark:bg-slate-950" />
                   <Input type="datetime-local" value={newInterview.schedule} onChange={(e) => setNewInterview((s) => ({ ...s, schedule: e.target.value }))} className="bg-white dark:bg-slate-950" />

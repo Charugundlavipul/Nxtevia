@@ -126,3 +126,48 @@ export async function fetchAllEmployeeRecords(): Promise<EmployeeRecord[]> {
   if (error) throw error;
   return (data || []) as EmployeeRecord[];
 }
+
+export async function transitionToHired(
+  companyId: string,
+  opportunityId: string,
+  applicantId: string,
+  details: { role: string; start_date: string; end_date: string }
+) {
+  // 1. Delete all interviewing records for this applicant/opportunity
+  const { error: deleteError } = await supabase
+    .from("employee_records")
+    .delete()
+    .eq("opportunity_id", opportunityId)
+    .eq("applicant_id", applicantId)
+    .eq("status", "interviewing");
+
+  if (deleteError) throw deleteError;
+
+  // 2. Create the new hired record
+  const { data: newRecord, error: createError } = await supabase
+    .from("employee_records")
+    .insert({
+      company_id: companyId,
+      opportunity_id: opportunityId,
+      applicant_id: applicantId,
+      status: "hired",
+      role: details.role || null,
+      start_date: details.start_date || null,
+      end_date: details.end_date || null,
+    })
+    .select()
+    .single();
+
+  if (createError) throw createError;
+
+  // 3. Update application status
+  const { error: updateError } = await supabase
+    .from("applications")
+    .update({ status: "hired" })
+    .eq("opportunity_id", opportunityId)
+    .eq("applicant_id", applicantId);
+
+  if (updateError) throw updateError;
+
+  return newRecord;
+}
