@@ -414,9 +414,7 @@ export default function Login() {
             </div>
           </div>
 
-          <div className="relative z-10 mt-12 text-sm text-white/60">
-            © 2024 NxteVia Inc. All rights reserved.
-          </div>
+
         </aside>
 
         {/* Right Side - Login Form */}

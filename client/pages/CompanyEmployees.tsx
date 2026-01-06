@@ -237,7 +237,7 @@ export default function CompanyEmployees() {
             <CardHeader className="border-b border-slate-100 pb-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="bg-indigo-50 p-2 rounded-lg"><Users className="h-5 w-5 text-indigo-600" /></div>
+                  <div className="bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10 p-2 rounded-lg"><Users className="h-5 w-5 text-indigo-600 dark:text-indigo-400" /></div>
                   <div>
                     <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Team Members</CardTitle>
                     <CardDescription className="dark:text-slate-400">View and manage your hired employees.</CardDescription>
@@ -263,11 +263,11 @@ export default function CompanyEmployees() {
                 </div>
               ) : list.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <div className="bg-slate-50 p-4 rounded-full mb-3">
+                  <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-full mb-3">
                     <Users className="h-6 w-6 text-slate-400" />
                   </div>
-                  <p className="text-slate-900 font-medium">No employees found</p>
-                  <p className="text-slate-500 text-sm mt-1">You haven't hired anyone yet.</p>
+                  <p className="text-slate-900 dark:text-white font-medium">No employees found</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">You haven't hired anyone yet.</p>
                 </div>
               ) : filteredList.length === 0 ? (
                 <div className="p-8 text-center text-slate-500">
@@ -303,8 +303,8 @@ export default function CompanyEmployees() {
                             <div className="flex items-center justify-end gap-2">
                               <Button
                                 size="sm"
-                                variant="ghost"
-                                className="text-primary hover:text-primary dark:hover:text-white hover:bg-primary/10 dark:hover:bg-primary/20"
+                                variant="outline"
+                                className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-primary dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700"
                                 onClick={() => startConversation(employee.applicant_id)}
                               >
                                 <MessageSquare className="h-4 w-4 mr-1.5" />
@@ -313,7 +313,7 @@ export default function CompanyEmployees() {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
+                                className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700"
                                 onClick={() => navigate(`/company/employees/${employee.id}/tenure`)}
                               >
                                 Manage

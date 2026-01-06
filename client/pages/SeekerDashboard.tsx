@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-type OppMap = Record<string, { title: string; summary?: string }>;
+type OppMap = Record<string, { title: string; summary?: string; company_name?: string }>;
 
 export default function SeekerDashboard() {
   const [apps, setApps] = React.useState<Application[]>([]);
@@ -37,12 +37,24 @@ export default function SeekerDashboard() {
         if (ids.length) {
           const { data, error } = await supabase
             .from("opportunities")
-            .select("id,title,problem,scope")
+            .select("id,title,problem,scope,user_id")
             .in("id", ids);
           if (error) throw error;
+
+          // Fetch company names
+          const userIds = Array.from(new Set((data || []).map((o: any) => o.user_id)));
+          const { data: profiles } = await supabase
+            .from("company_profiles")
+            .select("user_id, name")
+            .in("user_id", userIds);
+          const companyMap = new Map<string, string>();
+          profiles?.forEach((p: any) => {
+            if (p.name) companyMap.set(p.user_id, p.name);
+          });
+
           const map: OppMap = {};
           (data || []).forEach((o: any) => {
-            map[o.id] = { title: o.title, summary: o.problem || o.scope };
+            map[o.id] = { title: o.title, summary: o.problem || o.scope, company_name: companyMap.get(o.user_id) || "Unknown Company" };
           });
           setOppMap(map);
         }
@@ -83,27 +95,31 @@ export default function SeekerDashboard() {
   const stats = React.useMemo(() => {
     return {
       total: apps.length,
-      pending: apps.filter(a => a.status === 'pending').length,
-      accepted: apps.filter(a => a.status === 'accepted').length,
+      interviewing: apps.filter(a => a.status === 'interviewing' || a.status === 'pending' || a.status === 'submitted').length,
+      hired: apps.filter(a => a.status === 'hired' || a.status === 'accepted').length,
       rejected: apps.filter(a => a.status === 'rejected').length,
     };
   }, [apps]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
+      case 'hired':
       case 'accepted': return "bg-green-100/50 text-green-700 dark:bg-green-900/30 dark:text-green-400 border-green-200/50 dark:border-green-800";
       case 'rejected': return "bg-red-100/50 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-red-200/50 dark:border-red-800";
-      case 'submitted':
-      case 'pending': return "bg-blue-100/50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200/50 dark:border-blue-800";
+      case 'submitted': return "bg-blue-100/50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200/50 dark:border-blue-800";
+      case 'interviewing':
+      case 'pending': return "bg-yellow-100/50 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200/50 dark:border-yellow-800";
       default: return "bg-slate-100/50 text-slate-700 dark:bg-slate-800 dark:text-slate-400 border-slate-200/50 dark:border-slate-700";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
+      case 'hired':
       case 'accepted': return <CheckCircle className="h-3.5 w-3.5" />;
       case 'rejected': return <XCircle className="h-3.5 w-3.5" />;
-      case 'submitted':
+      case 'submitted': return <FileText className="h-3.5 w-3.5" />;
+      case 'interviewing':
       case 'pending': return <Clock className="h-3.5 w-3.5" />;
       default: return <AlertCircle className="h-3.5 w-3.5" />;
     }
@@ -124,11 +140,13 @@ export default function SeekerDashboard() {
     show: { opacity: 1, y: 0 }
   };
 
-  const [filter, setFilter] = React.useState<"all" | "pending" | "accepted" | "rejected">("all");
+  const [filter, setFilter] = React.useState<"all" | "interviewing" | "hired" | "rejected">("all");
 
   const filteredApps = React.useMemo(() => {
     if (filter === "all") return apps;
-    return apps.filter((a) => a.status === filter || (filter === "pending" && a.status === "submitted"));
+    if (filter === "interviewing") return apps.filter((a) => a.status === 'interviewing' || a.status === 'pending' || a.status === 'submitted');
+    if (filter === "hired") return apps.filter((a) => a.status === 'hired' || a.status === 'accepted');
+    return apps.filter((a) => a.status === filter);
   }, [apps, filter]);
 
   return (
@@ -186,8 +204,8 @@ export default function SeekerDashboard() {
             >
               {[
                 { icon: FileText, label: "Total Applications", value: stats.total, color: "blue" },
-                { icon: Clock, label: "Pending", value: stats.pending, color: "yellow" },
-                { icon: CheckCircle, label: "Accepted", value: stats.accepted, color: "green" },
+                { icon: Clock, label: "Interviewing", value: stats.interviewing, color: "yellow" },
+                { icon: CheckCircle, label: "Hired", value: stats.hired, color: "green" },
                 { icon: XCircle, label: "Rejected", value: stats.rejected, color: "red" },
               ].map((stat, i) => (
                 <motion.div key={i} variants={itemAnimations}>
@@ -215,6 +233,8 @@ export default function SeekerDashboard() {
         </div>
 
         <div className="relative z-10 container max-w-5xl py-12">
+          <SavedOpportunitiesSection />
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -232,15 +252,13 @@ export default function SeekerDashboard() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={() => setFilter("all")}>All Applications</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setFilter("pending")}>Pending</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setFilter("accepted")}>Accepted</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setFilter("interviewing")}>Interviewing</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setFilter("hired")}>Hired</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setFilter("rejected")}>Rejected</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           </motion.div>
-
-          <SavedOpportunitiesSection />
 
           {loading ? (
             <div className="space-y-4">
@@ -290,9 +308,12 @@ export default function SeekerDashboard() {
                           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div className="space-y-2 flex-1">
                               <div className="flex items-start justify-between md:justify-start md:gap-4">
-                                <h3 className="font-bold text-lg text-slate-900 dark:text-white group-hover:text-primary dark:group-hover:text-white dark:hover:text-white transition-colors line-clamp-1">
-                                  {meta?.title || "Opportunity"}
-                                </h3>
+                                <div>
+                                  <p className="text-sm text-slate-500 dark:text-slate-400 mb-0.5">{meta?.company_name || "Unknown Company"}</p>
+                                  <h3 className="font-bold text-lg text-slate-900 dark:text-white group-hover:text-primary dark:group-hover:text-white dark:hover:text-white transition-colors line-clamp-1">
+                                    {meta?.title || "Opportunity"}
+                                  </h3>
+                                </div>
                                 <Badge variant="outline" className={cn("capitalize flex items-center gap-1.5 px-2.5 py-0.5 backdrop-blur-sm", getStatusColor(a.status))}>
                                   {getStatusIcon(a.status)}
                                   {a.status.replace('_', ' ')}
@@ -313,9 +334,6 @@ export default function SeekerDashboard() {
                             </div>
 
                             <div className="flex items-center gap-3 pt-4 md:pt-0 border-t md:border-0 border-slate-100 dark:border-slate-800">
-                              <Button size="sm" variant="outline" className="flex-1 md:flex-none border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm" asChild>
-                                <Link to={`/seekers/applications/${a.id}`}>View Details</Link>
-                              </Button>
                               {(a.status === 'pending' || a.status === 'submitted') && (
                                 <Button
                                   size="sm"
@@ -326,6 +344,9 @@ export default function SeekerDashboard() {
                                   Withdraw
                                 </Button>
                               )}
+                              <Button size="sm" variant="outline" className="flex-1 md:flex-none border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm" asChild>
+                                <Link to={`/seekers/applications/${a.id}`}>View Details</Link>
+                              </Button>
                             </div>
                           </div>
                         </CardContent>

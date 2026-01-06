@@ -99,11 +99,20 @@ export default function AdminJobApplicants() {
     [apps],
   );
 
-  const availableApplicantOptions = React.useMemo(
+  const interviewApplicantOptions = React.useMemo(
     () =>
       applicantOptions.filter((opt) => {
         const hasRecord = records.some((r) => r.applicant_id === opt.value);
         return !hasRecord;
+      }),
+    [applicantOptions, records]
+  );
+
+  const hireApplicantOptions = React.useMemo(
+    () =>
+      applicantOptions.filter((opt) => {
+        const isHired = records.some((r) => r.applicant_id === opt.value && r.status === 'hired');
+        return !isHired;
       }),
     [applicantOptions, records]
   );
@@ -301,7 +310,7 @@ export default function AdminJobApplicants() {
                         <th className="px-6 py-4">Submitted</th>
                         <th className="px-6 py-4">Documents</th>
                         <th className="px-6 py-4">Status</th>
-                        <th className="px-6 py-4 text-right">Action</th>
+                        <th className="px-6 py-4">Action</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 dark:divide-slate-800 bg-white/50 dark:bg-slate-900/50">
@@ -321,21 +330,23 @@ export default function AdminJobApplicants() {
                               {a.cover_letter_url ? <a className="text-blue-600 hover:underline" href={a.cover_letter_url} target="_blank" rel="noreferrer">Cover</a> : null}
                             </td>
                             <td className="px-6 py-4"><Badge variant="outline" className="capitalize">{a.status}</Badge></td>
-                            <td className="px-6 py-4 text-right">
-                              <Button size="sm" variant="outline" asChild className="rounded-lg h-8">
-                                <Link to={`/admin/applications/${a.id}`}>Review</Link>
-                              </Button>
-                              {(a.status === 'submitted' || a.status === 'pending' || a.status === 'interviewing') && (
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  className="h-8 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20"
-                                  onClick={() => confirmReject(a.id, name)}
-                                >
-                                  <XCircle className="h-4 w-4 mr-1.5" />
-                                  Reject
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-2">
+                                <Button size="sm" variant="outline" asChild className="rounded-lg h-8 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700">
+                                  <Link to={`/admin/applications/${a.id}`}>Review</Link>
                                 </Button>
-                              )}
+                                {(a.status === 'submitted' || a.status === 'pending' || a.status === 'interviewing') && (
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-8 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20"
+                                    onClick={() => confirmReject(a.id, name)}
+                                  >
+                                    <XCircle className="h-4 w-4 mr-1.5" />
+                                    Reject
+                                  </Button>
+                                )}
+                              </div>
                             </td>
                           </tr>
                         );
@@ -384,7 +395,7 @@ export default function AdminJobApplicants() {
 
                             <td className="px-6 py-4 text-right space-x-2">
                               {appForRecord && (
-                                <Button size="sm" variant="ghost" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50" asChild>
+                                <Button size="sm" variant="outline" className="bg-white dark:bg-slate-800 text-blue-600 dark:text-white border-blue-200 dark:border-slate-600 hover:bg-blue-50 dark:hover:bg-slate-700" asChild>
                                   <Link to={`/admin/applications/${appForRecord.id}`}>View App</Link>
                                 </Button>
                               )}
@@ -408,7 +419,7 @@ export default function AdminJobApplicants() {
                 <form className="grid gap-4 md:grid-cols-2 lg:grid-cols-4" onSubmit={createHire}>
                   <select className="rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 text-sm" value={newHire.applicant_id} onChange={(e) => setNewHire((s) => ({ ...s, applicant_id: e.target.value }))}>
                     <option value="">Select Candidate...</option>
-                    {availableApplicantOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                    {hireApplicantOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                   </select>
                   <Input placeholder="Role Title" value={newHire.role} onChange={(e) => setNewHire((s) => ({ ...s, role: e.target.value }))} className="bg-white dark:bg-slate-950" />
                   <Input type="date" value={newHire.start_date} onChange={(e) => setNewHire((s) => ({ ...s, start_date: e.target.value }))} className="bg-white dark:bg-slate-950" />
@@ -476,7 +487,7 @@ export default function AdminJobApplicants() {
                 <form className="grid gap-4 md:grid-cols-2 lg:grid-cols-5" onSubmit={createInterview}>
                   <select className="rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 text-sm" value={newInterview.applicant_id} onChange={(e) => setNewInterview((s) => ({ ...s, applicant_id: e.target.value }))}>
                     <option value="">Select Candidate...</option>
-                    {availableApplicantOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                    {interviewApplicantOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                   </select>
                   <Input placeholder="Round (e.g. Technical)" value={newInterview.round} onChange={(e) => setNewInterview((s) => ({ ...s, round: e.target.value }))} className="bg-white dark:bg-slate-950" />
                   <Input type="datetime-local" value={newInterview.schedule} onChange={(e) => setNewInterview((s) => ({ ...s, schedule: e.target.value }))} className="bg-white dark:bg-slate-950" />

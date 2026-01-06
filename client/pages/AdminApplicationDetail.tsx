@@ -71,10 +71,10 @@ export default function AdminApplicationDetail() {
     return (
       <Layout>
         <Seo title="Application - Admin" canonical={window.location.href} />
-        <div className="min-h-screen bg-slate-50/50 flex items-center justify-center">
+        <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 flex items-center justify-center">
           <div className="flex flex-col items-center gap-4">
-            <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600" />
-            <div className="text-slate-500 font-medium">Loading application...</div>
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 dark:border-slate-700 border-t-blue-600" />
+            <div className="text-slate-500 dark:text-slate-400 font-medium">Loading application...</div>
           </div>
         </div>
       </Layout>
@@ -85,13 +85,13 @@ export default function AdminApplicationDetail() {
     return (
       <Layout>
         <Seo title="Application not found" canonical={window.location.href} />
-        <div className="min-h-screen bg-slate-50/50 flex items-center justify-center">
+        <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 flex items-center justify-center">
           <div className="text-center space-y-4">
-            <div className="bg-slate-100 p-4 rounded-full inline-flex">
+            <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-full inline-flex">
               <FileText className="h-10 w-10 text-slate-400" />
             </div>
-            <h2 className="text-xl font-semibold">Application Not Found</h2>
-            <Button variant="outline" onClick={() => navigate(-1)}>Go Back</Button>
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Application Not Found</h2>
+            <Button variant="outline" onClick={() => navigate(-1)} className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 dark:text-white dark:hover:bg-slate-700">Go Back</Button>
           </div>
         </div>
       </Layout>
@@ -112,27 +112,27 @@ export default function AdminApplicationDetail() {
   return (
     <Layout>
       <Seo title="Application - Admin" canonical={window.location.href} />
-      <div className="min-h-screen bg-slate-50/50 py-12">
+      <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-12">
         <div className="container max-w-6xl space-y-8">
           {/* Header */}
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div className="space-y-1">
-              <Link to={`/admin/jobs/${application.opportunity_id}/applicants`} className="flex items-center gap-2 text-sm text-slate-500 hover:text-blue-600 transition-colors mb-2">
+              <Link to={`/admin/jobs/${application.opportunity_id}/applicants`} className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-2">
                 <ArrowLeft className="h-3 w-3" /> Back to Applicants (Admin)
               </Link>
               <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold text-slate-900 tracking-tight">{profile.display_name || "Applicant"}</h1>
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">{profile.display_name || "Applicant"}</h1>
                 <Badge variant={
                   application.status === 'hired' ? 'default' :
                     application.status === 'interviewing' ? 'secondary' : 'outline'
-                } className="uppercase text-xs tracking-wider px-2 py-0.5 border-slate-200">
+                } className="uppercase text-xs tracking-wider px-2 py-0.5 border-slate-200 dark:border-slate-700">
                   {application.status}
                 </Badge>
               </div>
-              <div className="flex items-center gap-4 text-sm text-slate-500">
+              <div className="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
                 <div className="flex items-center gap-1">
                   <Briefcase className="h-3.5 w-3.5" />
-                  Applying for <span className="font-semibold text-slate-700">{opportunity?.title || "Opportunity"}</span>
+                  Applying for <span className="font-semibold text-slate-700 dark:text-slate-300">{opportunity?.title || "Opportunity"}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Clock className="h-3.5 w-3.5" />
@@ -146,37 +146,37 @@ export default function AdminApplicationDetail() {
 
             {/* Applicant Profile Card */}
             <div className="md:col-span-2 space-y-6">
-              <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-sm">
-                <CardHeader className="border-b border-slate-100 pb-4">
-                  <CardTitle className="flex items-center gap-2 text-lg font-bold text-slate-900">
-                    <div className="bg-blue-50 p-1.5 rounded-md"><User className="h-5 w-5 text-blue-500" /></div>
+              <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/60 dark:border-slate-800 shadow-sm">
+                <CardHeader className="border-b border-slate-100 dark:border-slate-800 pb-4">
+                  <CardTitle className="flex items-center gap-2 text-lg font-bold text-slate-900 dark:text-white">
+                    <div className="bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10 p-1.5 rounded-md"><User className="h-5 w-5 text-indigo-600 dark:text-indigo-400" /></div>
                     Applicant Profile
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6 space-y-6">
                   {seeker.about && (
                     <div>
-                      <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">About</h3>
-                      <p className="text-slate-700 leading-relaxed text-sm whitespace-pre-line">{seeker.about}</p>
+                      <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">About</h3>
+                      <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm whitespace-pre-line">{seeker.about}</p>
                     </div>
                   )}
 
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div>
-                      <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Contact Info</h3>
+                      <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Contact Info</h3>
                       <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2 text-slate-700">
+                        <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
                           <Mail className="h-3.5 w-3.5 text-slate-400" />
                           {seeker.contact_email || application.contact || "N/A"}
                         </div>
                         {seeker.telephone && (
-                          <div className="flex items-center gap-2 text-slate-700">
+                          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
                             <Phone className="h-3.5 w-3.5 text-slate-400" />
                             {seeker.telephone}
                           </div>
                         )}
                         {profile.country && (
-                          <div className="flex items-center gap-2 text-slate-700">
+                          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
                             <MapPin className="h-3.5 w-3.5 text-slate-400" />
                             {profile.country}
                           </div>
@@ -185,10 +185,10 @@ export default function AdminApplicationDetail() {
                     </div>
 
                     <div>
-                      <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Details</h3>
+                      <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Details</h3>
                       <div className="space-y-2 text-sm">
                         {application.availability && (
-                          <div className="flex items-center gap-2 text-slate-700">
+                          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
                             <Calendar className="h-3.5 w-3.5 text-slate-400" />
                             Available: {application.availability}
                           </div>
@@ -199,10 +199,10 @@ export default function AdminApplicationDetail() {
 
                   {Array.isArray(seeker.skills) && seeker.skills.length > 0 && (
                     <div>
-                      <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Skills</h3>
+                      <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Skills</h3>
                       <div className="flex flex-wrap gap-2">
                         {seeker.skills.map((skill: string) => (
-                          <Badge key={skill} variant="secondary" className="bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200">
+                          <Badge key={skill} variant="secondary" className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border-slate-200 dark:border-slate-700">
                             {skill}
                           </Badge>
                         ))}
@@ -213,25 +213,25 @@ export default function AdminApplicationDetail() {
               </Card>
 
               {/* Questionnaire Answers */}
-              <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-sm">
-                <CardHeader className="border-b border-slate-100 pb-4">
-                  <CardTitle className="flex items-center gap-2 text-lg font-bold text-slate-900">
-                    <div className="bg-indigo-50 p-1.5 rounded-md"><MessageSquare className="h-5 w-5 text-indigo-500" /></div>
+              <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/60 dark:border-slate-800 shadow-sm">
+                <CardHeader className="border-b border-slate-100 dark:border-slate-800 pb-4">
+                  <CardTitle className="flex items-center gap-2 text-lg font-bold text-slate-900 dark:text-white">
+                    <div className="bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10 p-1.5 rounded-md"><MessageSquare className="h-5 w-5 text-indigo-600 dark:text-indigo-400" /></div>
                     Application Responses
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6">
                   {answers.length === 0 ? (
-                    <div className="text-sm text-slate-500 italic">No custom questions were answered.</div>
+                    <div className="text-sm text-slate-500 dark:text-slate-400 italic">No custom questions were answered.</div>
                   ) : (
                     <div className="space-y-6">
                       {answers.map((ans: any, idx: number) => (
                         <div key={idx} className="space-y-2">
                           <div className="flex items-center justify-between gap-4">
-                            <div className="font-medium text-slate-900 text-sm">{ans.prompt || `Question ${idx + 1}`}</div>
-                            {ans.type && <Badge variant="outline" className="text-[10px] uppercase text-slate-500 border-slate-200">{ans.type}</Badge>}
+                            <div className="font-medium text-slate-900 dark:text-white text-sm">{ans.prompt || `Question ${idx + 1}`}</div>
+                            {ans.type && <Badge variant="outline" className="text-[10px] uppercase text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700">{ans.type}</Badge>}
                           </div>
-                          <div className="bg-slate-50 p-3 rounded-lg border border-slate-100 text-sm text-slate-700">
+                          <div className="bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-100 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300">
                             {formatAnswer(ans.answer)}
                           </div>
                         </div>
@@ -244,26 +244,26 @@ export default function AdminApplicationDetail() {
 
             {/* Sidebar: Documents & Actions */}
             <div className="space-y-6">
-              <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-sm h-fit">
-                <CardHeader className="border-b border-slate-100 pb-4">
-                  <CardTitle className="flex items-center gap-2 text-base font-bold text-slate-900">
-                    <div className="bg-emerald-50 p-1.5 rounded-md"><FileText className="h-4 w-4 text-emerald-500" /></div>
+              <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/60 dark:border-slate-800 shadow-sm h-fit">
+                <CardHeader className="border-b border-slate-100 dark:border-slate-800 pb-4">
+                  <CardTitle className="flex items-center gap-2 text-base font-bold text-slate-900 dark:text-white">
+                    <div className="bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-emerald-900/20 p-1.5 rounded-md"><FileText className="h-4 w-4 text-emerald-600 dark:text-emerald-400" /></div>
                     Attachments
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 space-y-3">
                   {attachments.length === 0 ? (
-                    <div className="text-sm text-slate-500 italic">No attachments provided.</div>
+                    <div className="text-sm text-slate-500 dark:text-slate-400 italic">No attachments provided.</div>
                   ) : (
                     attachments.map(([label, url]) => (
-                      <Button asChild key={label} variant="outline" className="w-full justify-start bg-white hover:bg-slate-50 border-slate-200 h-auto py-3 shadow-none">
+                      <Button asChild key={label} variant="outline" className="w-full justify-start bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border-slate-200 dark:border-slate-700 h-auto py-3 shadow-none">
                         <a href={url} target="_blank" rel="noreferrer" className="flex items-center gap-3">
-                          <div className="bg-blue-50 p-2 rounded text-blue-600">
+                          <div className="bg-blue-50 dark:bg-blue-900/30 p-2 rounded text-blue-600 dark:text-blue-400">
                             {label === 'LinkedIn' ? <Globe className="h-4 w-4" /> : <FileText className="h-4 w-4" />}
                           </div>
                           <div className="flex-1 text-left">
-                            <div className="font-medium text-slate-900 text-sm">{label}</div>
-                            <div className="text-xs text-slate-500">Click to view</div>
+                            <div className="font-medium text-slate-900 dark:text-white text-sm">{label}</div>
+                            <div className="text-xs text-slate-500 dark:text-slate-400">Click to view</div>
                           </div>
                           <ExternalLink className="h-3 w-3 text-slate-400" />
                         </a>

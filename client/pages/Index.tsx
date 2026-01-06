@@ -2,7 +2,7 @@ import * as React from "react";
 import Layout from "@/components/Layout";
 import { Seo } from "@/components/site/Seo";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Accordion,
@@ -28,9 +28,10 @@ import {
   Clock,
   UserPlus,
   Search,
-  Send
+  Send,
+  DollarSign
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { fetchActiveOpportunities, type Opportunity } from "@/lib/opportunities";
 import { Link, useLocation } from "react-router-dom";
 
@@ -116,11 +117,11 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
 
           <div className="pt-8 flex items-center justify-center lg:justify-start gap-8 text-slate-500 dark:text-slate-400">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary" />
+              <CheckCircle2 className="h-5 w-5 text-primary dark:text-white" />
               <span className="font-medium">Verified Experience</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary" />
+              <CheckCircle2 className="h-5 w-5 text-primary dark:text-white" />
               <span className="font-medium">Global Network</span>
             </div>
           </div>
@@ -420,7 +421,7 @@ function HowItWorks({ seekerMode, companyMode }: { seekerMode: boolean; companyM
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6 }}
       id="how-it-works"
-      className="py-16 bg-white dark:bg-slate-900 transition-colors duration-300 scroll-mt-24"
+      className="py-16 bg-white dark:bg-slate-950 transition-colors duration-300 scroll-mt-24"
     >
       <div className="container">
         <div className="text-center mb-12">
@@ -437,21 +438,21 @@ function HowItWorks({ seekerMode, companyMode }: { seekerMode: boolean; companyM
               </div>
               <ol className="space-y-6">
                 <li className="flex gap-4">
-                  <div className="flex-none w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">1</div>
+                  <div className="flex-none w-8 h-8 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 flex items-center justify-center font-bold text-sm">1</div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white">Create a Profile</h4>
                     <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Sign up and showcase your skills and interests.</p>
                   </div>
                 </li>
                 <li className="flex gap-4">
-                  <div className="flex-none w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">2</div>
+                  <div className="flex-none w-8 h-8 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 flex items-center justify-center font-bold text-sm">2</div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white">Browse Opportunities</h4>
                     <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Find projects that match your career goals.</p>
                   </div>
                 </li>
                 <li className="flex gap-4">
-                  <div className="flex-none w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">3</div>
+                  <div className="flex-none w-8 h-8 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 flex items-center justify-center font-bold text-sm">3</div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white">Select and Apply</h4>
                     <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Submit your application and start working.</p>
@@ -477,21 +478,21 @@ function HowItWorks({ seekerMode, companyMode }: { seekerMode: boolean; companyM
                 </div>
                 <ol className="space-y-6">
                   <li className="flex gap-4">
-                    <div className="flex-none w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary flex items-center justify-center font-bold text-sm">1</div>
+                    <div className="flex-none w-8 h-8 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 flex items-center justify-center font-bold text-sm">1</div>
                     <div>
                       <h4 className="font-semibold text-slate-900 dark:text-white">Create Company Profile</h4>
                       <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Register your organization and verify details.</p>
                     </div>
                   </li>
                   <li className="flex gap-4">
-                    <div className="flex-none w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary flex items-center justify-center font-bold text-sm">2</div>
+                    <div className="flex-none w-8 h-8 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 flex items-center justify-center font-bold text-sm">2</div>
                     <div>
                       <h4 className="font-semibold text-slate-900 dark:text-white">Post Opportunities</h4>
                       <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Define scope, requirements, and deliverables.</p>
                     </div>
                   </li>
                   <li className="flex gap-4">
-                    <div className="flex-none w-8 h-8 rounded-full bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary flex items-center justify-center font-bold text-sm">3</div>
+                    <div className="flex-none w-8 h-8 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 flex items-center justify-center font-bold text-sm">3</div>
                     <div>
                       <h4 className="font-semibold text-slate-900 dark:text-white">Review & Hire</h4>
                       <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Select best candidates and manage projects.</p>
@@ -528,11 +529,7 @@ function FeaturedProjects({ companyMode }: { companyMode: boolean }) {
     typeof window !== "undefined" &&
     localStorage.getItem("eaas_authed") === "true";
 
-  const applyHref = (id: string) => {
-    return authed
-      ? `/apply/form/${id}`
-      : `/login?next=/apply/form/${id}`;
-  };
+
 
   if (companyMode) return null;
 
@@ -595,76 +592,77 @@ function FeaturedProjects({ companyMode }: { companyMode: boolean }) {
               </Card>
             ))
           ) : (
-            opportunities.map((p) => (
+            opportunities.map((p, index) => (
               <Card
                 key={p.id}
-                className="group relative h-full flex flex-col overflow-hidden bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1"
+                className="group relative h-full flex flex-col bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-primary/30 dark:hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 overflow-hidden hover:-translate-y-1"
               >
-                {/* Gradient Top Line */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-violet-500 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                <CardContent className="flex flex-col h-full p-8">
-                  {/* Header */}
-                  <div className="flex items-center justify-between mb-6">
-                    <Badge variant="outline" className={cn(
-                      "capitalize font-medium",
-                      p.modality === 'remote' ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-900/50" :
-                        p.modality === 'hybrid' ? "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-900/50" :
-                          "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/50"
-                    )}>
-                      {p.modality}
-                    </Badge>
-                    <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                      {p.stipend === "none" ? "Unpaid" : p.stipend}
-                    </span>
-                  </div>
-
-                  {/* Content */}
-                  <div className="mb-6 flex-grow">
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-primary dark:group-hover:text-white dark:hover:text-white transition-colors line-clamp-2">
-                      {p.title}
-                    </h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-3">
-                      {p.problem}
-                    </p>
-                  </div>
-
-                  {/* Footer */}
-                  <div className="space-y-6">
-                    <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
-                      <div className="flex items-center gap-6 text-xs font-medium text-slate-500 dark:text-slate-400 mb-4">
-                        <div className="flex items-center gap-1.5">
-                          <Clock className="h-4 w-4 text-primary/70" />
-                          {p.duration}
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Briefcase className="h-4 w-4 text-primary/70" />
-                          {p.hours} hrs/wk
-                        </div>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2">
-                        {(p.skills || []).slice(0, 3).map((s) => (
-                          <Badge key={s} variant="secondary" className="bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-100 dark:border-slate-800">
-                            {s}
-                          </Badge>
-                        ))}
-                        {(p.skills?.length || 0) > 3 && (
-                          <span className="text-xs font-medium text-slate-400 flex items-center px-1">
-                            +{p.skills!.length - 3}
-                          </span>
+                <CardHeader className="space-y-3 pb-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="space-y-1">
+                      <Badge
+                        variant="secondary"
+                        className={cn(
+                          "mb-2 capitalize font-medium",
+                          p.modality === 'remote' ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-900/50" :
+                            p.modality === 'hybrid' ? "bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-900/20 dark:text-purple-400 dark:border-purple-900/50" :
+                              "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/50"
                         )}
+                      >
+                        {p.modality}
+                      </Badge>
+                      <div className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-0.5">
+                        {p.company_name}
                       </div>
+                      <CardTitle className="text-xl font-bold text-slate-900 dark:text-white leading-tight group-hover:text-primary dark:group-hover:text-white dark:hover:text-white transition-colors">
+                        {p.title}
+                      </CardTitle>
                     </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2 text-xs text-slate-500 dark:text-slate-400">
+                    <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/50 px-2 py-1.5 rounded-md border border-slate-200 dark:border-slate-700">
+                      <Clock className="h-3.5 w-3.5" />
+                      {p.duration}
+                    </div>
+                    <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/50 px-2 py-1.5 rounded-md border border-slate-200 dark:border-slate-700">
+                      <Briefcase className="h-3.5 w-3.5" />
+                      {p.hours} hrs/week
+                    </div>
+                    <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/50 px-2 py-1.5 rounded-md border border-slate-200 dark:border-slate-700">
+                      <DollarSign className="h-3.5 w-3.5" />
+                      {p.stipend === "none" || p.stipend === "unpaid" ? "Unpaid" : p.stipend === "micro" ? "Stipend" : "Paid"}
+                    </div>
+                  </div>
+                </CardHeader>
 
-                    <div className="grid grid-cols-2 gap-3 mt-4">
-                      <Button asChild className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100">
-                        <Link to={applyHref(p.id)}>Apply Now</Link>
-                      </Button>
-                      <Button asChild variant="outline" className="w-full border-slate-200 dark:border-slate-700">
-                        <Link to={`/opportunities/${p.id}`}>Details</Link>
-                      </Button>
+                <CardContent className="flex-1 flex flex-col pt-0">
+                  <div className="flex-1">
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {(p.skills || []).slice(0, 4).map((s) => (
+                        <span
+                          key={s}
+                          className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700"
+                        >
+                          {s}
+                        </span>
+                      ))}
+                      {(p.skills?.length || 0) > 4 && (
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400">
+                          +{p.skills!.length - 4} more
+                        </span>
+                      )}
                     </div>
+                  </div>
+
+                  <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <Button asChild className="w-full group-hover:bg-primary transition-all shadow-sm group-hover:shadow-primary/25" size="lg">
+                      <Link to={`/seekers/opportunities/${encodeURIComponent(p.id)}`} className="flex items-center justify-center gap-2">
+                        View Details
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

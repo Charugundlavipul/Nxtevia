@@ -709,6 +709,11 @@ drop policy if exists company_view_authenticated on public.company_profiles;
 create policy company_view_authenticated on public.company_profiles
   for select using (auth.role() = 'authenticated');
 
+-- Allow anonymous/public users to view company names (for home page opportunities)
+drop policy if exists company_public_read on public.company_profiles;
+create policy company_public_read on public.company_profiles
+  for select using (true);
+
 -- Legal Attestations for things like ESA Student Exemptions
 create table if not exists public.legal_attestations (
   id uuid primary key default gen_random_uuid(),

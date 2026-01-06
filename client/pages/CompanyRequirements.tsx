@@ -229,8 +229,7 @@ export default function CompanyRequirements() {
 
         <section className="container py-12 max-w-4xl relative z-10">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-              <Settings className="h-8 w-8 text-primary dark:text-primary" />
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
               Application Requirements
             </h1>
             <p className="text-slate-600 dark:text-slate-400 mt-2 text-lg">
@@ -242,8 +241,8 @@ export default function CompanyRequirements() {
             <Card className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-white/50 dark:border-slate-800 shadow-sm overflow-hidden">
               <CardHeader className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 pb-4">
                 <div className="flex items-center gap-2">
-                  <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded-lg text-primary dark:text-primary">
-                    <FileText className="h-5 w-5" />
+                  <div className="bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10 p-2 rounded-lg">
+                    <FileText className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
                   <div>
                     <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">Standard Requirements</CardTitle>
@@ -408,8 +407,8 @@ export default function CompanyRequirements() {
               <CardHeader className="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 pb-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-2">
-                    <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded-lg text-amber-600 dark:text-amber-400">
-                      <HelpCircle className="h-5 w-5" />
+                    <div className="bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-amber-900/20 p-2 rounded-lg">
+                      <HelpCircle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
                     </div>
                     <div>
                       <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">Custom Questions</CardTitle>

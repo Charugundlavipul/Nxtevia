@@ -71,7 +71,7 @@ export function SavedOpportunitiesSection() {
                                             <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-1 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                                 {opp.title}
                                             </h3>
-                                            {/* Company Name would be nice here if available in join */}
+                                            <p className="text-sm text-slate-500 dark:text-slate-400">{opp.company_name || "Unknown Company"}</p>
                                         </div>
 
                                         <div className="space-y-2 mb-6 flex-1">

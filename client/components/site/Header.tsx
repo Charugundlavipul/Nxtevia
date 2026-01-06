@@ -111,7 +111,7 @@ export function Header() {
               src="/assets/nxtevia-logo-light.webp"
               alt="NxteVia"
               className="h-8 w-auto block dark:hidden"
-              fetchPriority="high"
+              fetchpriority="high"
               decoding="async"
             />
             {/* Dark mode logo */}

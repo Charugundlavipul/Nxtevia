@@ -643,12 +643,12 @@ export default function AdminJobReview() {
                     <div className="space-y-4 pt-2">
                       {(job.history || []).map((h: any, idx: number) => (
                         <div key={idx} className="flex gap-4 text-sm border-l-2 border-slate-200 dark:border-slate-700 pl-4 py-1">
-                          <div className="min-w-[140px] text-slate-400 dark:text-slate-500 text-xs pt-0.5 font-mono">
-                            {new Date(h.at).toLocaleString()}
+                          <div className="w-[160px] shrink-0 text-slate-400 dark:text-slate-500 text-xs pt-0.5 font-mono">
+                            {new Date(h.at).toLocaleDateString()}, {new Date(h.at).toLocaleTimeString()}
                           </div>
                           <div>
                             <div className="font-medium text-slate-900 dark:text-white">{h.action}</div>
-                            {h.note && <div className="text-slate-500 dark:text-slate-400 text-xs mt-1 bg-slate-50 dark:bg-slate-800 p-2 rounded-lg">{h.note}</div>}
+                            {h.note && <div className="inline-block text-slate-500 dark:text-slate-400 text-xs mt-1 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">{h.note}</div>}
                             {h.by && <div className="text-slate-400 dark:text-slate-500 text-xs italic mt-1">by {h.by}</div>}
                           </div>
                         </div>

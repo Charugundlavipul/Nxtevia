@@ -32,11 +32,11 @@ function JobsTable({ rows }: { rows: Opportunity[] }) {
   if (rows.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
-        <div className="bg-slate-50 p-4 rounded-full mb-3">
+        <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-full mb-3">
           <Briefcase className="h-6 w-6 text-slate-400" />
         </div>
-        <p className="text-slate-900 font-medium">No jobs found</p>
-        <p className="text-slate-500 text-sm mt-1">There are no jobs in this category.</p>
+        <p className="text-slate-900 dark:text-white font-medium">No jobs found</p>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">There are no jobs in this category.</p>
       </div>
     );
   }
@@ -78,7 +78,7 @@ function JobsTable({ rows }: { rows: Opportunity[] }) {
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <Button asChild size="sm" variant="ghost" className="text-primary hover:text-primary dark:hover:text-white hover:bg-primary/10">
+                  <Button asChild size="sm" variant="outline" className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-primary dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-primary dark:hover:text-white">
                     <Link to={`/company/jobs/${s.id}`}>Manage <ArrowRight className="ml-1 h-3 w-3" /></Link>
                   </Button>
                 </td>
@@ -161,7 +161,7 @@ export default function CompanyDashboard() {
           <Card id="jobs-table-section" className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/60 dark:border-slate-800 shadow-sm scroll-mt-24">
             <CardHeader className="border-b border-slate-100 pb-4">
               <div className="flex items-center gap-3">
-                <div className="bg-primary/10 p-2 rounded-lg"><LayoutDashboard className="h-5 w-5 text-primary" /></div>
+                <div className="bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10 p-2 rounded-lg"><LayoutDashboard className="h-5 w-5 text-indigo-600 dark:text-indigo-400" /></div>
                 <div>
                   <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Your Opportunities</CardTitle>
                   <CardDescription className="dark:text-slate-400">Track and manage your job listings.</CardDescription>
@@ -246,8 +246,8 @@ function ActiveJobsShowcase({ jobs, loading, onViewAll }: { jobs: Opportunity[];
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-          <Briefcase className="h-5 w-5 text-primary" />
+        <div className="h-10 w-10 rounded-xl bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10 flex items-center justify-center">
+          <Briefcase className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
         </div>
         <div>
           <h2 className="text-lg font-bold text-slate-900 dark:text-white">Active Jobs</h2>
@@ -260,8 +260,8 @@ function ActiveJobsShowcase({ jobs, loading, onViewAll }: { jobs: Opportunity[];
           <Link key={job.id} to={`/company/jobs/${job.id}`} className="group block h-full">
             <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-primary/50 transition-all h-full flex flex-col">
               <div className="flex items-start justify-between mb-3">
-                <div className="bg-primary/5 p-2 rounded-lg group-hover:bg-primary/10 transition-colors">
-                  <Briefcase className="h-5 w-5 text-primary" />
+                <div className="bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10 p-2 rounded-lg group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/20 transition-colors">
+                  <Briefcase className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                 </div>
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
                   LIVE
