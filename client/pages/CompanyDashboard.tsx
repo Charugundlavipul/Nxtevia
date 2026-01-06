@@ -61,8 +61,7 @@ function JobsTable({ rows }: { rows: Opportunity[] }) {
               <th className="px-6 py-4">Title</th>
               <th className="px-6 py-4">Status</th>
               <th className="px-6 py-4">Submitted</th>
-              <th className="px-6 py-4">Applicants</th>
-              <th className="px-6 py-4 text-right">Action</th>
+              <th className="px-6 py-4">Action</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -71,13 +70,7 @@ function JobsTable({ rows }: { rows: Opportunity[] }) {
                 <td className="px-6 py-4 font-medium text-slate-900 dark:text-slate-200">{s.title}</td>
                 <td className="px-6 py-4">{getStatusBadge(s.status)}</td>
                 <td className="px-6 py-4 text-slate-500">{new Date(s.created_at).toLocaleDateString()}</td>
-                <td className="px-6 py-4 text-slate-500">
-                  {/* Placeholder for applicant count if available, else just a dash or icon */}
-                  <span className="inline-flex items-center gap-1 text-slate-400">
-                    <UserGroupIcon className="h-4 w-4" /> -
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-right">
+                <td className="px-6 py-4">
                   <Button asChild size="sm" variant="outline" className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-primary dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-primary dark:hover:text-white">
                     <Link to={`/company/jobs/${s.id}`}>Manage <ArrowRight className="ml-1 h-3 w-3" /></Link>
                   </Button>

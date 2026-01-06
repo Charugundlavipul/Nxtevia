@@ -38,6 +38,7 @@ import {
 import { supabase } from "@/lib/supabase";
 import {
   ArrowLeft,
+  ArrowRight,
   Briefcase,
   Clock,
   DollarSign,
@@ -458,177 +459,25 @@ export default function AdminJobReview() {
                 </CardContent>
               </Card>
 
-              {/* Hiring Pipeline */}
-              <div className="space-y-6">
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                  <Users className="h-5 w-5 text-indigo-500" /> Hiring Pipeline
-                </h2>
-
-                {/* Interviewing */}
-                <Card className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-white/50 dark:border-slate-800 shadow-sm overflow-hidden">
-                  <CardHeader className="flex flex-row items-center justify-between border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 py-3 px-6">
-                    <CardTitle className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                      <Users className="h-4 w-4 text-slate-500 dark:text-slate-400" />
-                      Interviewing Candidates
-                    </CardTitle>
-                    <Button size="sm" variant="ghost" className="h-8 text-primary hover:text-primary dark:hover:text-white hover:bg-primary/10 dark:text-blue-400 dark:hover:bg-blue-900/20" onClick={() => setShowInterviewForm((v) => !v)}>
-                      {showInterviewForm ? "Cancel" : "Add Candidate"}
-                    </Button>
-                  </CardHeader>
-                  <CardContent className="p-0">
-                    {showInterviewForm && (
-                      <div className="p-6 bg-slate-50 dark:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800">
-                        <form className="grid gap-4 md:grid-cols-2" onSubmit={createInterview}>
-                          <div className="md:col-span-2">
-                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5 block">Applicant</label>
-                            <select
-                              className="flex h-10 w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                              value={newInterview.applicant_id}
-                              onChange={(e) => setNewInterview((s) => ({ ...s, applicant_id: e.target.value }))}
-                            >
-                              <option value="">Select Applicant...</option>
-                              {applicantOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                            </select>
-                          </div>
-                          <div>
-                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5 block">Round</label>
-                            <Input placeholder="e.g. Technical" value={newInterview.round} onChange={(e) => setNewInterview((s) => ({ ...s, round: e.target.value }))} className="bg-white dark:bg-slate-950" />
-                          </div>
-                          <div>
-                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5 block">Schedule</label>
-                            <Input type="datetime-local" value={newInterview.schedule} onChange={(e) => setNewInterview((s) => ({ ...s, schedule: e.target.value }))} className="bg-white dark:bg-slate-950" />
-                          </div>
-                          <div>
-                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5 block">Interviewer</label>
-                            <Input placeholder="Interviewer Name" value={newInterview.interviewer} onChange={(e) => setNewInterview((s) => ({ ...s, interviewer: e.target.value }))} className="bg-white dark:bg-slate-950" />
-                          </div>
-                          <div>
-                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5 block">Notes</label>
-                            <Input placeholder="Notes" value={newInterview.notes} onChange={(e) => setNewInterview((s) => ({ ...s, notes: e.target.value }))} className="bg-white dark:bg-slate-950" />
-                          </div>
-                          <div className="md:col-span-2 flex justify-end pt-2">
-                            <Button type="submit" disabled={saving} className="bg-primary hover:bg-primary/90 text-white">Add to Interview</Button>
-                          </div>
-                        </form>
-                      </div>
-                    )}
-
-                    {interviewing.length === 0 ? (
-                      <div className="text-center py-8 text-slate-500 dark:text-slate-400 text-sm">No candidates currently interviewing.</div>
-                    ) : (
-                      <Table>
-                        <TableHeader className="bg-slate-50/50 dark:bg-slate-800/50">
-                          <TableRow className="border-slate-100 dark:border-slate-800 hover:bg-transparent">
-                            <TableHead className="pl-6 font-medium text-slate-500 dark:text-slate-400">Candidate</TableHead>
-                            <TableHead className="font-medium text-slate-500 dark:text-slate-400">Round</TableHead>
-                            <TableHead className="font-medium text-slate-500 dark:text-slate-400">Schedule</TableHead>
-                            <TableHead className="text-right pr-6 font-medium text-slate-500 dark:text-slate-400">Actions</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {interviewing.map((r) => {
-                            const applicant = applicantOptions.find((opt) => opt.value === r.applicant_id);
-                            return (
-                              <TableRow key={r.id} className="border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
-                                <TableCell className="pl-6 font-medium text-slate-900 dark:text-white">{applicant?.label || "Unknown"}</TableCell>
-                                <TableCell className="text-slate-600 dark:text-slate-300">{r.round || "—"}</TableCell>
-                                <TableCell className="text-slate-600 dark:text-slate-300">{r.schedule ? new Date(r.schedule).toLocaleString() : "—"}</TableCell>
-                                <TableCell className="text-right pr-6 space-x-2">
-                                  <Button size="sm" variant="ghost" className="hover:bg-slate-100 dark:hover:bg-slate-800 h-8 w-8 p-0" onClick={() => { setEditInterview(r); setEditInterviewOpen(true); }}>
-                                    <Pencil className="h-4 w-4 text-slate-500" />
-                                  </Button>
-                                  <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 h-8 w-8 p-0" onClick={() => onDelete(r.id)}>
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    )}
-                  </CardContent>
-                </Card>
-
-                {/* Hired */}
-                <Card className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-white/50 dark:border-slate-800 shadow-sm overflow-hidden">
-                  <CardHeader className="flex flex-row items-center justify-between border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50 py-3 px-6">
-                    <CardTitle className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-green-500" />
-                      Hired Employees
-                    </CardTitle>
-                    <Button size="sm" variant="ghost" className="h-8 text-green-600 hover:text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/20" onClick={() => setShowHireForm((v) => !v)}>
-                      {showHireForm ? "Cancel" : "Record Hire"}
-                    </Button>
-                  </CardHeader>
-                  <CardContent className="p-0">
-                    {showHireForm && (
-                      <div className="p-6 bg-green-50/30 dark:bg-green-900/10 border-b border-green-100 dark:border-green-900/30">
-                        <form className="grid gap-4 md:grid-cols-2" onSubmit={createHire}>
-                          <div className="md:col-span-2">
-                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5 block">Applicant</label>
-                            <select
-                              className="flex h-10 w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all"
-                              value={newHire.applicant_id}
-                              onChange={(e) => setNewHire((s) => ({ ...s, applicant_id: e.target.value }))}
-                            >
-                              <option value="">Select Applicant...</option>
-                              {applicantOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                            </select>
-                          </div>
-                          <div>
-                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5 block">Role Title</label>
-                            <Input placeholder="Role Title" value={newHire.role} onChange={(e) => setNewHire((s) => ({ ...s, role: e.target.value }))} className="bg-white dark:bg-slate-950" />
-                          </div>
-                          <div>
-                            <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1.5 block">Start Date</label>
-                            <Input type="date" value={newHire.start_date} onChange={(e) => setNewHire((s) => ({ ...s, start_date: e.target.value }))} className="bg-white dark:bg-slate-950" />
-                          </div>
-
-                          <div className="md:col-span-2 flex justify-end pt-2">
-                            <Button type="submit" disabled={saving} className="bg-green-600 hover:bg-green-700 text-white">Confirm Hire</Button>
-                          </div>
-                        </form>
-                      </div>
-                    )}
-
-                    {hired.length === 0 ? (
-                      <div className="text-center py-8 text-slate-500 dark:text-slate-400 text-sm">No hires recorded yet.</div>
-                    ) : (
-                      <Table>
-                        <TableHeader className="bg-slate-50/50 dark:bg-slate-800/50">
-                          <TableRow className="border-slate-100 dark:border-slate-800 hover:bg-transparent">
-                            <TableHead className="pl-6 font-medium text-slate-500 dark:text-slate-400">Employee</TableHead>
-                            <TableHead className="font-medium text-slate-500 dark:text-slate-400">Role</TableHead>
-                            <TableHead className="font-medium text-slate-500 dark:text-slate-400">Start Date</TableHead>
-                            <TableHead className="text-right pr-6 font-medium text-slate-500 dark:text-slate-400">Actions</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {hired.map((r) => {
-                            const applicant = applicantOptions.find((opt) => opt.value === r.applicant_id);
-                            return (
-                              <TableRow key={r.id} className="border-slate-100 dark:border-slate-800 hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
-                                <TableCell className="pl-6 font-medium text-slate-900 dark:text-white">{applicant?.label || "Unknown"}</TableCell>
-                                <TableCell className="text-slate-600 dark:text-slate-300">{r.role || "—"}</TableCell>
-                                <TableCell className="text-slate-600 dark:text-slate-300">{r.start_date || "—"}</TableCell>
-                                <TableCell className="text-right pr-6 space-x-2">
-                                  <Button size="sm" variant="ghost" className="hover:bg-slate-100 dark:hover:bg-slate-800 h-8 w-8 p-0" onClick={() => { setEditHire(r); setEditHireOpen(true); }}>
-                                    <Pencil className="h-4 w-4 text-slate-500" />
-                                  </Button>
-                                  <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 h-8 w-8 p-0" onClick={() => onDelete(r.id)}>
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
+              {/* Hiring Banner */}
+              <Card className="bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900/80 border-slate-200 dark:border-slate-800 shadow-sm">
+                <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                  <div className="space-y-2">
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      <div className="bg-emerald-100 dark:bg-emerald-900/30 p-2 rounded-lg"><Users className="h-5 w-5 text-emerald-700 dark:text-emerald-400" /></div>
+                      Manage Applicants & Hiring Pipeline
+                    </h2>
+                    <p className="text-slate-500 dark:text-slate-400 max-w-lg">
+                      Review applications, track interview progress, and manage hiring decisions in the dedicated dashboard.
+                    </p>
+                  </div>
+                  <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 whitespace-nowrap">
+                    <Link to={`/admin/jobs/${job.id}/applicants`}>
+                      Go to Applicant Dashboard <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
 
               {/* History - Collapsible */}
               <Accordion type="single" collapsible className="w-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-white/50 dark:border-slate-800 rounded-xl shadow-sm">

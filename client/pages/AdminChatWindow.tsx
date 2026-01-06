@@ -181,16 +181,6 @@ export default function AdminChatWindow() {
 
   const messageGroups = groupMessagesByDate(messages);
 
-  if (loading && messages.length === 0) {
-    return (
-      <ChatLayout
-        sidebar={<AdminChatListPane currentConversationId={conversationId} />}
-      >
-        <ChatLoadingState />
-      </ChatLayout>
-    );
-  }
-
   if (!conversationId) {
     return (
       <ChatLayout sidebar={<AdminChatListPane currentConversationId={undefined} />}>
@@ -203,6 +193,16 @@ export default function AdminChatWindow() {
             <p className="text-slate-500 dark:text-slate-400 text-sm max-w-xs mx-auto">Select a conversation to monitor or participate.</p>
           </div>
         </div>
+      </ChatLayout>
+    );
+  }
+
+  if (loading && messages.length === 0) {
+    return (
+      <ChatLayout
+        sidebar={<AdminChatListPane currentConversationId={conversationId} />}
+      >
+        <ChatLoadingState />
       </ChatLayout>
     );
   }
