@@ -90,7 +90,7 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
           </h1>
 
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-            Join students and companies building the future of work. Gain verifiable experience, build your portfolio, and get hired.
+            Connect talent and companies in one integrated space built for the future of work. Build verifiable experience as you collaborate, grow your portfolio, and move seamlessly toward meaningful employment.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
@@ -119,10 +119,6 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-primary dark:text-white" />
               <span className="font-medium">Verified Experience</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary dark:text-white" />
-              <span className="font-medium">Global Network</span>
             </div>
           </div>
         </motion.div>
@@ -229,7 +225,7 @@ function Mission() {
                   <CheckCircle2 className="h-4 w-4 text-green-500" /> Build a verifiable portfolio
                 </li>
                 <li className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" /> Gain global experience
+                  <CheckCircle2 className="h-4 w-4 text-green-500" /> Gain Professional experience
                 </li>
                 <li className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
                   <CheckCircle2 className="h-4 w-4 text-green-500" /> Improve employability

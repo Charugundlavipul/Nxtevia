@@ -134,8 +134,7 @@ export default function ProjectDetail() {
                         ? `${project.currency || "USD"} ${project.pay_amount} / ${project.pay_type || "hourly"}`
                         : project.stipend === "unpaid" ? "Unpaid (ESA Exempt)"
                           : project.stipend === "none" ? "Unpaid"
-                            : project.stipend === "micro" ? "Small Stipend"
-                              : "Paid"
+                            : "Paid"
                       }
                     </div>
                   </div>
