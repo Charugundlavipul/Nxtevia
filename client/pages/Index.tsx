@@ -228,7 +228,7 @@ function Mission() {
                   <CheckCircle2 className="h-4 w-4 text-green-500" /> Gain Professional experience
                 </li>
                 <li className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" /> Improve employability
+                  <CheckCircle2 className="h-4 w-4 text-green-500" /> Strengthen your professional profile
                 </li>
               </ul>
             </CardContent>
