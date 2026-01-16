@@ -63,15 +63,15 @@ function EmailVerifyModal({ open, onClose, email, onVerify }: { open: boolean; o
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-md rounded-2xl bg-white border border-slate-100 shadow-2xl p-6 space-y-4">
+      <div className="w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-2xl p-6 space-y-4">
         <div className="space-y-1">
-          <div className="font-bold text-xl text-slate-900">Verify Email</div>
-          <div className="text-sm text-slate-500">We will send a one-time code to <span className="font-medium text-slate-900">{email}</span>.</div>
+          <div className="font-bold text-xl text-slate-900 dark:text-white">Verify Email</div>
+          <div className="text-sm text-slate-500 dark:text-slate-400">We will send a one-time code to <span className="font-medium text-slate-900 dark:text-white">{email}</span>.</div>
         </div>
 
         {stage === "idle" && (
           <div className="flex justify-end gap-3 pt-2">
-            <Button variant="outline" onClick={onClose} className="rounded-xl">Cancel</Button>
+            <Button variant="outline" onClick={onClose} className="rounded-xl dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">Cancel</Button>
             <Button
               className="rounded-xl bg-primary hover:bg-primary/90 text-white"
               onClick={() => {
@@ -89,18 +89,18 @@ function EmailVerifyModal({ open, onClose, email, onVerify }: { open: boolean; o
         {stage === "sent" && (
           <div className="space-y-4 pt-2">
             <div className="space-y-2">
-              <Label>Enter Code</Label>
+              <Label className="dark:text-slate-300">Enter Code</Label>
               <Input
                 value={code}
                 onChange={(e) => setCode((e.target as HTMLInputElement).value)}
                 placeholder="0000"
-                className="text-center text-2xl tracking-widest font-mono h-14 bg-slate-50 border-slate-200"
+                className="text-center text-2xl tracking-widest font-mono h-14 bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 dark:text-white"
                 maxLength={4}
               />
-              <p className="text-xs text-slate-500 text-center">Check your spam folder if you don't see it.</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 text-center">Check your spam folder if you don't see it.</p>
             </div>
             <div className="flex justify-end gap-3">
-              <Button variant="outline" onClick={onClose} className="rounded-xl">Cancel</Button>
+              <Button variant="outline" onClick={onClose} className="rounded-xl dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">Cancel</Button>
               <Button
                 className="rounded-xl bg-primary hover:bg-primary/90 text-white"
                 onClick={() => {
@@ -218,22 +218,22 @@ export default function CompanyProfileCreate() {
   return (
     <Layout>
       <Seo title="Create Company Profile – NxteVia" canonical={window.location.href} />
-      <div className="min-h-screen bg-slate-50/50 py-12">
+      <div className="min-h-screen bg-slate-50/50 dark:bg-slate-900 py-12">
         <div className="container max-w-3xl space-y-8">
 
           {/* Header */}
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Create Company Profile</h1>
-            <p className="text-slate-500">Tell us about your organization to get started.</p>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Create Company Profile</h1>
+            <p className="text-slate-500 dark:text-slate-400">Tell us about your organization to get started.</p>
           </div>
 
           {loading ? (
-            <div className="h-64 bg-white rounded-xl shadow-sm animate-pulse" />
+            <div className="h-64 bg-white dark:bg-slate-800 rounded-xl shadow-sm animate-pulse" />
           ) : (
             <form onSubmit={save} className="space-y-8">
-              <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-sm">
-                <CardHeader className="border-b border-slate-100 pb-4">
-                  <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-white/60 dark:border-slate-700 shadow-sm">
+                <CardHeader className="border-b border-slate-100 dark:border-slate-700 pb-4">
+                  <CardTitle className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Building2 className="h-5 w-5 text-primary" />
                     Organization Details
                   </CardTitle>
@@ -241,37 +241,37 @@ export default function CompanyProfileCreate() {
                 <CardContent className="p-6 space-y-6">
                   <div className="grid gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Organization Name</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Organization Name</Label>
                       <Input
                         value={profile.name}
                         onChange={(e) => setProfile((p) => ({ ...p, name: e.target.value }))}
                         placeholder="e.g., Brane Group"
-                        className="bg-white border-slate-200"
+                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Industry</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Industry</Label>
                       <Input
                         value={profile.industry}
                         onChange={(e) => setProfile((p) => ({ ...p, industry: e.target.value }))}
                         placeholder="e.g., Software, Education"
-                        className="bg-white border-slate-200"
+                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700"
                       />
                     </div>
                     <div className="md:col-span-2 space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">About the Organization</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">About the Organization</Label>
                       <Textarea
                         rows={4}
                         value={profile.about}
                         onChange={(e) => setProfile((p) => ({ ...p, about: e.target.value }))}
                         placeholder="Share a brief overview of your company..."
-                        className="bg-white border-slate-200 resize-none"
+                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700 resize-none"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Company Size</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Company Size</Label>
                       <Select value={profile.sizeRange} onValueChange={(v) => setProfile((p) => ({ ...p, sizeRange: v }))}>
-                        <SelectTrigger className="bg-white border-slate-200">
+                        <SelectTrigger className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700">
                           <SelectValue placeholder="Select size" />
                         </SelectTrigger>
                         <SelectContent>
@@ -283,33 +283,33 @@ export default function CompanyProfileCreate() {
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Base Location</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Base Location</Label>
                       <div className="relative">
                         <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                         <Input
                           value={profile.baseLocation}
                           onChange={(e) => setProfile((p) => ({ ...p, baseLocation: e.target.value }))}
                           placeholder="City, Country"
-                          className="pl-9 bg-white border-slate-200"
+                          className="pl-9 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700"
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Website</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Website</Label>
                       <div className="relative">
                         <Globe className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                         <Input
                           value={profile.website}
                           onChange={(e) => setProfile((p) => ({ ...p, website: e.target.value }))}
                           placeholder="https://example.com"
-                          className="pl-9 bg-white border-slate-200"
+                          className="pl-9 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700"
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Hiring Goal</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Hiring Goal</Label>
                       <Select value={profile.hiringGoal} onValueChange={(v) => setProfile((p) => ({ ...p, hiringGoal: v }))}>
-                        <SelectTrigger className="bg-white border-slate-200">
+                        <SelectTrigger className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700">
                           <SelectValue placeholder="Select goal" />
                         </SelectTrigger>
                         <SelectContent>
@@ -324,9 +324,9 @@ export default function CompanyProfileCreate() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-sm">
-                <CardHeader className="border-b border-slate-100 pb-4">
-                  <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-white/60 dark:border-slate-700 shadow-sm">
+                <CardHeader className="border-b border-slate-100 dark:border-slate-700 pb-4">
+                  <CardTitle className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Users className="h-5 w-5 text-primary" />
                     Contact Information
                   </CardTitle>
@@ -334,7 +334,7 @@ export default function CompanyProfileCreate() {
                 <CardContent className="p-6 space-y-6">
                   <div className="grid gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Contact Email</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Contact Email</Label>
                       <div className="flex gap-2">
                         <div className="relative flex-1">
                           <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
@@ -342,7 +342,7 @@ export default function CompanyProfileCreate() {
                             value={profile.contactEmail}
                             onChange={(e) => setProfile((p) => ({ ...p, contactEmail: e.target.value }))}
                             placeholder="contact@company.com"
-                            className="pl-9 bg-white border-slate-200"
+                            className="pl-9 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700"
                           />
                         </div>
                         <Button
@@ -350,7 +350,10 @@ export default function CompanyProfileCreate() {
                           variant="outline"
                           onClick={() => setModalOpen(true)}
                           disabled={!profile.contactEmail || profile.emailVerified}
-                          className={cn(profile.emailVerified && "text-green-600 border-green-200 bg-green-50")}
+                          className={cn(
+                            "dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800",
+                            profile.emailVerified && "text-green-600 border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400"
+                          )}
                         >
                           {profile.emailVerified ? <CheckCircle2 className="h-4 w-4 mr-2" /> : null}
                           {profile.emailVerified ? "Verified" : "Verify"}
@@ -358,46 +361,46 @@ export default function CompanyProfileCreate() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Phone Number</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Phone Number</Label>
                       <div className="relative">
                         <Phone className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                         <Input
                           value={profile.telephone}
                           onChange={(e) => setProfile((p) => ({ ...p, telephone: e.target.value }))}
                           placeholder="+1 555 555 5555"
-                          className="pl-9 bg-white border-slate-200"
+                          className="pl-9 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700"
                         />
                       </div>
                     </div>
                     <div className="md:col-span-2">
-                      <Label className="text-sm font-semibold text-slate-700 mb-2 block">LinkedIn Verification</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 block">LinkedIn Verification</Label>
                       <div
                         onClick={() => setProfile((p) => ({ ...p, linkedinVerified: !p.linkedinVerified }))}
                         className={cn(
-                          "cursor-pointer flex items-center gap-3 rounded-xl border p-4 transition-all hover:bg-slate-50",
-                          profile.linkedinVerified ? "border-primary bg-primary/5" : "border-slate-200"
+                          "cursor-pointer flex items-center gap-3 rounded-xl border p-4 transition-all hover:bg-slate-50 dark:hover:bg-slate-800",
+                          profile.linkedinVerified ? "border-primary bg-primary/5 dark:bg-primary/10" : "border-slate-200 dark:border-slate-700"
                         )}
                       >
                         <div className={cn(
                           "flex h-5 w-5 items-center justify-center rounded border transition-colors",
-                          profile.linkedinVerified ? "border-primary bg-primary text-white" : "border-slate-400"
+                          profile.linkedinVerified ? "border-primary bg-primary text-white" : "border-slate-400 dark:border-slate-600"
                         )}>
                           {profile.linkedinVerified && <CheckCircle2 className="h-3.5 w-3.5" />}
                         </div>
-                        <span className="text-sm font-medium text-slate-700">My LinkedIn profile is verified (Optional)</span>
+                        <span className="text-sm font-medium text-slate-700 dark:text-slate-300">My LinkedIn profile is verified (Optional)</span>
                       </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-sm">
-                <CardHeader className="border-b border-slate-100 pb-4">
-                  <CardTitle className="text-lg font-bold text-slate-900">Preferences & Interests</CardTitle>
+              <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border-white/60 dark:border-slate-700 shadow-sm">
+                <CardHeader className="border-b border-slate-100 dark:border-slate-700 pb-4">
+                  <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Preferences & Interests</CardTitle>
                 </CardHeader>
                 <CardContent className="p-6 space-y-8">
                   <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-slate-700">Reasons for Joining</Label>
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Reasons for Joining</Label>
                     <div className="grid gap-3 sm:grid-cols-2">
                       {[
                         "On-board skilled talent for quick turn around",
@@ -411,16 +414,16 @@ export default function CompanyProfileCreate() {
                           key={r}
                           onClick={() => toggleSelection("reasonsForJoining", r)}
                           className={cn(
-                            "cursor-pointer rounded-xl border p-4 text-sm transition-all hover:border-primary/40 hover:bg-primary/5",
+                            "cursor-pointer rounded-xl border p-4 text-sm transition-all hover:border-primary/40 hover:bg-primary/5 dark:hover:bg-primary/10",
                             profile.reasonsForJoining.includes(r)
-                              ? "border-primary bg-primary/5 text-primary ring-1 ring-primary"
-                              : "border-slate-200 bg-slate-50/50 text-slate-600"
+                              ? "border-primary bg-primary/5 dark:bg-primary/10 text-primary ring-1 ring-primary"
+                              : "border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 text-slate-600 dark:text-slate-300"
                           )}
                         >
                           <div className="flex items-start gap-3">
                             <div className={cn(
                               "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-colors",
-                              profile.reasonsForJoining.includes(r) ? "border-primary bg-primary text-white" : "border-slate-400"
+                              profile.reasonsForJoining.includes(r) ? "border-primary bg-primary text-white" : "border-slate-400 dark:border-slate-600"
                             )}>
                               {profile.reasonsForJoining.includes(r) && <CheckCircle2 className="h-3 w-3" />}
                             </div>
@@ -432,7 +435,7 @@ export default function CompanyProfileCreate() {
                   </div>
 
                   <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-slate-700">Project Types of Interest</Label>
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Project Types of Interest</Label>
                     <div className="flex flex-wrap gap-2">
                       {[
                         "Tech", "Marketing", "Design", "Operations", "Product", "Other"
@@ -443,8 +446,8 @@ export default function CompanyProfileCreate() {
                           className={cn(
                             "cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-all",
                             profile.projectTypes.includes(t)
-                              ? "border-primary bg-primary/5 text-primary"
-                              : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                              ? "border-primary bg-primary/5 dark:bg-primary/10 text-primary"
+                              : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:border-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
                           )}
                         >
                           {t}
@@ -456,7 +459,7 @@ export default function CompanyProfileCreate() {
                         value={profile.projectTypesOther}
                         onChange={(e) => setProfile((p) => ({ ...p, projectTypesOther: e.target.value }))}
                         placeholder="Please specify other project types"
-                        className="mt-2 bg-white border-slate-200"
+                        className="mt-2 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700"
                       />
                     )}
                   </div>
@@ -471,7 +474,7 @@ export default function CompanyProfileCreate() {
                   type="button"
                   variant="ghost"
                   onClick={() => navigate('/company/home')}
-                  className="h-12 px-6 rounded-xl text-slate-600 hover:bg-slate-100"
+                  className="h-12 px-6 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
                   Cancel
                 </Button>

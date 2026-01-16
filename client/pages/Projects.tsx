@@ -229,7 +229,7 @@ export default function Projects() {
                   <SelectContent>
                     <SelectItem value="all">Any Pay</SelectItem>
                     <SelectItem value="none">Unpaid</SelectItem>
-                    <SelectItem value="micro">Small Stipend</SelectItem>
+                    
                     <SelectItem value="modest">Paid</SelectItem>
                   </SelectContent>
                 </Select>

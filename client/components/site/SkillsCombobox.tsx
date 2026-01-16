@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const DEFAULT_SKILLS: string[] = [
-  "Customer Success Management","UX Design","UI Design","Product Management","Frontend Development","Backend Development","Fullstack","React","Next.js","Node.js","TypeScript","JavaScript","Python","Java","SQL","NoSQL","Data Analysis","Power BI","Tableau","Excel","Machine Learning","NLP","SEO","SEM","Content Writing","Copywriting","Email Marketing","Social Media","Sales","CRM","HubSpot","Salesforce","Figma","UX Research","QA Testing","Automation","Cypress","Jest","DevOps","Docker","Kubernetes","AWS","GCP","Azure","APIs","REST","GraphQL","Design","Branding","Illustration","HTML","CSS","Accessibility","WCAG","Analytics","Product Analytics","A/B Testing","Project Management","Agile","Scrum","Notion","Zapier"
+  "Customer Success Management", "UX Design", "UI Design", "Product Management", "Frontend Development", "Backend Development", "Fullstack", "React", "Next.js", "Node.js", "TypeScript", "JavaScript", "Python", "Java", "SQL", "NoSQL", "Data Analysis", "Power BI", "Tableau", "Excel", "Machine Learning", "NLP", "SEO", "SEM", "Content Writing", "Copywriting", "Email Marketing", "Social Media", "Sales", "CRM", "HubSpot", "Salesforce", "Figma", "UX Research", "QA Testing", "Automation", "Cypress", "Jest", "DevOps", "Docker", "Kubernetes", "AWS", "GCP", "Azure", "APIs", "REST", "GraphQL", "Design", "Branding", "Illustration", "HTML", "CSS", "Accessibility", "WCAG", "Analytics", "Product Analytics", "A/B Testing", "Project Management", "Agile", "Scrum", "Notion", "Zapier"
 ];
 
 function uniquePush(list: string[], value: string) {
@@ -18,11 +18,13 @@ function uniquePush(list: string[], value: string) {
 export function SkillsCombobox({
   selected,
   onChange,
-  placeholder = "Add skills"
+  placeholder = "Add skills",
+  className
 }: {
   selected: string[];
   onChange: (next: string[]) => void;
   placeholder?: string;
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -65,7 +67,8 @@ export function SkillsCombobox({
         <div
           className={cn(
             "flex min-h-10 w-full flex-wrap items-center gap-1 rounded-md border bg-background px-2 py-1 text-sm",
-            "focus-within:ring-2 focus-within:ring-ring"
+            "focus-within:ring-2 focus-within:ring-ring",
+            className
           )}
           onClick={() => inputRef.current?.focus()}
         >
