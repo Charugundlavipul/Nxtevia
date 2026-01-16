@@ -407,15 +407,7 @@ export default function Login() {
                 <p className="text-sm text-white/80">Build a portfolio that proves your skills</p>
               </div>
             </div>
-            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 transition-transform hover:scale-[1.02]">
-              <div className="bg-white/20 p-2.5 rounded-xl">
-                <Globe2 className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-white">Global Opportunities</h3>
-                <p className="text-sm text-white/80">Work with companies from around the world</p>
-              </div>
-            </div>
+
             <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 transition-transform hover:scale-[1.02]">
               <div className="bg-white/20 p-2.5 rounded-xl">
                 <BellRing className="h-6 w-6 text-white" />

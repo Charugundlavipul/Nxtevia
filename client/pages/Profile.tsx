@@ -507,7 +507,7 @@ export default function Profile() {
 
                   {companyProfile?.projectTypes && companyProfile.projectTypes.length > 0 && (
                     <section>
-                      <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3">Project Types</h3>
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3">Project/Work Types</h3>
                       <div className="flex flex-wrap gap-2">
                         {companyProfile.projectTypes.map((p) => (
                           <Badge key={p} variant="secondary" className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 border-blue-100 dark:border-blue-800">

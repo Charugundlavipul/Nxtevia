@@ -252,7 +252,7 @@ function Mission() {
               </div>
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">For Companies</h3>
               <p className="text-slate-600 dark:text-slate-400 mb-6">
-                Connect with talented individuals who can support you with short-term projects anywhere in your journey.
+                Connect with talented individuals who can support you with short-term projects/work anywhere in your journey.
               </p>
               <ul className="space-y-3">
                 <li className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
@@ -451,7 +451,7 @@ function HowItWorks({ seekerMode, companyMode }: { seekerMode: boolean; companyM
                   <div className="flex-none w-8 h-8 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 flex items-center justify-center font-bold text-sm">3</div>
                   <div>
                     <h4 className="font-semibold text-slate-900 dark:text-white">Select and Apply</h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Submit your application and start working.</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Submit your application.</p>
                   </div>
                 </li>
               </ol>
@@ -491,7 +491,7 @@ function HowItWorks({ seekerMode, companyMode }: { seekerMode: boolean; companyM
                     <div className="flex-none w-8 h-8 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 flex items-center justify-center font-bold text-sm">3</div>
                     <div>
                       <h4 className="font-semibold text-slate-900 dark:text-white">Review & Hire</h4>
-                      <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Select best candidates and manage projects.</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Select best candidates</p>
                     </div>
                   </li>
                 </ol>
@@ -553,7 +553,7 @@ function FeaturedProjects({ companyMode }: { companyMode: boolean }) {
               Curated Opportunities
             </Badge>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-white mb-6">
-              Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">Projects</span>
+              Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">Opportunities</span>
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
               Hand-picked opportunities to help you build your portfolio, gain verifiable experience, and connect with top companies.
@@ -702,7 +702,7 @@ function FAQ({ companyMode }: { companyMode?: boolean }) {
     },
     {
       q: "Is NxteVia available in my country?",
-      a: "NxteVia is expanding globally, starting with opportunities in Canada and India. As we grow, more regions will be added — so stay tuned!",
+      a: "NxteVia is expanding globally, starting with opportunities in Canada. As we grow, more regions will be added — so stay tuned!",
     },
   ];
 
@@ -820,7 +820,7 @@ function FinalCTA({ seekerMode, companyMode }: { seekerMode: boolean; companyMod
         <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-8 font-light leading-relaxed">
           {companyMode
             ? "Connect with verified talent and streamline your hiring process."
-            : "Join thousands of students gaining real-world experience."}
+            : "Connect talent and companies in one integrated space."}
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

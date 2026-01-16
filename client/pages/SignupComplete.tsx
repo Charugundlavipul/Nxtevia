@@ -47,7 +47,7 @@ export default function SignupComplete() {
                   <ul className="list-disc list-inside space-y-1">
                     <li>Organization name and description</li>
                     <li>Contact email and location</li>
-                    <li>Industries and project types</li>
+                    <li>Industries and Project/Work Types</li>
                   </ul>
                 </>
               ) : (

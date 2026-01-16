@@ -133,7 +133,7 @@ export default function Contact() {
                                             </div>
                                             <div>
                                                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">Location</h3>
-                                                <p className="text-slate-500 dark:text-slate-400 mb-2">Come say hello at our office HQ.</p>
+                                                <p className="text-slate-500 dark:text-slate-400 mb-2">We are a Canada based Company</p>
                                                 <p className="text-slate-900 dark:text-slate-200 font-medium text-lg">
                                                     Toronto, Ontario, Canada
                                                 </p>

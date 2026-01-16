@@ -252,7 +252,7 @@ export default function ProjectDetail() {
                   <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 space-y-3 border border-slate-100 dark:border-slate-700">
                     <div className="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-400">
                       <Calendar className="h-4 w-4 text-slate-400 mt-0.5" />
-                      <span>Applications reviewed weekly</span>
+                      <span>Applications reviewed frequently</span>
                     </div>
                     <div className="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-400">
                       <CheckCircle2 className="h-4 w-4 text-slate-400 mt-0.5" />

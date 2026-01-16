@@ -322,7 +322,7 @@ export default function CompanyProfileUpdate() {
                   </div>
 
                   <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-slate-700">Project Types of Interest</Label>
+                    <Label className="text-sm font-semibold text-slate-700">Project/Work Types of Interest</Label>
                     <div className="flex flex-wrap gap-2">
                       {[
                         "Tech", "Marketing", "Design", "Operations", "Product", "Other"
@@ -345,7 +345,7 @@ export default function CompanyProfileUpdate() {
                       <Input
                         value={profile.projectTypesOther}
                         onChange={(e) => setProfile((p) => ({ ...p, projectTypesOther: e.target.value }))}
-                        placeholder="Please specify other project types"
+                        placeholder="Please specify other Project/Work Types"
                         className="mt-2 bg-white border-slate-200"
                       />
                     )}

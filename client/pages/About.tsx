@@ -41,7 +41,7 @@ const HeroSection = () => {
 
           <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 leading-relaxed font-light max-w-3xl mx-auto">
             NxteVia Inc. is a founder-led company built by visionaries. We design intelligent,
-            future-ready digital platforms that connect <span className="text-slate-900 dark:text-white font-medium">opportunity with potential</span>.
+            digital platforms that connect <span className="text-slate-900 dark:text-white font-medium">opportunity with potential</span>.
           </p>
         </motion.div>
       </div>

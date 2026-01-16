@@ -22,7 +22,7 @@ const FAQ_CATEGORIES: { id: string; label: string; roles: Role[]; faqs: { q: str
     roles: ["student", "company", null],
     faqs: [
       { q: "What is NxteVia?", a: "A platform for part-time, real-world projects that help you gain verifiable experience and grow your career." },
-      { q: "Where is NxteVia available?", a: "United States, India, and Canada." },
+      { q: "Where is NxteVia available?", a: "Canada" },
       { q: "How long are projects?", a: "Typically 2–8 weeks with 5–20 hours/week." },
       { q: "How do verified completions work?", a: "When a project is marked completed by the organization, NxteVia records a verified completion on your profile and adds a badge if criteria are met." },
     ],
@@ -32,11 +32,11 @@ const FAQ_CATEGORIES: { id: string; label: string; roles: Role[]; faqs: { q: str
     label: "Projects & Applications",
     roles: ["student", null],
     faqs: [
-      { q: "How do I apply?", a: "Open a project and click Apply—complete a short form; the organization reviews weekly." },
-      { q: "Are projects paid?", a: "Some projects are paid; each posting displays stipend information like 'none', 'micro', or 'modest'." },
-      { q: "Can I apply to multiple projects?", a: "Yes—submit separate applications for each project. Organizations review and respond per their timelines." },
-      { q: "What happens after I apply?", a: "The organization reviews applications weekly; status updates appear in your dashboard and you may be invited to interview or start." },
-    ],
+      { q: "How do I apply?", a: "Open a Opportunity and click Apply—complete a short form; the organization reviews applications." },
+      { q: "Are Opportunities paid?", a: "Some Opportunities are paid, Companies can post both paid and unpaid opportunities." },
+      { q: "Can I apply to multiple Opportunities?", a: "Yes—submit separate applications for each project. Organizations review and respond per their timelines." },
+      { q: "What happens after I apply?", a: "The organization reviews applications; status updates appear in your dashboard and you may be invited to interview or start." },
+    ]
   },
   {
     id: "company",
@@ -44,7 +44,7 @@ const FAQ_CATEGORIES: { id: string; label: string; roles: Role[]; faqs: { q: str
     roles: ["company", null],
     faqs: [
       { q: "How do I post an opportunity?", a: "Use the post form from the company dashboard; include title, scope, duration, and skills." },
-      { q: "What are verification rules for hires?", a: "Companies can verify completions; admins may moderate and issue badges based on deliverables." },
+
       { q: "Attachment limits?", a: "Attachments must be under 10MB per file and common formats (pdf, png, jpg)." },
     ],
   },
