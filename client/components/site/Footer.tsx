@@ -78,7 +78,7 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} NxteVia, Inc. All rights reserved.</p>
-          <p className="text-slate-600">Designed by Dhrumil Waghela and Vipul Charugundla</p>
+
           <p>Built with ❤️ by Canadians for Canadians.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-slate-300 transition-colors">Privacy</a>
