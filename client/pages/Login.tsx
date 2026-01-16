@@ -203,6 +203,13 @@ export default function Login() {
       const mappedRole = ensured.mappedRole;
       const name = ensured.displayName || (user.user_metadata as any)?.name;
       const email = user.email ?? "";
+
+      if (mappedRole === "admin" || mappedRole === "Admin" || role === "admin" || role === "Admin") {
+        await supabase.auth.signOut();
+        toast({ title: "Sign in failed", description: "Check your credentials.", duration: 3500 });
+        return;
+      }
+
       localStorage.setItem("eaas_authed", "true");
       localStorage.setItem("eaas_role", mappedRole);
       if (name) localStorage.setItem("eaas_name", name);
@@ -317,9 +324,9 @@ export default function Login() {
       const mappedRole = ensured.mappedRole;
       const name = ensured.displayName || (data.user.user_metadata as any)?.name;
 
-      if (mappedRole === "admin") {
+      if (mappedRole === "admin" || mappedRole === "Admin" || role === "admin" || role === "Admin") {
         await supabase.auth.signOut();
-        toast({ title: "Access denied", description: "Admins must use the Admin Login page.", duration: 4000 });
+        toast({ title: "Sign in failed", description: "Check your credentials.", duration: 3500 });
         setLoading(false);
         return;
       }
@@ -342,10 +349,16 @@ export default function Login() {
     const redirectTo = next
       ? `${window.location.origin}/login?next=${encodeURIComponent(next)}`
       : `${window.location.origin}/login`;
+
+    const scopes = provider === "azure"
+      ? "openid profile email User.Read offline_access"
+      : "openid profile email";
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo,
+        scopes,
         queryParams: { access_type: "offline", prompt: "consent" },
       },
     });
