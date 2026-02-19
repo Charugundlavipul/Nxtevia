@@ -41,11 +41,15 @@ export default function CreateAccount() {
     }
   };
 
+  const [dob, setDob] = useState("");
+
   const handleManual = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     if (!email || !password) { toast({ title: "Error", description: "Email and password are required.", duration: 3000 }); setLoading(false); return; }
     if (!name) { toast({ title: "Error", description: role === "company" ? "Company name is required." : "Full name is required.", duration: 3000 }); setLoading(false); return; }
+    if (role === "student" && !dob) { toast({ title: "Error", description: "Date of Birth is required.", duration: 3000 }); setLoading(false); return; }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) { toast({ title: "Invalid email", description: "Please enter a valid email address.", duration: 3000 }); setLoading(false); return; }
     if (password.length < 6) { toast({ title: "Password too short", description: "Use at least 6 characters.", duration: 3000 }); setLoading(false); return; }
@@ -71,7 +75,7 @@ export default function CreateAccount() {
         return;
       }
 
-      await provisionProfileForRole(data.session, role, name, email);
+      await provisionProfileForRole(data.session, role, name, email, dob);
       toast({ title: "Account created", description: "Signed up successfully.", duration: 2500 });
       navigate(`/signup/complete?role=${role}`);
     } catch (err) {
@@ -159,6 +163,19 @@ export default function CreateAccount() {
                       className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-10 text-slate-900 dark:text-white"
                     />
                   </div>
+                  {role === "student" && (
+                    <div className="space-y-2 animate-in fade-in slide-in-from-top-1 duration-200">
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Date of Birth</Label>
+                      <Input
+                        value={dob}
+                        onChange={(e) => setDob(e.target.value)}
+                        type="date"
+                        max={new Date().toISOString().split("T")[0]}
+                        required={role === "student"}
+                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-10 text-slate-900 dark:text-white"
+                      />
+                    </div>
+                  )}
                   <div className="space-y-2">
                     <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Email</Label>
                     <Input

@@ -426,7 +426,40 @@ export default function AdminJobReview() {
                 <CardContent className="p-6 space-y-8">
                   <div>
                     <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-wider">Problem Statement</h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">{job.problem}</p>
+                    <div className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+                      {(() => {
+                        if (job.desired_outcome) {
+                          let cleanProblem = job.problem || "No problem statement provided.";
+                          if (cleanProblem.includes("**Problem Statement**")) {
+                            cleanProblem = cleanProblem.replace(/\*\*Problem Statement\*\*/g, "").split("**Desired Outcome**")[0];
+                          }
+                          return cleanProblem.trim();
+                        }
+                        // Backwards compatibility
+                        if (job.problem && job.problem.includes("**Problem Statement**")) {
+                          const parts = job.problem.split("**Desired Outcome**");
+                          return parts[0].replace(/\*\*Problem Statement\*\*/g, "").trim();
+                        }
+                        return job.problem;
+                      })()}
+                    </div>
+                  </div>
+                  <Separator className="bg-slate-100 dark:bg-slate-800" />
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-2 uppercase tracking-wider">Desired Outcome</h3>
+                    <div className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+                      {(() => {
+                        if (job.desired_outcome) {
+                          return job.desired_outcome;
+                        }
+                        // Backwards compatibility
+                        if (job.problem && job.problem.includes("**Desired Outcome**")) {
+                          const parts = job.problem.split("**Desired Outcome**");
+                          return parts[1] ? parts[1].trim() : "";
+                        }
+                        return "";
+                      })()}
+                    </div>
                   </div>
                   <Separator className="bg-slate-100 dark:bg-slate-800" />
                   <div>

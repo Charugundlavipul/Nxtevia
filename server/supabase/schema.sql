@@ -107,6 +107,7 @@ create table if not exists public.opportunities (
   user_id uuid not null references auth.users on delete cascade,
   title text not null,
   problem text not null,
+  desired_outcome text,
   scope text not null,
   modality public.opportunity_modality not null,
   duration text not null check (duration in ('0-3m', '4-6m', '7-9m', '10-12m', '>12m')),
@@ -199,7 +200,9 @@ alter table public.seeker_profiles
   add column if not exists resume_name text,
   add column if not exists email_verified boolean default false,
   add column if not exists linkedin_verified boolean default false,
-  add column if not exists status text not null default 'active' check (status in ('active', 'banned'));
+  add column if not exists status text not null default 'active' check (status in ('active', 'banned')),
+  add column if not exists dob date,
+  add column if not exists is_minor boolean default false;
 
 alter table public.company_profiles
   add column if not exists reasons_for_joining text[] default '{}',
@@ -249,6 +252,7 @@ $$ language plpgsql security definer;
 alter table public.opportunities
   add column if not exists title text,
   add column if not exists problem text,
+  add column if not exists desired_outcome text,
   add column if not exists scope text,
   add column if not exists modality text,
   add column if not exists duration text,

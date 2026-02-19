@@ -108,7 +108,7 @@ export default function Contact() {
                                     <Badge variant="outline" className="mb-4 border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-700/50 dark:text-slate-300 dark:bg-slate-800/50 px-4 py-1 text-xs uppercase tracking-wider font-semibold">Contact Info</Badge>
                                     <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-6">Reach Out to Us</h2>
                                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
-                                        We are always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
+                                        We are always open to discussing new projects, creative ideas, or opportunities to be part of our vision.
                                     </p>
                                 </div>
 

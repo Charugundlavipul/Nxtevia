@@ -36,8 +36,10 @@ export default function SignupComplete() {
             <div>
               <h1 className="text-2xl font-bold">Account created</h1>
               <p className="text-sm text-muted-foreground mt-1">
-                Your {isCompany ? "company" : "seeker"} account is ready. One last step:
-                complete your profile so we can match you correctly.
+                Your {isCompany ? "company" : "seeker"} account is ready. One last step:{" "}
+                {isCompany
+                  ? "complete your profile so we can match you with the right talent."
+                  : "complete your profile so we can connect you with the right opportunities."}
               </p>
             </div>
             <div className="space-y-2 text-sm text-muted-foreground">

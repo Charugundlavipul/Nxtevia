@@ -7,6 +7,7 @@ export type Opportunity = {
   user_id: string;
   title: string;
   problem: string;
+  desired_outcome?: string;
   scope: string;
   modality: string;
   duration: string;

@@ -28,7 +28,8 @@ import { cn } from "@/lib/utils";
 interface FormValues {
   modality: "remote" | "hybrid" | "on-site";
   title: string;
-  problem: string;
+  problem_statement: string;
+  desired_outcome: string;
   scope: string;
   duration: "0-3m" | "4-6m" | "7-9m" | "10-12m" | ">12m";
   hours: "5-10" | "10-20" | "20+" | string;
@@ -61,7 +62,8 @@ export default function PostOpportunity() {
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormValues>({
     defaultValues: {
       title: "",
-      problem: "",
+      problem_statement: "",
+      desired_outcome: "",
       scope: "",
       skills: "",
       modality: "remote",
@@ -176,9 +178,11 @@ export default function PostOpportunity() {
 
     setSubmitting(true);
     try {
+      const combinedProblem = `**Problem Statement**\n${values.problem_statement}\n\n**Desired Outcome**\n${values.desired_outcome}`;
+
       const newJob = await createOpportunity({
         title: values.title,
-        problem: values.problem,
+        problem: combinedProblem,
         scope: values.scope,
         modality: values.modality,
         duration: values.duration,
@@ -249,7 +253,7 @@ export default function PostOpportunity() {
               <CardContent className="p-6 space-y-6">
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Modality</Label>
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Workmode</Label>
                     <Select value={watch("modality")} onValueChange={(v) => setValue("modality", v as any)}>
                       <SelectTrigger className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700">
                         <SelectValue placeholder="Work mode" />
@@ -270,11 +274,20 @@ export default function PostOpportunity() {
                     />
                   </div>
                   <div className="md:col-span-2 space-y-2">
-                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Desired Outcome (Problem Statement)</Label>
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Problem Statement</Label>
                     <Textarea
-                      rows={4}
-                      {...register("problem", { required: true })}
-                      placeholder="What outcome do you want to achieve?"
+                      rows={3}
+                      {...register("problem_statement", { required: true })}
+                      placeholder="What is the problem you are trying to solve?"
+                      className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700 resize-none"
+                    />
+                  </div>
+                  <div className="md:col-span-2 space-y-2">
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Desired Outcome</Label>
+                    <Textarea
+                      rows={3}
+                      {...register("desired_outcome", { required: true })}
+                      placeholder="What is the desired outcome or solution?"
                       className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700 resize-none"
                     />
                   </div>
@@ -344,7 +357,6 @@ export default function PostOpportunity() {
                           />
                         </div>
                         <div className="col-span-1 space-y-2">
-                          <Label className="text-xs font-medium text-slate-500">Currency</Label>
                           <Select value={watch("currency")} onValueChange={(v) => setValue("currency", v)}>
                             <SelectTrigger className="bg-white dark:bg-slate-950">
                               <SelectValue />
@@ -551,21 +563,26 @@ export default function PostOpportunity() {
               )}
             </Card>
 
-            <div className="flex items-center gap-4 pt-4 pb-12">
-              <Button
-                type="submit"
-                className="h-12 px-8 rounded-xl bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 font-medium text-base transition-all hover:scale-[1.02]"
-                disabled={submitting}
-              >
-                {submitting ? "Submitting..." : (
-                  <>
-                    <Save className="mr-2 h-4 w-4" /> Submit Opportunity
-                  </>
-                )}
-              </Button>
-              <Button type="button" variant="ghost" onClick={() => navigate("/company/dashboard")} className="h-12 px-6 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
-                Cancel
-              </Button>
+            <div className="space-y-4 pt-4 pb-12">
+              <p className="text-sm text-slate-500 dark:text-slate-400 text-justify">
+                By posting, you confirm this opportunity complies with Ontario&apos;s Employment Standards Act and Human Rights Code. You acknowledge that NxteVia is a technology platform only, not a recruiter or employer, and you are solely responsible for the hiring relationship.
+              </p>
+              <div className="flex items-center gap-4">
+                <Button
+                  type="submit"
+                  className="h-12 px-8 rounded-xl bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20 font-medium text-base transition-all hover:scale-[1.02]"
+                  disabled={submitting}
+                >
+                  {submitting ? "Submitting..." : (
+                    <>
+                      <Save className="mr-2 h-4 w-4" /> Submit Opportunity
+                    </>
+                  )}
+                </Button>
+                <Button type="button" variant="ghost" onClick={() => navigate("/company/dashboard")} className="h-12 px-6 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+                  Cancel
+                </Button>
+              </div>
             </div>
 
           </form>
@@ -585,6 +602,6 @@ export default function PostOpportunity() {
         }}
         onVerify={handleESAVerified}
       />
-    </Layout>
+    </Layout >
   );
 }

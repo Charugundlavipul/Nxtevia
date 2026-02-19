@@ -22,6 +22,7 @@ interface EditValues {
   contact_email: string;
   modality: "remote" | "hybrid" | "on-site";
   title: string;
+  problem_statement: string;
   desired_outcome: string;
   scope: string;
   duration: string;
@@ -54,7 +55,7 @@ export default function AdminEditJob() {
       city: foundCompany ? undefined : "San Francisco",
       postal_code: undefined,
       contact_email: foundCompany?.email ?? "hr@example.org",
-      modality: ["remote","hybrid","on-site"][idVal.length % 3] as any,
+      modality: ["remote", "hybrid", "on-site"][idVal.length % 3] as any,
       title: foundPosting?.title ?? "Onboarding microsite",
       desired_outcome: "Publish project outcome with clear KPIs.",
       scope: "Milestones, acceptance criteria, and final outputs with QA.",
@@ -82,6 +83,7 @@ export default function AdminEditJob() {
       contact_email: "",
       modality: "remote",
       title: "",
+      problem_statement: "",
       desired_outcome: "",
       scope: "",
       duration: "0–3 months",
@@ -102,6 +104,7 @@ export default function AdminEditJob() {
       contact_email: viewSub.contact_email,
       modality: viewSub.modality,
       title: viewSub.title,
+      problem_statement: "", // AdminSubmission mock doesn't have problem_statement separate, likely needs update or ignored.
       desired_outcome: viewSub.desired_outcome,
       scope: viewSub.scope,
       duration: viewSub.duration,
@@ -190,7 +193,7 @@ export default function AdminEditJob() {
             <div className="text-lg font-semibold mb-2">Opportunity details</div>
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium mb-1">Modality</label>
+                <label className="block text-sm font-medium mb-1">Workmode</label>
                 <Select value={watch("modality")} onValueChange={(v) => setValue("modality", v as any)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Work mode" />
@@ -207,7 +210,11 @@ export default function AdminEditJob() {
                 <Input {...register("title", { required: true })} placeholder="Design an onboarding microsite" />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium mb-1">Desired outcome</label>
+                <label className="block text-sm font-medium mb-1">Problem Statement</label>
+                <Textarea rows={4} {...register("problem_statement")} placeholder="What is the problem you are trying to solve?" />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium mb-1">Desired Outcome</label>
                 <Textarea rows={4} {...register("desired_outcome", { required: true })} placeholder="What outcome do you want to achieve?" />
               </div>
               <div className="md:col-span-2">
@@ -257,14 +264,14 @@ export default function AdminEditJob() {
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium mb-1">Skills (comma‑separated)</label>
-                <SkillsCombobox selected={watch("skills_csv").split(",").map((s)=>s.trim()).filter(Boolean)} onChange={(arr)=> setValue("skills_csv", arr.join(", "))} placeholder="e.g., Customer Success Management, UX Design" />
+                <SkillsCombobox selected={watch("skills_csv").split(",").map((s) => s.trim()).filter(Boolean)} onChange={(arr) => setValue("skills_csv", arr.join(", "))} placeholder="e.g., Customer Success Management, UX Design" />
               </div>
             </div>
           </div>
 
           <div className="flex items-center gap-3 pt-2">
             <Button type="submit" className="h-12 rounded-xl">Save Changes</Button>
-            <Button type="button" variant="ghost" onClick={()=> navigate(`/admin/jobs/job_id=${viewSub.id}`)}>Cancel</Button>
+            <Button type="button" variant="ghost" onClick={() => navigate(`/admin/jobs/job_id=${viewSub.id}`)}>Cancel</Button>
           </div>
         </form>
       </section>

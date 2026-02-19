@@ -4,9 +4,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const DEFAULT_SKILLS: string[] = [
-  "Customer Success Management", "UX Design", "UI Design", "Product Management", "Frontend Development", "Backend Development", "Fullstack", "React", "Next.js", "Node.js", "TypeScript", "JavaScript", "Python", "Java", "SQL", "NoSQL", "Data Analysis", "Power BI", "Tableau", "Excel", "Machine Learning", "NLP", "SEO", "SEM", "Content Writing", "Copywriting", "Email Marketing", "Social Media", "Sales", "CRM", "HubSpot", "Salesforce", "Figma", "UX Research", "QA Testing", "Automation", "Cypress", "Jest", "DevOps", "Docker", "Kubernetes", "AWS", "GCP", "Azure", "APIs", "REST", "GraphQL", "Design", "Branding", "Illustration", "HTML", "CSS", "Accessibility", "WCAG", "Analytics", "Product Analytics", "A/B Testing", "Project Management", "Agile", "Scrum", "Notion", "Zapier"
-];
+import { TOP_TECHNOLOGIES } from "@/lib/skills";
 
 function uniquePush(list: string[], value: string) {
   const v = value.trim();
@@ -32,11 +30,11 @@ export function SkillsCombobox({
 
   const suggestions = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const pool = DEFAULT_SKILLS;
+    const pool = TOP_TECHNOLOGIES;
     return pool
       .filter((s) => !selected.includes(s))
       .filter((s) => (q ? s.toLowerCase().includes(q) : true))
-      .slice(0, 12);
+      .slice(0, 50);
   }, [query, selected]);
 
   const add = (v: string) => {
@@ -95,7 +93,7 @@ export function SkillsCombobox({
       </PopoverTrigger>
       <PopoverContent className="p-0 w-[var(--radix-popover-trigger-width)]">
         <Command shouldFilter={false}>
-          <CommandInput placeholder="Search skills" value={query} onValueChange={setQuery} />
+
           <CommandList>
             <CommandEmpty>No matches. Press Enter to add.</CommandEmpty>
             <CommandGroup>

@@ -131,7 +131,7 @@ export default function ProjectDetail() {
                     <div className="flex items-center gap-1.5 bg-slate-100/50 dark:bg-slate-800/50 px-2.5 py-1.5 rounded-lg border border-slate-200/50 dark:border-slate-700">
                       <DollarSign className="h-4 w-4 text-slate-400" />
                       {project.stipend === "paid" && project.pay_amount
-                        ? `${project.currency || "USD"} ${project.pay_amount} / ${project.pay_type || "hourly"}`
+                        ? `POSTED RATE: ${project.currency || "USD"} ${project.pay_amount} / ${project.pay_type || "hourly"}`
                         : project.stipend === "unpaid" ? "Unpaid (ESA Exempt)"
                           : project.stipend === "none" ? "Unpaid"
                             : "Paid"
@@ -184,21 +184,45 @@ export default function ProjectDetail() {
                     <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                       About this opportunity
                     </h2>
-                    <div className="prose prose-sm prose-slate dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-line">
-                      {project.scope}
+                    <div className="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-300">
+                      <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Problem Statement</h3>
+                      <div className="whitespace-pre-wrap leading-relaxed">
+                        {(() => {
+                          if (project.desired_outcome) {
+                            // If we have a desired_outcome, the problem field shouldn't contain the combined text.
+                            // But if it DOES for some reason (migration edge case), we should still clean it.
+                            let cleanProblem = project.problem || "No problem statement provided.";
+                            if (cleanProblem.includes("**Problem Statement**")) {
+                              cleanProblem = cleanProblem.replace(/\*\*Problem Statement\*\*/g, "").split("**Desired Outcome**")[0];
+                            }
+                            return cleanProblem.trim();
+                          }
+
+                          // Backwards compatibility for old records
+                          if (project.problem && project.problem.includes("**Problem Statement**")) {
+                            const parts = project.problem.split("**Desired Outcome**");
+                            return parts[0].replace(/\*\*Problem Statement\*\*/g, "").trim();
+                          }
+                          return project.problem;
+                        })()}
+                      </div>
                     </div>
-                  </section>
 
-                  <div className="h-px bg-slate-100 dark:bg-slate-800" />
-
-                  <section>
-                    <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                      Desired Outcome
-                    </h2>
-                    <div className="bg-indigo-50/50 dark:bg-indigo-900/10 rounded-2xl p-6 border border-indigo-100/50 dark:border-indigo-900/20">
-                      <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
-                        {project.problem}
-                      </p>
+                    <div className="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 pt-6 border-t border-slate-100 dark:border-slate-800">
+                      <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Desired Outcome</h3>
+                      <div className="whitespace-pre-wrap leading-relaxed">
+                        {(() => {
+                          if (project.desired_outcome) {
+                            return project.desired_outcome;
+                          }
+                          // Backwards compatibility
+                          if (project.problem && project.problem.includes("**Desired Outcome**")) {
+                            const parts = project.problem.split("**Desired Outcome**");
+                            return parts[1] ? parts[1].trim() : "";
+                          }
+                          return "";
+                        })()}
+                      </div>
                     </div>
                   </section>
 

@@ -397,11 +397,7 @@ export default function Profile() {
                           <GraduationCap className="h-3 w-3 mr-1" /> Student
                         </Badge>
                       )}
-                      {(seekerProfile.emailVerified || companyProfile?.emailVerified) && (
-                        <Badge variant="outline" className="border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20">
-                          <CheckCircle2 className="h-3 w-3 mr-1" /> Verified
-                        </Badge>
-                      )}
+
                     </div>
                   </div>
                 </div>

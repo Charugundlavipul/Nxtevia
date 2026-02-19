@@ -115,12 +115,7 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
             )}
           </div>
 
-          <div className="pt-8 flex items-center justify-center lg:justify-start gap-8 text-slate-500 dark:text-slate-400">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5 text-primary dark:text-white" />
-              <span className="font-medium">Verified Experience</span>
-            </div>
-          </div>
+
         </motion.div>
 
         <motion.div
@@ -187,12 +182,7 @@ function Mission() {
     >
       <div className="container">
         <div className="max-w-3xl mx-auto text-center mb-12">
-          <Badge
-            variant="outline"
-            className="mb-4 border-primary/20 text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/10"
-          >
-            Our Vision
-          </Badge>
+
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6">
             Empowering every individual to grow through real-world experience.
           </h2>
@@ -698,7 +688,7 @@ function FAQ({ companyMode }: { companyMode?: boolean }) {
     },
     {
       q: "How long do opportunities last?",
-      a: "They are short-term opportunities, and each company can decide the length of the tenure. This information will be available along with each posted opportunity.",
+      a: "They are typically short-term opportunities, and each company can decide the length of the tenure. This information will be available along with each posted opportunity.",
     },
     {
       q: "Is NxteVia available in my country?",
@@ -715,10 +705,7 @@ function FAQ({ companyMode }: { companyMode?: boolean }) {
       q: "Who can apply to our projects?",
       a: "NxteVia connects you with students, career changers, and emerging professionals. Applicants are motivated to gain real-world experience and showcase their skills through verified work.",
     },
-    {
-      q: "How do I evaluate applicants?",
-      a: "You can review submitted profiles and other application materials. Our platform lets you verify work, give feedback, and approve candidates before considering them for full-time hiring. There is no commitment for offering full-time employment required.",
-    },
+
     {
       q: "What is the Review period of a posted opportunity?",
       a: "Most reviews are completed within 48 hours. You’ll see status updates on your dashboard.",
@@ -859,7 +846,7 @@ export default function HomePage() {
       <div className="bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
         <HeroOrbit seekerMode={seekerMode} companyMode={companyMode} />
         <Mission />
-        <Highlights />
+        {!companyMode && <Highlights />}
         <FeaturedProjects companyMode={companyMode} />
         <HowItWorks seekerMode={seekerMode} companyMode={companyMode} />
         <FAQ companyMode={companyMode} />

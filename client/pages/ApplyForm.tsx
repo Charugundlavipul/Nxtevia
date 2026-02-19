@@ -13,6 +13,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import { UploadCloud, Linkedin, Link as LinkIcon, FileText, CheckCircle, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ApplyDisclaimerModal } from "@/components/modals/ApplyDisclaimerModal";
 
 type FormState = {
   resumeFile?: File | null;
@@ -33,6 +34,7 @@ export default function ApplyForm() {
   const [form, setForm] = React.useState<FormState>({ customAnswers: {}, resumeFile: null, coverLetterFile: null, resumeUrl: undefined });
   const [profileLoaded, setProfileLoaded] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
+  const [disclaimerOpen, setDisclaimerOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (!id) return;
@@ -105,8 +107,13 @@ export default function ApplyForm() {
     setForm((f) => ({ ...f, customAnswers: { ...f.customAnswers, [idx]: value } }));
   };
 
-  const submit = async (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setDisclaimerOpen(true);
+  };
+
+  const submitApplication = async () => {
+    setDisclaimerOpen(false);
     if (!opportunity) return;
     setSubmitting(true);
 
@@ -233,7 +240,7 @@ export default function ApplyForm() {
                 </div>
               )}
 
-              <form className="space-y-8" onSubmit={submit}>
+              <form className="space-y-8" onSubmit={handleFormSubmit}>
                 {/* Standard Fields Section */}
                 <div className="space-y-6">
                   {req.require_resume && (
@@ -485,6 +492,11 @@ export default function ApplyForm() {
                   </Button>
                 </div>
               </form>
+              <ApplyDisclaimerModal
+                open={disclaimerOpen}
+                onOpenChange={setDisclaimerOpen}
+                onConfirm={() => submitApplication()}
+              />
             </CardContent>
           </Card>
         </div>

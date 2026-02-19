@@ -131,7 +131,7 @@ export async function transitionToHired(
   companyId: string,
   opportunityId: string,
   applicantId: string,
-  details: { role: string; start_date: string; end_date: string }
+  details: { role: string; start_date: string; end_date: string; notes?: string }
 ) {
   // 1. Delete all interviewing records for this applicant/opportunity
   const { error: deleteError } = await supabase
@@ -154,6 +154,7 @@ export async function transitionToHired(
       role: details.role || null,
       start_date: details.start_date || null,
       end_date: details.end_date || null,
+      notes: details.notes || null,
     })
     .select()
     .single();

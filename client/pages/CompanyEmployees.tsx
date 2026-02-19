@@ -45,9 +45,9 @@ function EmployeeOverview({
         <div className="bg-white p-3 rounded-full w-fit mx-auto shadow-sm mb-4">
           <Users className="h-6 w-6 text-indigo-600" />
         </div>
-        <h3 className="text-lg font-semibold text-indigo-900">No employees yet</h3>
+        <h3 className="text-lg font-semibold text-indigo-900">No seekers yet</h3>
         <p className="text-indigo-700/80 mt-1 max-w-md mx-auto">
-          Once you hire talent through NxteVia, they will appear here automatically.
+          Once you select talent through NxteVia, they will appear here automatically.
         </p>
       </div>
     );
@@ -72,7 +72,7 @@ function EmployeeOverview({
         <div>
           <p className="text-indigo-100 text-sm font-medium uppercase tracking-wider">Total Team</p>
           <p className="text-4xl font-bold mt-2">{totalEmployees}</p>
-          <p className="text-indigo-100/80 text-sm mt-1">Active employees</p>
+          <p className="text-indigo-100/80 text-sm mt-1">Active seekers</p>
         </div>
         <div className="mt-6 flex items-center gap-2 text-xs font-medium bg-white/10 w-fit px-2 py-1 rounded-lg">
           <TrendingUp className="h-3 w-3" /> Growing team
@@ -112,7 +112,7 @@ function EmployeeOverview({
         <div className="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
           <div className="flex items-center gap-2 mb-3 text-slate-500">
             <UserCheck className="h-4 w-4" />
-            <span className="text-xs font-semibold uppercase tracking-wider">Recent Hires</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">Recent Selections</span>
           </div>
           {recentHires.length === 0 ? (
             <p className="text-sm text-slate-400 mt-auto">No recent activity</p>
@@ -213,14 +213,14 @@ export default function CompanyEmployees() {
 
   return (
     <Layout>
-      <Seo title="Employees - NxteVia" canonical={window.location.href} />
+      <Seo title="Seekers - NxteVia" canonical={window.location.href} />
       <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-12">
         <div className="container max-w-6xl space-y-8">
 
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Employees</h1>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Seekers</h1>
               <p className="text-slate-500 dark:text-slate-400 mt-1">Manage your team and view contract details.</p>
             </div>
             <div className="flex items-center gap-3">
@@ -239,14 +239,14 @@ export default function CompanyEmployees() {
                 <div className="flex items-center gap-3">
                   <div className="bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10 p-2 rounded-lg"><Users className="h-5 w-5 text-indigo-600 dark:text-indigo-400" /></div>
                   <div>
-                    <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Team Members</CardTitle>
-                    <CardDescription className="dark:text-slate-400">View and manage your hired employees.</CardDescription>
+                    <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Selected Seekers</CardTitle>
+                    <CardDescription className="dark:text-slate-400">View and manage your selected seekers.</CardDescription>
                   </div>
                 </div>
                 <div className="relative w-full sm:w-64">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                   <Input
-                    placeholder="Search employees..."
+                    placeholder="Search seekers..."
                     className="pl-9 bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus:bg-white dark:focus:bg-slate-900 transition-all dark:text-white"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -266,8 +266,8 @@ export default function CompanyEmployees() {
                   <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-full mb-3">
                     <Users className="h-6 w-6 text-slate-400" />
                   </div>
-                  <p className="text-slate-900 dark:text-white font-medium">No employees found</p>
-                  <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">You haven't hired anyone yet.</p>
+                  <p className="text-slate-900 dark:text-white font-medium">No seekers found</p>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">You haven't selected anyone yet.</p>
                 </div>
               ) : filteredList.length === 0 ? (
                 <div className="p-8 text-center text-slate-500">

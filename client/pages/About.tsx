@@ -87,7 +87,7 @@ const VisionMissionSection = () => {
         {/* Mission Block - "Vertical Timeline" */}
         <div className="relative">
           {/* Center Timeline Line */}
-          <div className="absolute left-8 md:left-1/2 top-12 bottom-0 w-px bg-gradient-to-b from-indigo-500/50 via-purple-500/50 to-transparent md:-translate-x-1/2" />
+          <div className="absolute left-8 md:left-1/2 top-12 h-24 w-px bg-gradient-to-b from-indigo-500/50 via-purple-500/50 to-transparent md:-translate-x-1/2" />
 
           <div className="text-center mb-16 relative z-10">
             <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-purple-50/50 dark:bg-purple-900/10 border border-purple-100 dark:border-purple-500/20 backdrop-blur-sm shadow-sm">
@@ -159,13 +159,13 @@ const LeadershipSection = () => {
     {
       name: "Hussain Noor",
       role: "Co-Founder & Chief Operating Officer (COO)",
-      bio: "Hussain is the Co-Founder and Chief Operating Officer of NxteVia. NxteVia was born from Hussain’s firsthand experience seeing how capable, motivated professionals are often overlooked by traditional hiring processes—and how organizations struggle to assess real-world ability beyond resumes and interviews. He co-founded NxteVia to help close that gap by enabling individuals to demonstrate skills through meaningful, outcomes-based work, while giving organizations a clearer, more practical way to identify and engage proven talent. Before launching NxteVia, Hussain built a career spanning over a decade in strategic procurement, SaaS partnerships, vendor operations, and large-scale program delivery. He has led complex, cross-functional initiatives, negotiated enterprise technology agreements, and worked closely with senior stakeholders to drive efficiency, accountability, and measurable results. His background in operational leadership and project management brings rigor, scalability, and execution focus to NxteVia’s platform and partnerships.",
+      bio: "Hussain is the Co-Founder and Chief Operating Officer of NxteVia. He co-founded NxteVia after seeing how capable, motivated people are often unable to access meaningful jobs simply because they lack prior experience. This gap between ability and opportunity inspired NxteVia's mission to help individuals earn experience through real work and enable organizations to discover talent based on outcomes, not credentials. Before NxteVia, Hussain spent over a decade leading large-scale initiatives across strategic procurement, Saas partnerships, and operations. His background in execution, scaling systems, and cross-functional leadership helps shape NxteVia's operational foundation and long-term growth.",
       initials: "HN"
     },
     {
       name: "Dhrumil Waghela",
       role: "Co-Founder & Chief Product Officer (CPO)",
-      bio: "Dhrumil is the Chief Product Officer at Nxtevia Inc., where he leads product vision, strategy, and execution across the company’s digital platforms. He plays a key role in ensuring Nxtevia’s products simplify complexity through thoughtful design and strong technical alignment. With over six years of experience across SaaS, AI, FinTech, healthcare, insurance, and enterprise transformation, Dhrumil specializes in turning complex business challenges into scalable, user-centric solutions. He works closely with cross-functional teams to build products that are innovative, reliable, and impactful.",
+      bio: "Dhrumil is the Chief Product Officer at Nxtevia, where he leads product vision, strategy, and execution across the company’s digital platforms. He plays a key role in ensuring Nxtevia’s products simplify complexity through thoughtful design and strong technical alignment. With over six years of experience across SaaS, AI, FinTech, healthcare, insurance, and enterprise transformation, Dhrumil specializes in turning complex business challenges into scalable, user-centric solutions. He works closely with cross-functional teams to build products that are innovative, reliable, and impactful.",
       initials: "DW"
     }
   ];

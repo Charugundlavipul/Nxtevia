@@ -137,7 +137,7 @@ export default function SignupVerify() {
             <div>
               <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Check your inbox</h1>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                We sent a verification link to your email. Confirm it, then click the button below or sign in.
+                Follow this link to confirm your signup
               </p>
             </div>
             <>
@@ -146,10 +146,10 @@ export default function SignupVerify() {
                   We’ll ask for your details again after you confirm your email.
                 </div>
               ) : null}
-              <div className="text-sm text-slate-500 dark:text-slate-400 space-y-2">
+              {/* <div className="text-sm text-slate-500 dark:text-slate-400 space-y-2">
                 <p>Keep this tab open while you verify your email.</p>
                 <p>Once confirmed, clicking below will finish your setup.</p>
-              </div>
+              </div> */}
               {needsSignIn ? (
                 <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
                   <div className="font-semibold">Verified on another device?</div>

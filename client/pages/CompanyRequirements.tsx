@@ -379,27 +379,7 @@ export default function CompanyRequirements() {
                   </div>
                 </div>
 
-                <div className="pt-6 border-t border-slate-100 dark:border-slate-800">
-                  <Label className="font-medium mb-3 block text-slate-900 dark:text-white">Preferred Communication Method</Label>
-                  <div className="max-w-md">
-                    <Select
-                      value={prefs.preferred_messaging_method}
-                      onValueChange={(value) => setPrefs((p) => ({ ...p, preferred_messaging_method: value }))}
-                    >
-                      <SelectTrigger className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700">
-                        <SelectValue placeholder="Select messaging method" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="messaging">Messaging (NxteVia)</SelectItem>
-                        <SelectItem value="email">Email</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 flex items-center gap-1">
-                      <MessageSquare className="h-3 w-3" />
-                      Choose how applicants should contact you regarding opportunities.
-                    </p>
-                  </div>
-                </div>
+
               </CardContent>
             </Card>
 

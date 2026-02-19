@@ -8,9 +8,10 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { AlertTriangle } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { AlertTriangle, AlertCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ESAExemptionModalProps {
     open: boolean;
@@ -19,20 +20,10 @@ interface ESAExemptionModalProps {
 }
 
 export function ESAExemptionModal({ open, onOpenChange, onVerify }: ESAExemptionModalProps) {
-    const [scrolledToBottom, setScrolledToBottom] = React.useState(false);
-    const [checked, setChecked] = React.useState(false);
-    const contentRef = React.useRef<HTMLDivElement>(null);
-
-    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-        const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-        // Allow a small buffer (e.g. 5px) for browser rounding differences
-        if (scrollHeight - scrollTop - clientHeight < 10) {
-            setScrolledToBottom(true);
-        }
-    };
+    const [selectedOption, setSelectedOption] = React.useState<string>("");
 
     const handleVerify = () => {
-        if (scrolledToBottom && checked) {
+        if (selectedOption === "A" || selectedOption === "B") {
             onVerify();
         }
     };
@@ -40,89 +31,97 @@ export function ESAExemptionModal({ open, onOpenChange, onVerify }: ESAExemption
     // Reset state when modal opens
     React.useEffect(() => {
         if (open) {
-            setScrolledToBottom(false);
-            setChecked(false);
+            setSelectedOption("");
         }
     }, [open]);
 
+    const isOptionC = selectedOption === "C";
+    const canVerify = (selectedOption === "A" || selectedOption === "B");
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-xl">
+            <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2 text-amber-700">
+                    <DialogTitle className="flex items-center gap-2 text-destructive">
                         <AlertTriangle className="h-5 w-5" />
-                        Unpaid Opportunity: Legal Verification Required
+                        MANDATORY COMPLIANCE DECLARATION: UNPAID POSITION
                     </DialogTitle>
-                    <DialogDescription>
-                        You must verify that this opportunity qualifies for an exemption under the Ontario Employment Standards Act (ESA).
+                    <DialogDescription className="text-base text-slate-700 dark:text-slate-300 mt-2">
+                        You have indicated this is an unpaid opportunity. Under the <strong>Employment Standards Act, 2000 (Ontario)</strong>, unpaid internships are strictly regulated and are generally prohibited unless they fall under a specific statutory exemption.
                     </DialogDescription>
                 </DialogHeader>
 
-                <div className="border rounded-md p-4 bg-slate-50 dark:bg-slate-900">
-                    <ScrollArea
-                        className="h-[300px] pr-4"
-                        onScrollCapture={handleScroll} // Using capture to detect scroll on the viewport
-                    >
-                        <div
-                            className="space-y-4 text-sm text-slate-700 dark:text-slate-300"
-                            // We attach a raw onScroll listener to this div if ScrollArea doesn't bubble consistently,
-                            // but standard div scrolling is safer for detection
-                            style={{ maxHeight: "300px", overflowY: "auto" }}
-                            onScroll={handleScroll}
-                        >
-                            <h3 className="font-bold text-slate-900 dark:text-white">ESA Student Exemption Criteria</h3>
-                            <p>
-                                Under the Ontario Employment Standards Act (ESA), an individual receiving training may be considered an "employee" unless certain conditions are met. However, there is a specific exemption for students in school-approved programs.
-                            </p>
-                            <p><strong>[Legal text TBD]</strong></p>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            </p>
-                            <p>
-                                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                            </p>
-                            <p>
-                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-                            </p>
-                            <p>
-                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.
-                            </p>
-                            <p>
-                                Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.
-                            </p>
-                            <p className="font-semibold text-red-600 dark:text-red-400">
-                                End of document. Please confirm below.
-                            </p>
-                        </div>
-                    </ScrollArea>
-                </div>
-
-                <div className="space-y-4 py-2">
-                    <div className="flex items-start space-x-2 pt-2">
-                        <Checkbox
-                            id="esa-terms"
-                            checked={checked}
-                            onCheckedChange={(c) => setChecked(c as boolean)}
-                            disabled={!scrolledToBottom}
-                        />
-                        <div className="grid gap-1.5 leading-none">
-                            <label
-                                htmlFor="esa-terms"
-                                className={`text-sm font-medium leading-none ${!scrolledToBottom ? "text-slate-400 cursor-not-allowed" : "cursor-pointer"}`}
-                            >
-                                I confirm this role qualifies under the Ontario ESA student exemption (school-approved program etc.).
-                            </label>
-                            {!scrolledToBottom && (
-                                <p className="text-xs text-slate-500">Please scroll to the bottom of the text to enable.</p>
-                            )}
-                        </div>
+                <div className="space-y-6 py-2">
+                    <div className="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-lg border border-slate-200 dark:border-slate-800 text-sm text-slate-600 dark:text-slate-400">
+                        <p>
+                            By posting this opportunity, you acknowledge that simply calling a position an "internship" or "training" does not legally exempt you from paying minimum wage. You must attest that this position meets one of the following strict legal criteria:
+                        </p>
                     </div>
+
+                    <RadioGroup value={selectedOption} onValueChange={setSelectedOption} className="space-y-4">
+                        <div className={cn("flex items-start space-x-3 space-y-0 rounded-md border p-4 transition-colors", selectedOption === "A" ? "border-primary bg-primary/5" : "border-slate-200 dark:border-slate-800")}>
+                            <RadioGroupItem value="A" id="option-a" className="mt-1" />
+                            <div className="space-y-1">
+                                <Label htmlFor="option-a" className="font-bold text-slate-900 dark:text-white cursor-pointer">
+                                    Option A: Student Co-op / Educational Practicum (ESA s. 3(5))
+                                </Label>
+                                <div className="text-sm text-slate-600 dark:text-slate-400 pl-1 space-y-1">
+                                    <p>I certify that this position is a work experience program authorized by a secondary school board, college of applied arts and technology, or university.</p>
+                                    <ul className="list-disc pl-5 space-y-1 pt-1">
+                                        <li>I confirm the intern will receive academic credit or school recognition for this placement.</li>
+                                        <li>I acknowledge I am responsible for retaining school-issued approval documents.</li>
+                                        <li>I confirm this is not merely an internship for "experience" without academic integration.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={cn("flex items-start space-x-3 space-y-0 rounded-md border p-4 transition-colors", selectedOption === "B" ? "border-primary bg-primary/5" : "border-slate-200 dark:border-slate-800")}>
+                            <RadioGroupItem value="B" id="option-b" className="mt-1" />
+                            <div className="space-y-1">
+                                <Label htmlFor="option-b" className="font-bold text-slate-900 dark:text-white cursor-pointer">
+                                    Option B: Regulated Profession (ESA s. 3(2))
+                                </Label>
+                                <div className="text-sm text-slate-600 dark:text-slate-400 pl-1">
+                                    <p>I certify that this placement is a legal requirement for a specific regulated profession (e.g., Law, Architecture, Professional Engineering, Public Accounting).</p>
+                                    <ul className="list-disc pl-5 space-y-1 pt-1">
+                                        <li>I confirm the training provided meets the specific requirements of the governing professional body.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={cn("flex items-start space-x-3 space-y-0 rounded-md border p-4 transition-colors", isOptionC ? "border-destructive/50 bg-destructive/5" : "border-slate-200 dark:border-slate-800")}>
+                            <RadioGroupItem value="C" id="option-c" className="mt-1" />
+                            <div className="space-y-1">
+                                <Label htmlFor="option-c" className="font-bold text-slate-900 dark:text-white cursor-pointer">
+                                    Option C: Trainee / General Internship
+                                </Label>
+                                <div className="text-sm text-slate-600 dark:text-slate-400 pl-1">
+                                    <p>This position is for training or experience but is not part of a formal school program or regulated profession.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </RadioGroup>
+
+                    {isOptionC && (
+                        <div className="flex items-start gap-3 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 animate-in fade-in slide-in-from-top-2">
+                            <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                            <div className="text-sm font-medium">
+                                Based on Ontario employment laws, the "Trainee" exclusion is extremely narrow. If your company derives any benefit from the worker, you must pay at least minimum wage. You cannot post this as an unpaid role on NxteVia. Please update the Stipend field to meet statutory minimums.
+                            </div>
+                        </div>
+                    )}
                 </div>
 
-                <DialogFooter>
+                <DialogFooter className="gap-2 sm:gap-0">
                     <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-                    <Button onClick={handleVerify} disabled={!scrolledToBottom || !checked}>
-                        I Verify
+                    <Button
+                        onClick={handleVerify}
+                        disabled={!canVerify}
+                        className={cn(canVerify ? "bg-primary" : "bg-slate-300 dark:bg-slate-700")}
+                    >
+                        I Attest & Verify
                     </Button>
                 </DialogFooter>
             </DialogContent>

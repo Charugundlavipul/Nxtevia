@@ -29,7 +29,10 @@ import {
 } from "@/lib/employeeRecords";
 import { supabase } from "@/lib/supabase";
 import { toast } from "@/components/ui/use-toast";
-import { useParams, Link } from "react-router-dom";
+import {
+  findOrCreateConversation,
+} from "@/lib/messaging";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import * as React from "react";
 import {
   Briefcase,
@@ -44,9 +47,28 @@ import {
   XCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { HireDisclaimerModal } from "@/components/modals/HireDisclaimerModal";
 
 export default function CompanyJobApplicants() {
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  const handleMessage = async (applicantId: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const conversationId = await findOrCreateConversation(user.id, "company", applicantId, "seeker");
+      navigate(`/company/chats/${conversationId}`);
+    } catch (error) {
+      console.error("Failed to start conversation", error);
+      toast({
+        title: "Error",
+        description: "Failed to start conversation.",
+        variant: "destructive",
+      });
+    }
+  };
   const [apps, setApps] = React.useState<Application[]>([]);
   const [records, setRecords] = React.useState<EmployeeRecord[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -63,6 +85,8 @@ export default function CompanyJobApplicants() {
 
   const [editHireOpen, setEditHireOpen] = React.useState(false);
   const [editHire, setEditHire] = React.useState<EmployeeRecord | null>(null);
+
+  const [disclaimerOpen, setDisclaimerOpen] = React.useState(false);
 
   React.useEffect(() => {
     if (!id) return;
@@ -176,18 +200,25 @@ export default function CompanyJobApplicants() {
     }
   };
 
-  const createHire = async (e: React.FormEvent) => {
+  const preValidateHire = (e: React.FormEvent) => {
     e.preventDefault();
     if (!id || !ownerId || !newHire.applicant_id) {
       toast({ title: "Missing info", description: "Select an applicant to add.", duration: 2000 });
       return;
     }
+    setDisclaimerOpen(true);
+  };
+
+  const handleHireConfirmed = async (notes: string) => {
+    setDisclaimerOpen(false);
     setSaving(true);
     try {
+      if (!ownerId || !id) return; // Should be checked by preValidate but safe guard
       await transitionToHired(ownerId, id, newHire.applicant_id, {
         role: newHire.role,
         start_date: newHire.start_date,
-        end_date: newHire.end_date
+        end_date: newHire.end_date,
+        notes: notes
       });
       setNewHire({ applicant_id: "", role: "", start_date: "", end_date: "" });
       await refreshRecords();
@@ -341,6 +372,15 @@ export default function CompanyJobApplicants() {
                                 <Button size="sm" variant="outline" asChild className="rounded-lg h-8 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700">
                                   <Link to={`/company/applications/${a.id}`}>Review</Link>
                                 </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="rounded-lg h-8 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-primary dark:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-700"
+                                  onClick={() => handleMessage(a.applicant_id)}
+                                >
+                                  <MessageSquare className="h-4 w-4 mr-1.5" />
+                                  Message
+                                </Button>
                                 {(a.status === 'submitted' || a.status === 'pending' || a.status === 'interviewing') && (
                                   <Button
                                     size="sm"
@@ -417,8 +457,8 @@ export default function CompanyJobApplicants() {
 
               {/* Add Hire Form */}
               <div id="hire-form" className="bg-slate-50/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-100 dark:border-slate-800">
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4">Record New Hire</h3>
-                <form className="grid gap-4 md:grid-cols-2 lg:grid-cols-4" onSubmit={createHire}>
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4">Select Applicant</h3>
+                <form className="grid gap-4 md:grid-cols-2 lg:grid-cols-4" onSubmit={preValidateHire}>
                   <select className="rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-3 py-2 text-sm" value={newHire.applicant_id} onChange={(e) => setNewHire((s) => ({ ...s, applicant_id: e.target.value }))}>
                     <option value="">Select Candidate...</option>
                     {hireApplicantOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
@@ -426,7 +466,7 @@ export default function CompanyJobApplicants() {
                   <Input placeholder="Role Title" value={newHire.role} onChange={(e) => setNewHire((s) => ({ ...s, role: e.target.value }))} className="bg-white dark:bg-slate-950" />
                   <Input type="date" value={newHire.start_date} onChange={(e) => setNewHire((s) => ({ ...s, start_date: e.target.value }))} className="bg-white dark:bg-slate-950" />
                   <div className="flex gap-2">
-                    <Button type="submit" disabled={saving} className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white">Record Hire</Button>
+                    <Button type="submit" disabled={saving} className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white">Select</Button>
                   </div>
                 </form>
               </div>
@@ -476,13 +516,16 @@ export default function CompanyJobApplicants() {
                                   setNewHire(prev => ({ ...prev, applicant_id: r.applicant_id }));
                                   document.getElementById('hire-form')?.scrollIntoView({ behavior: 'smooth' });
                                 }}
-                                title="Hire this candidate"
+                                title="Select this candidate"
                               >
                                 <UserCheck className="h-4 w-4 mr-2" />
-                                Hire
+                                Select
                               </Button>
                               <Button size="sm" variant="ghost" className="hover:bg-slate-100 dark:hover:bg-slate-800" onClick={() => { setEditInterview(r); setEditInterviewOpen(true); }}>
                                 <Pencil className="h-4 w-4 text-slate-500" />
+                              </Button>
+                              <Button size="sm" variant="ghost" className="hover:bg-slate-100 dark:hover:bg-slate-800" onClick={() => handleMessage(r.applicant_id)} title="Message Candidate">
+                                <MessageSquare className="h-4 w-4 text-slate-500" />
                               </Button>
                               <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30" onClick={() => onDelete(r.id)}>
                                 <Trash2 className="h-4 w-4" />
@@ -582,6 +625,11 @@ export default function CompanyJobApplicants() {
             </DialogContent>
           </Dialog>
 
+          <HireDisclaimerModal
+            open={disclaimerOpen}
+            onOpenChange={setDisclaimerOpen}
+            onConfirm={handleHireConfirmed}
+          />
         </section>
       </div>
     </Layout>

@@ -383,20 +383,7 @@ export const Students = () => (
               </Button>
             </div>
 
-            <div className="grid grid-cols-2 gap-6 pt-8">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center">
-                  <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
-                </div>
-                <span className="font-medium text-slate-900 dark:text-white">Verified Badges</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
-                  <GraduationCap className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                </div>
-                <span className="font-medium text-slate-900 dark:text-white">Skill Growth</span>
-              </div>
-            </div>
+
           </div>
 
           <div className="relative">
@@ -460,7 +447,7 @@ export const Companies = () => (
                 <div className="h-10 w-10 rounded-full bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
                   <CheckCircle2 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                 </div>
-                <span className="font-medium text-slate-900 dark:text-white">Risk-Free Hiring</span>
+                {/* <span className="font-medium text-slate-900 dark:text-white">Risk-Free Hiring</span> */}
               </div>
             </div>
           </div>

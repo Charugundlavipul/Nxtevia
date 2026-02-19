@@ -2,12 +2,24 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getAllConversations, findOrCreateConversation, subscribeToConversations, Conversation, searchUsers, UserProfile } from "@/lib/messaging";
+import { fetchMyOpportunities, Opportunity } from "@/lib/opportunities";
+import { fetchApplicationsForOpportunity, Application } from "@/lib/applications";
 import { useNavigate } from "react-router-dom";
-import { Search, X, Plus, ArrowLeft, MessageSquare } from "lucide-react";
+import { Search, X, Plus, ArrowLeft, MessageSquare, Loader2 } from "lucide-react";
 import * as React from "react";
 import { OnlineIndicator } from "@/components/OnlineIndicator";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/use-toast";
 
 interface CompanyChatListPaneProps {
   currentConversationId?: string;
@@ -16,12 +28,18 @@ interface CompanyChatListPaneProps {
 export default function CompanyChatListPane({ currentConversationId }: CompanyChatListPaneProps) {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [newChatSearch, setNewChatSearch] = React.useState("");
-  const [showNewChat, setShowNewChat] = React.useState(false);
-  const [searchResults, setSearchResults] = React.useState<UserProfile[]>([]);
-  const [isSearching, setIsSearching] = React.useState(false);
   const [companyId, setCompanyId] = React.useState<string>("");
   const [conversations, setConversations] = React.useState<Conversation[]>([]);
+
+  // New Message State
+  const [isNewMessageOpen, setIsNewMessageOpen] = React.useState(false);
+  const [opportunities, setOpportunities] = React.useState<Opportunity[]>([]);
+  const [selectedOppId, setSelectedOppId] = React.useState<string>("");
+  const [applicants, setApplicants] = React.useState<Application[]>([]);
+  const [selectedApplicantId, setSelectedApplicantId] = React.useState<string>("");
+  const [loadingOpps, setLoadingOpps] = React.useState(false);
+  const [loadingApplicants, setLoadingApplicants] = React.useState(false);
+  const [startingChat, setStartingChat] = React.useState(false);
 
   React.useEffect(() => {
     const init = async () => {
@@ -56,40 +74,56 @@ export default function CompanyChatListPane({ currentConversationId }: CompanyCh
     };
   }, [companyId]);
 
+  // Fetch opportunities when modal opens
   React.useEffect(() => {
-    const search = async () => {
-      if (!newChatSearch.trim()) {
-        setSearchResults([]);
-        return;
-      }
-      setIsSearching(true);
-      try {
-        const results = await searchUsers(newChatSearch, "seeker");
-        setSearchResults(results);
-      } catch (error) {
-        console.error("Search failed", error);
-      } finally {
-        setIsSearching(false);
-      }
-    };
+    if (isNewMessageOpen && companyId) {
+      setLoadingOpps(true);
+      fetchMyOpportunities()
+        .then(setOpportunities)
+        .catch(err => console.error("Failed to fetch opportunities", err))
+        .finally(() => setLoadingOpps(false));
+    }
+  }, [isNewMessageOpen, companyId]);
 
-    const debounce = setTimeout(search, 300);
-    return () => clearTimeout(debounce);
-  }, [newChatSearch]);
+  // Fetch applicants when opportunity selected
+  React.useEffect(() => {
+    if (selectedOppId) {
+      setLoadingApplicants(true);
+      fetchApplicationsForOpportunity(selectedOppId)
+        .then(setApplicants)
+        .catch(err => console.error("Failed to fetch applicants", err))
+        .finally(() => setLoadingApplicants(false));
+    } else {
+      setApplicants([]);
+    }
+    setSelectedApplicantId("");
+  }, [selectedOppId]);
 
-  const startNewConversation = async (seekerId: string, seekerName: string) => {
+  const handleStartChat = async () => {
+    if (!selectedApplicantId || !selectedOppId) return;
+
+    setStartingChat(true);
     try {
+      const opp = opportunities.find(o => o.id === selectedOppId);
       const conversationId = await findOrCreateConversation(
         companyId,
         "company",
-        seekerId,
-        "seeker"
+        selectedApplicantId,
+        "seeker",
+        selectedOppId,
+        opp?.title
       );
+      setIsNewMessageOpen(false);
       navigate(`/company/chats/${conversationId}`);
-      setNewChatSearch("");
-      setShowNewChat(false);
     } catch (error) {
       console.error("Failed to start conversation", error);
+      toast({
+        title: "Error",
+        description: "Failed to create conversation",
+        variant: "destructive"
+      });
+    } finally {
+      setStartingChat(false);
     }
   };
 
@@ -111,67 +145,25 @@ export default function CompanyChatListPane({ currentConversationId }: CompanyCh
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 border-b border-slate-200 dark:border-slate-800 space-y-4 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/company/dashboard')} title="Back to Dashboard" className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" onClick={() => navigate('/company/dashboard')} title="Back to Dashboard" className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            <div className="text-sm font-semibold text-slate-900 dark:text-white">
+              Messages
+            </div>
+          </div>
           <Button
-            onClick={() => setShowNewChat(true)}
-            className="flex-1 justify-start gap-2 bg-white dark:bg-slate-950 text-slate-900 dark:text-white border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 shadow-sm"
-            variant="outline"
+            size="icon"
+            variant="ghost"
+            className="h-8 w-8 text-primary hover:text-primary hover:bg-primary/10"
+            onClick={() => setIsNewMessageOpen(true)}
+            title="New Message"
           >
-            <Plus className="h-4 w-4 text-primary dark:text-primary" />
-            New Conversation
+            <Plus className="h-5 w-5" />
           </Button>
         </div>
-
-        {showNewChat && (
-          <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 space-y-2 shadow-lg animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-sm text-slate-900 dark:text-white">Start chat</h3>
-              <button onClick={() => { setShowNewChat(false); setNewChatSearch(""); }} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-500 dark:text-slate-400">
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
-              <Input
-                placeholder="Search seeker by name..."
-                value={newChatSearch}
-                onChange={(e) => setNewChatSearch(e.target.value)}
-                className="pl-9 h-9 text-xs bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800"
-                autoFocus
-              />
-            </div>
-            {newChatSearch.trim() && (
-              <div className="max-h-48 overflow-y-auto space-y-1 pt-1 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800">
-                {isSearching ? (
-                  <p className="text-xs text-slate-500 dark:text-slate-400 text-center py-2">Searching...</p>
-                ) : searchResults.length === 0 ? (
-                  <p className="text-xs text-slate-500 dark:text-slate-400 text-center py-2">No seekers found</p>
-                ) : (
-                  searchResults.map(seeker => (
-                    <button
-                      key={seeker.id}
-                      onClick={() => startNewConversation(seeker.id, seeker.display_name)}
-                      className="w-full p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-left transition-colors flex items-center gap-3"
-                    >
-                      <Avatar className="h-8 w-8 border border-slate-200 dark:border-slate-700">
-                        <AvatarFallback className="bg-primary/10 dark:bg-primary/30 text-primary dark:text-primary/80 text-xs font-medium">
-                          {seeker.display_name.charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="min-w-0">
-                        <div className="font-medium text-sm truncate text-slate-900 dark:text-white">{seeker.display_name}</div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400 truncate capitalize">{seeker.role}</div>
-                      </div>
-                    </button>
-                  ))
-                )}
-              </div>
-            )}
-          </div>
-        )}
 
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
@@ -193,6 +185,11 @@ export default function CompanyChatListPane({ currentConversationId }: CompanyCh
             <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
               {searchQuery ? "No conversations found" : "No conversations yet"}
             </p>
+            {!searchQuery && (
+              <Button variant="link" onClick={() => setIsNewMessageOpen(true)} className="text-primary text-xs">
+                Start a new conversation
+              </Button>
+            )}
           </div>
         ) : (
           filtered.map((conv) => {
@@ -258,6 +255,72 @@ export default function CompanyChatListPane({ currentConversationId }: CompanyCh
           })
         )}
       </div>
+
+      <Dialog open={isNewMessageOpen} onOpenChange={setIsNewMessageOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>New Message</DialogTitle>
+            <DialogDescription>
+              Select an opportunity and applicant to start a conversation.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="opportunity">Opportunity</Label>
+              <select
+                id="opportunity"
+                className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                value={selectedOppId}
+                onChange={(e) => setSelectedOppId(e.target.value)}
+                disabled={loadingOpps}
+              >
+                <option value="">Select an opportunity...</option>
+                {opportunities.map((opp) => (
+                  <option key={opp.id} value={opp.id}>
+                    {opp.title}
+                  </option>
+                ))}
+              </select>
+              {loadingOpps && <span className="text-xs text-slate-500">Loading opportunities...</span>}
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="applicant">Applicant</Label>
+              <select
+                id="applicant"
+                className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300"
+                value={selectedApplicantId}
+                onChange={(e) => setSelectedApplicantId(e.target.value)}
+                disabled={!selectedOppId || loadingApplicants}
+              >
+                <option value="">Select an applicant...</option>
+                {applicants.map((app) => {
+                  const snap = app.applicant_snapshot || {};
+                  const profile = snap.profile || {};
+                  const seeker = snap.seeker || {};
+                  const name = profile.display_name || seeker.contact_email || "Applicant";
+                  return (
+                    <option key={app.applicant_id} value={app.applicant_id}>
+                      {name}
+                    </option>
+                  );
+                })}
+              </select>
+              {loadingApplicants && <span className="text-xs text-slate-500">Loading applicants...</span>}
+              {!loadingApplicants && selectedOppId && applicants.length === 0 && (
+                <span className="text-xs text-slate-500">No applicants found for this opportunity.</span>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsNewMessageOpen(false)}>Cancel</Button>
+            <Button onClick={handleStartChat} disabled={!selectedApplicantId || startingChat}>
+              {startingChat && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Start Chat
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

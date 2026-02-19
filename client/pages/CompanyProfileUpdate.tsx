@@ -223,8 +223,6 @@ export default function CompanyProfileUpdate() {
                         <SelectContent>
                           <SelectItem value="hire_full_time">Hire full-time later</SelectItem>
                           <SelectItem value="project_support">Gain project support</SelectItem>
-                          <SelectItem value="explore_talent">Explore talent</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -290,7 +288,7 @@ export default function CompanyProfileUpdate() {
                     <Label className="text-sm font-semibold text-slate-700">Reasons for Joining</Label>
                     <div className="grid gap-3 sm:grid-cols-2">
                       {[
-                        "On-board skilled talent for quick turn around",
+                        "Onboard skilled talent for quick turn around",
                         "Access motivated students and career changers",
                         "Support workforce development and learning",
                         "Collaborate with emerging professionals",

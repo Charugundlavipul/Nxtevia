@@ -22,6 +22,7 @@ import {
   ExternalLink,
   MapPin
 } from "lucide-react";
+import { findOrCreateConversation } from "@/lib/messaging";
 
 type OpportunityMeta = { title?: string | null };
 
@@ -38,6 +39,37 @@ export default function CompanyApplicationDetail() {
   const [application, setApplication] = React.useState<Application | null>(null);
   const [opportunity, setOpportunity] = React.useState<OpportunityMeta | null>(null);
   const [loading, setLoading] = React.useState(true);
+
+  // Imports check:
+  // import { toast } from "@/components/ui/use-toast"; -> This exports 'toast' function directly usually, or hook. 
+  // Checking previous file content: line 6: import { toast } from "@/components/ui/use-toast";
+  // So 'toast' is the function.
+
+  const handleMessage = async () => {
+    if (!application) return;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // We can pass opportunity info to contextually link the conversation
+      const conversationId = await findOrCreateConversation(
+        user.id,
+        "company",
+        application.applicant_id,
+        "seeker",
+        application.opportunity_id,
+        opportunity?.title || undefined
+      );
+      navigate(`/company/chats/${conversationId}`);
+    } catch (error) {
+      console.error("Failed to start conversation", error);
+      toast({
+        title: "Error",
+        description: "Failed to start conversation.",
+        variant: "destructive",
+      });
+    }
+  };
 
   React.useEffect(() => {
     if (!id) return;
@@ -139,6 +171,11 @@ export default function CompanyApplicationDetail() {
                   Submitted {new Date(application.created_at).toLocaleDateString()}
                 </div>
               </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button onClick={handleMessage} className="gap-2">
+                <MessageSquare className="h-4 w-4" /> Message Applicant
+              </Button>
             </div>
           </div>
 

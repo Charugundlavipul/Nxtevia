@@ -9,6 +9,7 @@ export async function provisionProfileForRole(
   role: UiRole,
   name: string,
   email: string,
+  dob?: string,
 ) {
   const userId = session.user.id;
   const apiRole = role === "student" ? "seeker" : "company";
@@ -21,9 +22,10 @@ export async function provisionProfileForRole(
   }
 
   if (role === "student") {
+    const isMinor = dob ? new Date(dob) > new Date(new Date().setFullYear(new Date().getFullYear() - 18)) : false;
     const { error } = await supabase
       .from("seeker_profiles")
-      .upsert({ user_id: userId, contact_email: email });
+      .upsert({ user_id: userId, contact_email: email, dob, is_minor: isMinor });
     if (error) throw error;
   } else {
     const { error } = await supabase

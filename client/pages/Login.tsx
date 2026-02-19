@@ -10,7 +10,7 @@ import { toast } from "@/components/ui/use-toast";
 import { trackEvent } from "@/lib/analytics";
 import { supabase } from "@/lib/supabase";
 import { readPendingSignup } from "@/lib/auth";
-import { BadgeCheck, BellRing, Globe2, ArrowRight, Mail } from "lucide-react";
+import { BellRing, ArrowRight, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 function GoogleIcon() {
@@ -398,15 +398,7 @@ export default function Login() {
           </div>
 
           <div className="relative z-10 mt-12 space-y-6">
-            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 transition-transform hover:scale-[1.02]">
-              <div className="bg-white/20 p-2.5 rounded-xl">
-                <BadgeCheck className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-white">Verifiable Experience</h3>
-                <p className="text-sm text-white/80">Build a portfolio that proves your skills</p>
-              </div>
-            </div>
+
 
             <div className="flex items-center gap-4 p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 transition-transform hover:scale-[1.02]">
               <div className="bg-white/20 p-2.5 rounded-xl">

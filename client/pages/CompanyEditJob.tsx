@@ -37,7 +37,8 @@ interface RequirementsState {
 interface EditValues {
   modality: "remote" | "hybrid" | "on-site";
   title: string;
-  problem: string;
+  problem_statement: string;
+  desired_outcome: string;
   scope: string;
   duration: "0-3m" | "4-6m" | "7-9m" | "10-12m" | ">12m";
   hours: "5-10" | "10-20" | "20+" | string;
@@ -75,7 +76,8 @@ export default function CompanyEditJob() {
   const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<EditValues>({
     defaultValues: {
       title: "",
-      problem: "",
+      problem_statement: "",
+      desired_outcome: "",
       scope: "",
       skills: "",
       modality: "remote",
@@ -97,9 +99,24 @@ export default function CompanyEditJob() {
           navigate("/company/dashboard", { replace: true });
           return;
         }
+
+        // Parse problem field
+        let problemStatement = job.problem || "";
+        let desiredOutcome = "";
+
+        // Simple parser for the format: **Problem Statement**\n...\n\n**Desired Outcome**\n...
+        if (job.problem && job.problem.includes("**Problem Statement**")) {
+          const parts = job.problem.split("**Desired Outcome**");
+          if (parts.length > 1) {
+            problemStatement = parts[0].replace("**Problem Statement**", "").trim();
+            desiredOutcome = parts[1].trim();
+          }
+        }
+
         reset({
           title: job.title,
-          problem: job.problem,
+          problem_statement: problemStatement,
+          desired_outcome: desiredOutcome,
           scope: job.scope,
           skills: (job.skills || []).join(", "),
           modality: job.modality as any,
@@ -188,12 +205,19 @@ export default function CompanyEditJob() {
       toast({ title: "Add skills", description: "Please add at least one skill.", duration: 2000 });
       return;
     }
+
+    // Combine fields
+    let combinedProblem = values.problem_statement;
+    if (values.desired_outcome) {
+      combinedProblem = `**Problem Statement**\n${values.problem_statement}\n\n**Desired Outcome**\n${values.desired_outcome}`;
+    }
+
     try {
       await updateOpportunity(
         id!,
         {
           title: values.title,
-          problem: values.problem,
+          problem: combinedProblem,
           scope: values.scope,
           modality: values.modality,
           duration: values.duration,
@@ -251,7 +275,7 @@ export default function CompanyEditJob() {
                 <CardContent className="p-6 space-y-6">
                   <div className="grid gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Modality</Label>
+                      <Label className="text-sm font-semibold text-slate-700">Workmode</Label>
                       <Select value={watch("modality")} onValueChange={(v) => setValue("modality", v as any)}>
                         <SelectTrigger className="bg-white border-slate-200">
                           <SelectValue placeholder="Work mode" />
@@ -268,8 +292,12 @@ export default function CompanyEditJob() {
                       <Input {...register("title", { required: true })} placeholder="e.g. Design an onboarding microsite" className="bg-white border-slate-200" />
                     </div>
                     <div className="md:col-span-2 space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Desired Outcome (Problem Statement)</Label>
-                      <Textarea rows={4} {...register("problem", { required: true })} placeholder="What outcome do you want to achieve?" className="bg-white border-slate-200 resize-none" />
+                      <Label className="text-sm font-semibold text-slate-700">Problem Statement</Label>
+                      <Textarea rows={3} {...register("problem_statement", { required: true })} placeholder="What is the problem you are trying to solve?" className="bg-white border-slate-200 resize-none" />
+                    </div>
+                    <div className="md:col-span-2 space-y-2">
+                      <Label className="text-sm font-semibold text-slate-700">Desired Outcome</Label>
+                      <Textarea rows={3} {...register("desired_outcome", { required: true })} placeholder="What is the desired outcome or solution?" className="bg-white border-slate-200 resize-none" />
                     </div>
                     <div className="md:col-span-2 space-y-2">
                       <Label className="text-sm font-semibold text-slate-700">Scope of Work</Label>
