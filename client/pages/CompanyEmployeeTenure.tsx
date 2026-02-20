@@ -59,7 +59,7 @@ export default function CompanyEmployeeTenure() {
         flagged,
         flag_reason: flagReason || null,
       });
-      toast({ title: "Saved", description: "Employment record updated successfully.", duration: 1800 });
+      toast({ title: "Saved", description: "Engagement record updated successfully.", duration: 1800 });
       navigate(`/company/seekers`);
     } catch (err) {
       toast({ title: "Save failed", description: err instanceof Error ? err.message : "Could not update", duration: 2200, variant: "destructive" });
@@ -102,7 +102,7 @@ export default function CompanyEmployeeTenure() {
 
   return (
     <Layout>
-      <Seo title="Edit Employment Record - NxteVia" canonical={window.location.href} />
+      <Seo title="Edit Engagement Record - NxteVia" canonical={window.location.href} />
       <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50 relative pb-20 transition-colors duration-300">
         {/* Decorative Background */}
         <div className="absolute top-0 left-0 w-full h-80 bg-gradient-to-b from-primary/5 dark:from-primary/10 to-transparent pointer-events-none" />
@@ -114,7 +114,7 @@ export default function CompanyEmployeeTenure() {
               <Link to="/company/seekers"><ArrowLeft className="h-5 w-5" /></Link>
             </Button>
             <div>
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Edit Employment Record</h1>
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Edit Engagement Record</h1>
               <p className="text-slate-500 dark:text-slate-400">Update contract details, feedback, and tenure info.</p>
             </div>
           </div>

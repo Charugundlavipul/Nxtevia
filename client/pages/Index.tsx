@@ -90,7 +90,7 @@ function HeroOrbit({ seekerMode, companyMode }: { seekerMode: boolean; companyMo
           </h1>
 
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-            Connect talent and companies in one integrated space built for the future of work. Build verifiable experience as you collaborate, grow your portfolio, and move seamlessly toward meaningful employment.
+            Connect talent and companies in one integrated space built for the future of work. Build verifiable experience as you collaborate, grow your portfolio, and move seamlessly toward meaningful career opportunities.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">

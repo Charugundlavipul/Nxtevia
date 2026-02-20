@@ -232,7 +232,7 @@ export default function About() {
     <Layout>
       <Seo
         title="About Us – NxteVia"
-        description="NxteVia bridges the gap between education and employment by connecting ambitious talent with forward-thinking companies."
+        description="NxteVia bridges the gap between education and career outcomes by connecting ambitious talent with forward-thinking companies."
         canonical={window?.location?.href || ""}
       />
       <HeroSection />
