@@ -83,6 +83,7 @@ export default function CompanyJobReview() {
 
   const canEdit = job && ["pending", "revision_required", "approved"].includes(job.status);
   const canClose = job && job.status === "approved";
+  const canWithdraw = job && job.status === "pending";
   const canReopen = job && job.status === "closed";
   const statusLabel = job ? (job.status === "approved" ? "active" : job.status) : "";
 
@@ -108,6 +109,21 @@ export default function CompanyJobReview() {
       setJob({ ...job, status: "approved" });
     } catch (err) {
       toast({ title: "Reopen failed", description: err instanceof Error ? err.message : "Unexpected error", duration: 2000 });
+    }
+  };
+
+  const withdrawJob = async () => {
+    if (!job || job.status !== "pending") {
+      toast({ title: "Cannot withdraw", description: "Only under-review opportunities can be withdrawn.", duration: 1800 });
+      return;
+    }
+    if (!window.confirm("Withdraw this under-review opportunity?")) return;
+    try {
+      await updateOpportunity(job.id, { status: "closed" } as any, { action: "withdrawn", note: "Withdrawn by company while under review" });
+      toast({ title: "Withdrawn", description: "Opportunity withdrawn successfully.", duration: 2000 });
+      setJob({ ...job, status: "closed" });
+    } catch (err) {
+      toast({ title: "Withdraw failed", description: err instanceof Error ? err.message : "Unexpected error", duration: 2000 });
     }
   };
 
@@ -185,6 +201,11 @@ export default function CompanyJobReview() {
               {canClose && (
                 <Button variant="destructive" onClick={closeJob} className="shadow-lg shadow-red-500/20">
                   <XCircle className="mr-2 h-4 w-4" /> Close Job
+                </Button>
+              )}
+              {canWithdraw && (
+                <Button variant="destructive" onClick={withdrawJob} className="shadow-lg shadow-red-500/20">
+                  <XCircle className="mr-2 h-4 w-4" /> Withdraw Opportunity
                 </Button>
               )}
               {canReopen && (

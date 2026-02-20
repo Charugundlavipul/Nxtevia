@@ -97,7 +97,7 @@ export function EvieAssistant() {
       return;
     }
 
-    const targetPath = role === 'student' ? '/seekers/home' : '/home';
+    const targetPath = '/home';
 
     if (location.pathname === targetPath) {
       const el = document.getElementById('faq');

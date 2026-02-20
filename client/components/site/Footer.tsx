@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
+import { Instagram, Linkedin } from "lucide-react";
 
 type Role = "student" | "company" | null;
 
@@ -32,9 +32,7 @@ export function Footer() {
             </p>
             <div className="flex gap-4 pt-2">
               <SocialLink href="#" icon={<Linkedin className="h-4 w-4" />} label="LinkedIn" />
-              <SocialLink href="#" icon={<Twitter className="h-4 w-4" />} label="Twitter" />
               <SocialLink href="#" icon={<Instagram className="h-4 w-4" />} label="Instagram" />
-              <SocialLink href="#" icon={<Facebook className="h-4 w-4" />} label="Facebook" />
             </div>
           </div>
 
@@ -61,7 +59,7 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li><FooterLink to="/about">About Us</FooterLink></li>
               <li><FooterLink to="/contact">Contact</FooterLink></li>
-              <li><FooterLink to={authed ? (role === "company" ? "/company/home#faq" : "/seekers/home#faq") : "/home#faq"}>FAQ</FooterLink></li>
+              <li><FooterLink to={authed && role === "company" ? "/company/home#faq" : "/home#faq"}>FAQ</FooterLink></li>
 
             </ul>
           </div>

@@ -381,6 +381,7 @@ export default function PostOpportunity() {
                           />
                         </div>
                         <div className="col-span-1 space-y-2">
+                          <Label className="text-xs font-medium text-slate-500">Currency</Label>
                           <Select value={watch("currency")} onValueChange={(v) => setValue("currency", v)}>
                             <SelectTrigger className="bg-white dark:bg-slate-950">
                               <SelectValue />

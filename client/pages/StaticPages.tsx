@@ -379,7 +379,7 @@ export const Students = () => (
                 <a href="/seekers/opportunities">Browse opportunities <ArrowRight className="ml-2 h-4 w-4" /></a>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <a href="/faq">Read FAQs</a>
+                <a href="/home#faq">Read FAQs</a>
               </Button>
             </div>
 

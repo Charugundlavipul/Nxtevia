@@ -10,7 +10,7 @@ export default function CompanyFAQ() {
     if (authed && role === "company") {
       navigate("/company/home#faq", { replace: true });
     } else if (authed && role === "student") {
-      navigate("/seekers/home#faq", { replace: true });
+      navigate("/home#faq", { replace: true });
     } else {
       navigate("/home#faq", { replace: true });
     }
