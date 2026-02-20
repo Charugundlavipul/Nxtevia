@@ -158,7 +158,7 @@ export function Header() {
               <NavLink to="/admin/jobs" className={navLink}>Jobs</NavLink>
               <NavLink to="/admin/seekers" className={navLink}>Seekers</NavLink>
               <NavLink to="/admin/companies" className={navLink}>Companies</NavLink>
-              <NavLink to="/admin/hires" className={navLink}>Hires</NavLink>
+              <NavLink to="/admin/hires" className={navLink}>Placements</NavLink>
               <NavLink to="/admin/chats" className={navLink}>Messages</NavLink>
               <NavLink to="/admin/analytics" className={navLink}>Analytics</NavLink>
               <NavLink to="/admin/tickets" className={navLink}>Tickets</NavLink>
@@ -267,7 +267,7 @@ export function Header() {
                 <MobileLink to="/admin/jobs" onClick={() => setOpen(false)}>Jobs</MobileLink>
                 <MobileLink to="/admin/seekers" onClick={() => setOpen(false)}>Seekers</MobileLink>
                 <MobileLink to="/admin/companies" onClick={() => setOpen(false)}>Companies</MobileLink>
-                <MobileLink to="/admin/hires" onClick={() => setOpen(false)}>Hires</MobileLink>
+                <MobileLink to="/admin/hires" onClick={() => setOpen(false)}>Placements</MobileLink>
                 <MobileLink to="/admin/chats" onClick={() => setOpen(false)}>Messages</MobileLink>
                 <MobileLink to="/admin/analytics" onClick={() => setOpen(false)}>Analytics</MobileLink>
                 <MobileLink to="/admin/tickets" onClick={() => setOpen(false)}>Tickets</MobileLink>
@@ -327,3 +327,4 @@ function MobileLink({ to, href, children, onClick }: { to?: string; href?: strin
     </Link>
   );
 }
+

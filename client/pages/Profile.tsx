@@ -68,6 +68,7 @@ type CompanyProfile = {
   hiringGoal?: string;
   emailVerified?: boolean;
   linkedinVerified?: boolean;
+  aiScreeningEnabled?: boolean;
 };
 
 const STORAGE_BUCKETS = ["profile-files"];
@@ -250,6 +251,7 @@ export default function Profile() {
               hiringGoal: row.hiring_goal ?? "",
               emailVerified: row.email_verified ?? false,
               linkedinVerified: row.linkedin_verified ?? false,
+              aiScreeningEnabled: row.ai_screening_enabled ?? false,
             });
           }
         } else {
@@ -497,6 +499,17 @@ export default function Profile() {
                       <div className="bg-slate-50/50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
                         <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">Size</div>
                         <div className="font-medium text-slate-900 dark:text-white">{companyProfile.sizeRange}</div>
+                      </div>
+                    )}
+                    {companyProfile?.aiScreeningEnabled && (
+                      <div className="md:col-span-2 bg-indigo-50/50 dark:bg-indigo-900/10 p-4 rounded-xl border border-indigo-100/50 dark:border-indigo-900/20 flex items-center gap-3">
+                        <div className="bg-indigo-100 dark:bg-indigo-900/20 p-2 rounded-lg">
+                          <CheckCircle2 className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-indigo-900 dark:text-indigo-300">AI-Powered Screening</div>
+                          <div className="text-sm text-indigo-700 dark:text-indigo-400">This company uses AI to help review applications faster.</div>
+                        </div>
                       </div>
                     )}
                   </div>
