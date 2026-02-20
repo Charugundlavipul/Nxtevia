@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import { COUNTRIES } from "@/lib/countries";
-import { ArrowRight, CheckCircle2, Building2, GraduationCap, HelpCircle } from "lucide-react";
+import { ArrowRight, CheckCircle2, HelpCircle } from "lucide-react";
 
 function SkillsAutosuggestRHFField({
   value,
@@ -436,20 +436,6 @@ export const Companies = () => (
               </Button>
             </div>
 
-            <div className="grid grid-cols-2 gap-6 pt-8">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-900/20 flex items-center justify-center">
-                  <Building2 className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                </div>
-                <span className="font-medium text-slate-900 dark:text-white">Diverse Talent</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-full bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
-                  <CheckCircle2 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                </div>
-                <span className="font-medium text-slate-900 dark:text-white">Risk-Free Hiring</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>

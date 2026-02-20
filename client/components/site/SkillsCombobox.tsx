@@ -91,7 +91,7 @@ export function SkillsCombobox({
           />
         </div>
       </PopoverTrigger>
-      <PopoverContent className="p-0 w-[var(--radix-popover-trigger-width)]">
+      <PopoverContent className="p-0 w-[var(--radix-popover-trigger-width)]" onOpenAutoFocus={(e) => e.preventDefault()}>
         <Command shouldFilter={false}>
 
           <CommandList>
