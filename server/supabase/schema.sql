@@ -209,7 +209,8 @@ alter table public.company_profiles
   add column if not exists project_types text[] default '{}',
   add column if not exists project_types_other text,
   add column if not exists hiring_goal text,
-  add column if not exists status text not null default 'active' check (status in ('active', 'banned'));
+  add column if not exists status text not null default 'active' check (status in ('active', 'banned')),
+  add column if not exists ai_screening_enabled boolean default false;
 
 alter table public.company_requirements
   add column if not exists require_resume boolean default true,

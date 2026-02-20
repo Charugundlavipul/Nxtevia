@@ -28,6 +28,7 @@ interface CompanyProfile {
   hiringGoal?: string;
   emailVerified: boolean;
   linkedinVerified: boolean;
+  aiScreening?: boolean;
 }
 
 const DEFAULT: CompanyProfile = {
@@ -45,6 +46,7 @@ const DEFAULT: CompanyProfile = {
   hiringGoal: "",
   emailVerified: false,
   linkedinVerified: false,
+  aiScreening: false,
 };
 
 function EmailVerifyModal({ open, onClose, email, onVerify }: { open: boolean; onClose: () => void; email: string; onVerify: (ok: boolean) => void }) {
@@ -159,6 +161,7 @@ export default function CompanyProfileCreate() {
             hiringGoal: row.hiring_goal ?? "",
             emailVerified: row.email_verified ?? false,
             linkedinVerified: row.linkedin_verified ?? false,
+            aiScreening: row.ai_screening_enabled ?? false,
           };
           setProfile(next);
         }
@@ -194,6 +197,7 @@ export default function CompanyProfileCreate() {
         hiring_goal: profile.hiringGoal,
         email_verified: profile.emailVerified,
         linkedin_verified: profile.linkedinVerified,
+        ai_screening_enabled: profile.aiScreening,
       };
       const { error } = await supabase.from("company_profiles").upsert(payload);
       if (error) {
@@ -433,7 +437,7 @@ export default function CompanyProfileCreate() {
                   </div>
 
                   <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Project/Work Types of Interest</Label>
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Project/Work Types of Interest</Label>
                     <div className="flex flex-wrap gap-2">
                       {[
                         "Tech", "Marketing", "Design", "Operations", "Product", "Other"
@@ -460,6 +464,19 @@ export default function CompanyProfileCreate() {
                         className="mt-2 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700"
                       />
                     )}
+                  </div>
+
+                  <div className="flex items-center gap-3 pt-2">
+                    <input
+                      type="checkbox"
+                      id="aiScreening"
+                      checked={profile.aiScreening}
+                      onChange={(e) => setProfile((p) => ({ ...p, aiScreening: e.target.checked }))}
+                      className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-700 dark:bg-slate-900"
+                    />
+                    <Label htmlFor="aiScreening" className="text-sm font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
+                      Do you use AI to screen candidates?
+                    </Label>
                   </div>
                 </CardContent>
               </Card>

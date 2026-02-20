@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ToastAction } from "@/components/ui/toast";
+
 import {
   Dialog,
   DialogContent,
@@ -44,7 +45,8 @@ import {
   Pencil,
   ArrowRight,
   UserCheck,
-  XCircle
+  XCircle,
+  MessageSquare
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { HireDisclaimerModal } from "@/components/modals/HireDisclaimerModal";

@@ -30,6 +30,7 @@ export default function CompanyProfileUpdate() {
     hiringGoal: "",
     emailVerified: false,
     linkedinVerified: false,
+    aiScreening: false,
   });
   const [modalOpen, setModalOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
@@ -60,6 +61,7 @@ export default function CompanyProfileUpdate() {
             hiringGoal: row.hiring_goal ?? "",
             emailVerified: row.email_verified ?? false,
             linkedinVerified: row.linkedin_verified ?? false,
+            aiScreening: row.ai_screening_enabled ?? false,
           });
         }
       } finally {
@@ -94,6 +96,7 @@ export default function CompanyProfileUpdate() {
         hiring_goal: profile.hiringGoal,
         email_verified: profile.emailVerified,
         linkedin_verified: profile.linkedinVerified,
+        ai_screening_enabled: profile.aiScreening,
       };
       const { error } = await supabase.from("company_profiles").upsert(payload);
       if (error) {
@@ -347,6 +350,19 @@ export default function CompanyProfileUpdate() {
                         className="mt-2 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 dark:text-white"
                       />
                     )}
+                  </div>
+
+                  <div className="flex items-center gap-3 pt-2">
+                    <input
+                      type="checkbox"
+                      id="aiScreening"
+                      checked={profile.aiScreening}
+                      onChange={(e) => setProfile((p) => ({ ...p, aiScreening: e.target.checked }))}
+                      className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-700 dark:bg-slate-900"
+                    />
+                    <Label htmlFor="aiScreening" className="text-sm font-medium text-slate-700 dark:text-slate-200 cursor-pointer">
+                      Do you use AI to screen candidates?
+                    </Label>
                   </div>
                 </CardContent>
               </Card>

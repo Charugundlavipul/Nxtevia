@@ -628,7 +628,7 @@ export default function PostOpportunity() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Compliance Confirmation</DialogTitle>
-            <DialogDescription className="text-justify pt-4">
+            <DialogDescription className="text-justify pt-4 max-h-[60vh] overflow-y-auto pr-2">
               By posting, you confirm this opportunity complies with applicable employment and human rights legislation (including Ontario’s Employment Standards Act and Human Rights Code). You acknowledge that NxteVia is a technology platform only, not a recruiter or employer, and you are solely responsible for the hiring relationship.
             </DialogDescription>
           </DialogHeader>
