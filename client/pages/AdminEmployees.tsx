@@ -97,20 +97,20 @@ export default function AdminEmployees() {
 
     return (
         <Layout>
-            <Seo title="Admin Hires - NxteVia" canonical={window.location.href} />
+            <Seo title="Admin Placements - NxteVia" canonical={window.location.href} />
             <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-12">
                 <div className="container max-w-6xl space-y-8">
 
                     {/* Header */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
-                            <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">All Hires</h1>
-                            <p className="text-slate-500 dark:text-slate-400 mt-1">Manage hired seekers across all companies.</p>
+                            <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">All Placements</h1>
+                            <p className="text-slate-500 dark:text-slate-400 mt-1">Manage selected seekers across all companies.</p>
                         </div>
                         <div className="flex items-center gap-3">
                             <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-lg shadow-blue-600/20">
                                 <Link to="/admin/hires/new">
-                                    <Plus className="mr-2 h-4 w-4" /> Add Hire
+                                    <Plus className="mr-2 h-4 w-4" /> Add Placement
                                 </Link>
                             </Button>
                         </div>
@@ -123,8 +123,8 @@ export default function AdminEmployees() {
                                 <div className="flex items-center gap-3">
                                     <div className="bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10 p-2 rounded-lg"><Users className="h-5 w-5 text-indigo-600 dark:text-indigo-400" /></div>
                                     <div>
-                                        <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Hire Records</CardTitle>
-                                        <CardDescription className="dark:text-slate-400">View and manage hired seekers.</CardDescription>
+                                        <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Placement Records</CardTitle>
+                                        <CardDescription className="dark:text-slate-400">View and manage selected seekers.</CardDescription>
                                     </div>
                                 </div>
                                 <div className="relative w-full sm:w-64">
@@ -150,8 +150,8 @@ export default function AdminEmployees() {
                                     <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-full mb-3">
                                         <Users className="h-6 w-6 text-slate-400" />
                                     </div>
-                                    <p className="text-slate-900 dark:text-white font-medium">No hires found</p>
-                                    <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">No hired records exist in the system.</p>
+                                    <p className="text-slate-900 dark:text-white font-medium">No placements found</p>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">No selected records exist in the system.</p>
                                 </div>
                             ) : filteredList.length === 0 ? (
                                 <div className="p-8 text-center text-slate-500 dark:text-slate-400">
@@ -215,3 +215,4 @@ export default function AdminEmployees() {
         </Layout>
     );
 }
+

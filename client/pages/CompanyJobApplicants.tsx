@@ -224,7 +224,7 @@ export default function CompanyJobApplicants() {
       });
       setNewHire({ applicant_id: "", role: "", start_date: "", end_date: "" });
       await refreshRecords();
-      toast({ title: "Saved", description: "Hire recorded and pipeline updated.", duration: 1800 });
+      toast({ title: "Saved", description: "Selection recorded and pipeline updated.", duration: 1800 });
       // Refresh apps to show updated status
       const updatedApps = await fetchApplicationsForOpportunity(id);
       setApps(updatedApps);
@@ -247,9 +247,9 @@ export default function CompanyJobApplicants() {
       await refreshRecords();
       setEditHireOpen(false);
       setEditHire(null);
-      toast({ title: "Updated", description: "Hire details updated.", duration: 1800 });
+      toast({ title: "Updated", description: "Selection details updated.", duration: 1800 });
     } catch (err) {
-      toast({ title: "Update failed", description: "Could not update hire", variant: "destructive" });
+      toast({ title: "Update failed", description: "Could not update selection", variant: "destructive" });
     } finally {
       setSaving(false);
     }
@@ -305,7 +305,7 @@ export default function CompanyJobApplicants() {
 
   return (
     <Layout>
-      <Seo title="Hiring Pipeline - NxteVia" canonical={window.location.href} />
+      <Seo title="Selection Pipeline - NxteVia" canonical={window.location.href} />
       <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50">
         <section className="container py-10 space-y-8 max-w-7xl mx-auto">
           {/* Header */}
@@ -316,7 +316,7 @@ export default function CompanyJobApplicants() {
                 <span>/</span>
                 <span className="text-slate-900 dark:text-white font-medium">Hiring Pipeline</span>
               </div>
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Candidates & Hires</h1>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Candidates & Placements</h1>
               <p className="text-slate-500 dark:text-slate-400">Manage your applicants, interviews, and active team.</p>
             </div>
             <Button asChild variant="outline" className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800">
@@ -406,13 +406,13 @@ export default function CompanyJobApplicants() {
             </CardContent>
           </Card>
 
-          {/* Hired Seekers */}
+          {/* Selected Seekers */}
           <Card className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-white/50 dark:border-slate-800 shadow-sm">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="bg-emerald-50 dark:bg-emerald-900/20 p-2 rounded-lg"><UserCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-400" /></div>
-                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">Active Hires</h2>
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">Active Placements</h2>
                   <Badge variant="secondary" className="ml-2 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">{hired.length}</Badge>
                 </div>
               </div>
@@ -457,7 +457,7 @@ export default function CompanyJobApplicants() {
                 </div>
               )}
 
-              {/* Add Hire Form */}
+              {/* Add Placement Form */}
               <div id="hire-form" className="bg-slate-50/50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-100 dark:border-slate-800">
                 <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-4">Select Applicant</h3>
                 <form className="grid gap-4 md:grid-cols-2 lg:grid-cols-4" onSubmit={preValidateHire}>
@@ -594,11 +594,11 @@ export default function CompanyJobApplicants() {
             </DialogContent>
           </Dialog>
 
-          {/* Edit Hire Dialog */}
+          {/* Edit Selection Dialog */}
           <Dialog open={editHireOpen} onOpenChange={setEditHireOpen}>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Edit Hire Details</DialogTitle>
+                <DialogTitle>Edit Selection Details</DialogTitle>
                 <DialogDescription>Update role, dates, or feedback.</DialogDescription>
               </DialogHeader>
               {editHire && (
@@ -637,3 +637,4 @@ export default function CompanyJobApplicants() {
     </Layout>
   );
 }
+

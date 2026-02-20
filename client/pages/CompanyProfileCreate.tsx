@@ -311,13 +311,13 @@ export default function CompanyProfileCreate() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Hiring Goal</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Team Goal</Label>
                       <Select value={profile.hiringGoal} onValueChange={(v) => setProfile((p) => ({ ...p, hiringGoal: v }))}>
                         <SelectTrigger className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700">
                           <SelectValue placeholder="Select goal" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="hire_full_time">Hire full-time later</SelectItem>
+                          <SelectItem value="hire_full_time">Add full-time team members later</SelectItem>
                           <SelectItem value="project_support">Gain project support</SelectItem>
                         </SelectContent>
                       </Select>
@@ -503,3 +503,4 @@ export default function CompanyProfileCreate() {
     </Layout>
   );
 }
+

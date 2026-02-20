@@ -264,16 +264,16 @@ export default function CompanyJobReview() {
                 </CardContent>
               </Card>
 
-              {/* Hiring Banner */}
+              {/* Selection Banner */}
               <Card className="bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900/80 border-slate-200 dark:border-slate-800 shadow-sm">
                 <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-6">
                   <div className="space-y-2">
                     <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                       <div className="bg-emerald-100 dark:bg-emerald-900/30 p-2 rounded-lg"><Users className="h-5 w-5 text-emerald-700 dark:text-emerald-400" /></div>
-                      Manage Applicants & Hiring Pipeline
+                      Manage Applicants & Selection Pipeline
                     </h2>
                     <p className="text-slate-500 dark:text-slate-400 max-w-lg">
-                      Review new applications, schedule interviews, and manage your hiring pipeline in the dedicated dashboard.
+                      Review new applications, schedule interviews, and manage your selection pipeline in the dedicated dashboard.
                     </p>
                   </div>
                   <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 whitespace-nowrap">
@@ -417,4 +417,5 @@ export default function CompanyJobReview() {
     </Layout>
   );
 }
+
 

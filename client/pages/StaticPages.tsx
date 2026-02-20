@@ -414,7 +414,7 @@ export const Companies = () => (
             <div className="absolute inset-0 bg-gradient-to-bl from-indigo-500/20 to-purple-500/20 rounded-3xl blur-2xl transform rotate-3"></div>
             <img
               src="/assets/static-2.webp"
-              alt="Hiring meeting success"
+              alt="Team meeting success"
               className="relative w-full h-[500px] object-cover rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800"
             />
           </div>
@@ -607,3 +607,4 @@ export const Terms = () => (
     <PlaceholderPage title="Terms" />
   </Layout>
 );
+

@@ -307,9 +307,9 @@ export default function AdminAnalytics() {
                     {Math.abs(metrics.newHires.change)}%
                   </div>
                 </div>
-                <div className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Hires (Period)</div>
+                <div className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Placements (Period)</div>
                 <div className="text-3xl font-bold text-slate-900 dark:text-white mt-1">{metrics.newHires.count}</div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">Candidates marked as hired</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">Candidates marked as selected</p>
               </CardContent>
             </Card>
           </div>
@@ -318,3 +318,4 @@ export default function AdminAnalytics() {
     </Layout>
   );
 }
+

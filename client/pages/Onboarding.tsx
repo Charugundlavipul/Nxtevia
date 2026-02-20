@@ -123,7 +123,7 @@ export default function Onboarding() {
                     Publish an opportunity with a clear scope and outcome.
                   </li>
                   <li>
-                    Review applicants, schedule interviews, and track hires.
+                    Review applicants, schedule interviews, and track selections.
                   </li>
                 </ul>
                 <div className="grid gap-2 sm:grid-cols-2">
@@ -158,3 +158,4 @@ export default function Onboarding() {
     </Layout>
   );
 }
+

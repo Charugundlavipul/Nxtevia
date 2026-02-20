@@ -177,7 +177,7 @@ export default function AdminEmployeeTenure() {
             <Layout>
                 <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50 flex flex-col items-center justify-center p-4">
                     <h1 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Record Not Found</h1>
-                    <Button asChild variant="outline"><Link to="/admin/hires">Back to Hires</Link></Button>
+                    <Button asChild variant="outline"><Link to="/admin/hires">Back to Placements</Link></Button>
                 </div>
             </Layout>
         );
@@ -416,3 +416,4 @@ export default function AdminEmployeeTenure() {
         </Layout>
     );
 }
+

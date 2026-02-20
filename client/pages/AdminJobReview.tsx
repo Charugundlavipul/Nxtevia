@@ -224,7 +224,7 @@ export default function AdminJobReview() {
   const createHire = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!id || !job?.user_id || !newHire.applicant_id) {
-      toast({ title: "Select applicant", description: "Choose an applicant to mark as hired.", duration: 2000 });
+      toast({ title: "Select applicant", description: "Choose an applicant to mark as selected.", duration: 2000 });
       return;
     }
     setSaving(true);
@@ -245,9 +245,9 @@ export default function AdminJobReview() {
         .eq("applicant_id", newHire.applicant_id);
       setNewHire({ applicant_id: "", role: "", start_date: "", end_date: "" });
       await refreshRecords();
-      toast({ title: "Saved", description: "Hire recorded.", duration: 1600 });
+      toast({ title: "Saved", description: "Selection recorded.", duration: 1600 });
     } catch (err) {
-      toast({ title: "Save failed", description: err instanceof Error ? err.message : "Could not add hire", duration: 2200 });
+      toast({ title: "Save failed", description: err instanceof Error ? err.message : "Could not add selection", duration: 2200 });
     } finally {
       setSaving(false);
     }
@@ -265,9 +265,9 @@ export default function AdminJobReview() {
       await refreshRecords();
       setEditHireOpen(false);
       setEditHire(null);
-      toast({ title: "Updated", description: "Hire details updated.", duration: 1800 });
+      toast({ title: "Updated", description: "Selection details updated.", duration: 1800 });
     } catch (err) {
-      toast({ title: "Update failed", description: "Could not update hire", variant: "destructive" });
+      toast({ title: "Update failed", description: "Could not update selection", variant: "destructive" });
     } finally {
       setSaving(false);
     }
@@ -492,16 +492,16 @@ export default function AdminJobReview() {
                 </CardContent>
               </Card>
 
-              {/* Hiring Banner */}
+              {/* Selection Banner */}
               <Card className="bg-gradient-to-r from-slate-50 to-white dark:from-slate-900 dark:to-slate-900/80 border-slate-200 dark:border-slate-800 shadow-sm">
                 <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-6">
                   <div className="space-y-2">
                     <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                       <div className="bg-emerald-100 dark:bg-emerald-900/30 p-2 rounded-lg"><Users className="h-5 w-5 text-emerald-700 dark:text-emerald-400" /></div>
-                      Manage Applicants & Hiring Pipeline
+                      Manage Applicants & Selection Pipeline
                     </h2>
                     <p className="text-slate-500 dark:text-slate-400 max-w-lg">
-                      Review applications, track interview progress, and manage hiring decisions in the dedicated dashboard.
+                      Review applications, track interview progress, and manage selection decisions in the dedicated dashboard.
                     </p>
                   </div>
                   <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 whitespace-nowrap">
@@ -746,11 +746,11 @@ export default function AdminJobReview() {
           </DialogContent>
         </Dialog>
 
-        {/* Edit Hire Dialog */}
+        {/* Edit Selection Dialog */}
         <Dialog open={editHireOpen} onOpenChange={setEditHireOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Hire Details</DialogTitle>
+              <DialogTitle>Edit Selection Details</DialogTitle>
               <DialogDescription>Update role, dates, or feedback.</DialogDescription>
             </DialogHeader>
             {editHire && (
@@ -782,3 +782,4 @@ export default function AdminJobReview() {
     </Layout>
   );
 }
+

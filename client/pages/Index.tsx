@@ -280,7 +280,7 @@ function Highlights() {
       b: "bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10"
     },
     {
-      t: "Get Hired",
+      t: "Get Selected",
       d: "Turn experience into opportunity - get noticed and land your next role.",
       i: Rocket,
       c: "text-indigo-600 dark:text-indigo-400",
@@ -480,7 +480,7 @@ function HowItWorks({ seekerMode, companyMode }: { seekerMode: boolean; companyM
                   <li className="flex gap-4">
                     <div className="flex-none w-8 h-8 rounded-full bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 flex items-center justify-center font-bold text-sm">3</div>
                     <div>
-                      <h4 className="font-semibold text-slate-900 dark:text-white">Review & Hire</h4>
+                      <h4 className="font-semibold text-slate-900 dark:text-white">Review & Select</h4>
                       <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Select best candidates</p>
                     </div>
                   </li>
@@ -699,7 +699,7 @@ function FAQ({ companyMode }: { companyMode?: boolean }) {
   const companyFaqs = [
     {
       q: "What is NxteVia for companies?",
-      a: "NxteVia helps companies connect with skilled talent through short-term, outcomes-based opportunities. Post opportunities, evaluate real work, and hire top performers with confidence.",
+      a: "NxteVia helps companies connect with skilled talent through short-term, outcomes-based opportunities. Post opportunities, evaluate real work, and select top performers with confidence.",
     },
     {
       q: "Who can apply to our projects?",
@@ -806,7 +806,7 @@ function FinalCTA({ seekerMode, companyMode }: { seekerMode: boolean; companyMod
 
         <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-8 font-light leading-relaxed">
           {companyMode
-            ? "Connect with verified talent and streamline your hiring process."
+            ? "Connect with verified talent and streamline your selection process."
             : "Connect talent and companies in one integrated space."}
         </p>
 
@@ -855,3 +855,4 @@ export default function HomePage() {
     </Layout>
   );
 }
+

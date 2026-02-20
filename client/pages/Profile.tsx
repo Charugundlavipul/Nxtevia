@@ -534,7 +534,7 @@ export default function Profile() {
 
                   {companyProfile?.hiringGoal && (
                     <section className="bg-indigo-50/50 dark:bg-indigo-900/10 p-5 rounded-xl border border-indigo-100/50 dark:border-indigo-900/20">
-                      <h3 className="text-sm font-bold text-indigo-900 dark:text-indigo-300 mb-2">Hiring Goal</h3>
+                      <h3 className="text-sm font-bold text-indigo-900 dark:text-indigo-300 mb-2">Team Goal</h3>
                       <p className="text-sm text-indigo-700 dark:text-indigo-400">{companyProfile.hiringGoal}</p>
                     </section>
                   )}
@@ -746,3 +746,4 @@ export default function Profile() {
     </Layout>
   );
 }
+
