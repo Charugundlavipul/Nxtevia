@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { fetchApplicationsForApplicant, type Application, withdrawApplication } from "@/lib/applications";
 import { supabase } from "@/lib/supabase";
+import { getApplicationStatusLabel, toTitleCase } from "@/lib/uiText";
 import { toast } from "@/components/ui/use-toast";
 
 type OppMap = Record<string, { title: string }>;
@@ -68,7 +69,7 @@ export default function Dashboard() {
                       <CardContent className="p-4 space-y-2">
                         <div className="flex items-center justify-between">
                           <div className="font-semibold">{title}</div>
-                          <Badge variant="outline">{a.status}</Badge>
+                          <Badge variant="outline">{toTitleCase(getApplicationStatusLabel(a.status))}</Badge>
                         </div>
                         <div className="text-xs text-muted-foreground">Submitted: {new Date(a.created_at).toLocaleString()}</div>
                         <div className="flex gap-2">

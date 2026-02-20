@@ -27,6 +27,7 @@ import {
   type EmployeeRecord,
 } from "@/lib/employeeRecords";
 import { supabase } from "@/lib/supabase";
+import { getApplicationStatusLabel } from "@/lib/uiText";
 import { toast } from "@/components/ui/use-toast";
 import { useParams, Link } from "react-router-dom";
 import * as React from "react";
@@ -329,7 +330,7 @@ export default function AdminJobApplicants() {
                               {a.resume_url ? <a className="text-blue-600 hover:underline" href={a.resume_url} target="_blank" rel="noreferrer">Resume</a> : <span className="text-slate-400">-</span>}
                               {a.cover_letter_url ? <a className="text-blue-600 hover:underline" href={a.cover_letter_url} target="_blank" rel="noreferrer">Cover</a> : null}
                             </td>
-                            <td className="px-6 py-4"><Badge variant="outline" className="capitalize">{a.status}</Badge></td>
+                            <td className="px-6 py-4"><Badge variant="outline" className="capitalize">{getApplicationStatusLabel(a.status)}</Badge></td>
                             <td className="px-6 py-4">
                               <div className="flex items-center gap-2">
                                 <Button size="sm" variant="outline" asChild className="rounded-lg h-8 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700">

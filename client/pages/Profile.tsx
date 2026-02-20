@@ -10,7 +10,7 @@ import { COUNTRIES } from "@/lib/countries";
 import { appSignOut } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { fetchCompletionsForApplicant, type OpportunityCompletion } from "@/lib/opportunityCompletions";
-import { getTeamGoalLabel } from "@/lib/uiText";
+import { getApplicationStatusLabel, getTeamGoalLabel, toTitleCase } from "@/lib/uiText";
 import { toast } from "@/components/ui/use-toast";
 import { Building2, FileText, Globe2, Loader2, MapPin, Phone, Star, Users, Briefcase, GraduationCap, Mail, CheckCircle2, AlertCircle, Trash2, Edit } from "lucide-react";
 import {
@@ -715,7 +715,7 @@ export default function Profile() {
                           <div className="font-semibold text-slate-900 dark:text-white">{op.title || "Opportunity"}</div>
                           <div className="flex flex-wrap gap-2 mt-2">
                             {op.role && <Badge variant="outline" className="text-xs border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">{op.role}</Badge>}
-                            {op.status && <Badge variant="secondary" className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{op.status}</Badge>}
+                            {op.status && <Badge variant="secondary" className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{toTitleCase(getApplicationStatusLabel(op.status))}</Badge>}
                           </div>
                         </div>
                       ))}
