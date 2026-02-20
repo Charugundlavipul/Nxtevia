@@ -315,7 +315,7 @@ export default function AdminEmployeeTenure() {
                                     </h3>
                                     <div className="grid gap-4 md:grid-cols-2">
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Start Date</label>
+                                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Initiation Date</label>
                                             <Input
                                                 type="date"
                                                 value={startDate}
@@ -324,7 +324,7 @@ export default function AdminEmployeeTenure() {
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">End Date</label>
+                                            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Completion Date</label>
                                             <Input
                                                 type="date"
                                                 value={endDate}

@@ -333,7 +333,7 @@ export default function AdminJobApplicants() {
                             <td className="px-6 py-4"><Badge variant="outline" className="capitalize">{getApplicationStatusLabel(a.status)}</Badge></td>
                             <td className="px-6 py-4">
                               <div className="flex items-center gap-2">
-                                <Button size="sm" variant="outline" asChild className="rounded-lg h-8 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700">
+                                <Button size="sm" variant="outline" asChild className="rounded-lg h-8 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 hover:text-slate-900 dark:hover:bg-slate-700">
                                   <Link to={`/admin/applications/${a.id}`}>Review</Link>
                                 </Button>
                                 {(a.status === 'submitted' || a.status === 'pending' || a.status === 'interviewing') && (
@@ -396,7 +396,7 @@ export default function AdminJobApplicants() {
 
                             <td className="px-6 py-4 text-right space-x-2">
                               {appForRecord && (
-                                <Button size="sm" variant="outline" className="bg-white dark:bg-slate-800 text-blue-600 dark:text-white border-blue-200 dark:border-slate-600 hover:bg-blue-50 dark:hover:bg-slate-700" asChild>
+                                <Button size="sm" variant="outline" className="bg-white dark:bg-slate-800 text-blue-600 dark:text-white border-blue-200 dark:border-slate-600 hover:bg-blue-50 hover:text-blue-700 dark:hover:bg-slate-700" asChild>
                                   <Link to={`/admin/applications/${appForRecord.id}`}>View App</Link>
                                 </Button>
                               )}
