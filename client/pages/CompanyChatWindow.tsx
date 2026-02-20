@@ -232,7 +232,7 @@ export default function CompanyChatWindow() {
             <Button
               variant="outline"
               size="sm"
-              className="hidden sm:flex items-center gap-2 h-8 text-xs bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+              className="hidden sm:flex items-center gap-2 h-8 text-xs bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:bg-slate-50 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50"
               onClick={() => navigate(`/profile/${otherUserId}`)}
             >
               <User className="h-3.5 w-3.5" />
@@ -322,9 +322,9 @@ export default function CompanyChatWindow() {
               onChange={handleFileSelect}
               className="hidden"
             />
-            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800" onClick={() => fileInputRef.current?.click()}>
+            {/* <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800" onClick={() => fileInputRef.current?.click()}>
               <Paperclip className="h-4 w-4" />
-            </Button>
+            </Button> */}
             <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
               <Smile className="h-4 w-4" />
             </Button>
