@@ -447,7 +447,7 @@ export const Companies = () => (
                 <div className="h-10 w-10 rounded-full bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center">
                   <CheckCircle2 className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                 </div>
-                {/* <span className="font-medium text-slate-900 dark:text-white">Risk-Free Hiring</span> */}
+                <span className="font-medium text-slate-900 dark:text-white">Risk-Free Hiring</span>
               </div>
             </div>
           </div>

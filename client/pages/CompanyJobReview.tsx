@@ -188,7 +188,7 @@ export default function CompanyJobReview() {
               </div>
             </div>
             <div className="flex gap-3">
-              <Button asChild variant="outline" className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 border shadow-sm">
+              <Button asChild variant="outline" className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-white border shadow-sm">
                 <Link to={`/company/jobs/${job.id}/applicants`}>
                   <Users className="mr-2 h-4 w-4" /> View Applicants
                 </Link>
@@ -209,7 +209,7 @@ export default function CompanyJobReview() {
                 </Button>
               )}
               {canReopen && (
-                <Button variant="outline" onClick={reopenJob} className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 dark:text-white">
+                <Button variant="outline" onClick={reopenJob} className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-white">
                   <History className="mr-2 h-4 w-4" /> Reopen Job
                 </Button>
               )}

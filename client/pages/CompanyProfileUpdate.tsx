@@ -119,29 +119,29 @@ export default function CompanyProfileUpdate() {
   return (
     <Layout>
       <Seo title="Update Company Profile – NxteVia" canonical={window.location.href} />
-      <div className="min-h-screen bg-slate-50/50 py-12">
+      <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-12">
         <div className="container max-w-3xl space-y-8">
 
           {/* Header */}
           <div className="space-y-1">
-            <div className="flex items-center gap-2 text-sm text-slate-500 mb-2">
+            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-2">
               <Link to={`/company/profile/${(profile.name || "company").toString().trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "company"}`} className="hover:text-primary dark:hover:text-white transition-colors flex items-center gap-1">
                 <ArrowLeft className="h-3 w-3" /> Back to Profile
               </Link>
               <span>/</span>
-              <span className="text-slate-900 font-medium">Update Profile</span>
+              <span className="text-slate-900 dark:text-white font-medium">Update Profile</span>
             </div>
-            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Update Company Profile</h1>
-            <p className="text-slate-500">Edit details about your organization to attract the best talent.</p>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Update Company Profile</h1>
+            <p className="text-slate-500 dark:text-slate-400">Edit details about your organization to attract the best talent.</p>
           </div>
 
           {loading ? (
             <div className="h-64 bg-white rounded-xl shadow-sm animate-pulse" />
           ) : (
             <form onSubmit={save} className="space-y-8">
-              <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-sm">
-                <CardHeader className="border-b border-slate-100 pb-4">
-                  <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/60 dark:border-slate-800 shadow-sm">
+                <CardHeader className="border-b border-slate-100 dark:border-slate-800 pb-4">
+                  <CardTitle className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Building2 className="h-5 w-5 text-primary" />
                     Organization Details
                   </CardTitle>
@@ -149,37 +149,37 @@ export default function CompanyProfileUpdate() {
                 <CardContent className="p-6 space-y-6">
                   <div className="grid gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Organization Name</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Organization Name</Label>
                       <Input
                         value={profile.name}
                         onChange={(e) => setProfile((p) => ({ ...p, name: e.target.value }))}
                         placeholder="e.g., Brane Group"
-                        className="bg-white border-slate-200"
+                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 dark:text-white"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Industry</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Industry</Label>
                       <Input
                         value={profile.industry}
                         onChange={(e) => setProfile((p) => ({ ...p, industry: e.target.value }))}
                         placeholder="e.g., Software, Education"
-                        className="bg-white border-slate-200"
+                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 dark:text-white"
                       />
                     </div>
                     <div className="md:col-span-2 space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">About the Organization</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">About the Organization</Label>
                       <Textarea
                         rows={4}
                         value={profile.about}
                         onChange={(e) => setProfile((p) => ({ ...p, about: e.target.value }))}
                         placeholder="Share a brief overview of your company..."
-                        className="bg-white border-slate-200 resize-none"
+                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 dark:text-white resize-none"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Company Size</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Company Size</Label>
                       <Select value={profile.sizeRange} onValueChange={(v) => setProfile((p) => ({ ...p, sizeRange: v }))}>
-                        <SelectTrigger className="bg-white border-slate-200">
+                        <SelectTrigger className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 dark:text-white">
                           <SelectValue placeholder="Select size" />
                         </SelectTrigger>
                         <SelectContent>
@@ -191,33 +191,33 @@ export default function CompanyProfileUpdate() {
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Base Location</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Base Location</Label>
                       <div className="relative">
                         <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                         <Input
                           value={profile.baseLocation}
                           onChange={(e) => setProfile((p) => ({ ...p, baseLocation: e.target.value }))}
                           placeholder="City, Country"
-                          className="pl-9 bg-white border-slate-200"
+                          className="pl-9 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 dark:text-white"
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Website</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Website</Label>
                       <div className="relative">
                         <Globe className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                         <Input
                           value={profile.website}
                           onChange={(e) => setProfile((p) => ({ ...p, website: e.target.value }))}
                           placeholder="https://example.com"
-                          className="pl-9 bg-white border-slate-200"
+                          className="pl-9 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 dark:text-white"
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Hiring Goal</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Hiring Goal</Label>
                       <Select value={profile.hiringGoal} onValueChange={(v) => setProfile((p) => ({ ...p, hiringGoal: v }))}>
-                        <SelectTrigger className="bg-white border-slate-200">
+                        <SelectTrigger className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 dark:text-white">
                           <SelectValue placeholder="Select goal" />
                         </SelectTrigger>
                         <SelectContent>
@@ -230,9 +230,9 @@ export default function CompanyProfileUpdate() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-sm">
-                <CardHeader className="border-b border-slate-100 pb-4">
-                  <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/60 dark:border-slate-800 shadow-sm">
+                <CardHeader className="border-b border-slate-100 dark:border-slate-800 pb-4">
+                  <CardTitle className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <Users className="h-5 w-5 text-primary" />
                     Contact Information
                   </CardTitle>
@@ -240,7 +240,7 @@ export default function CompanyProfileUpdate() {
                 <CardContent className="p-6 space-y-6">
                   <div className="grid gap-6 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Contact Email</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Contact Email</Label>
                       <div className="flex gap-2">
                         <div className="relative flex-1">
                           <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
@@ -248,7 +248,7 @@ export default function CompanyProfileUpdate() {
                             value={profile.contactEmail}
                             onChange={(e) => setProfile((p) => ({ ...p, contactEmail: e.target.value }))}
                             placeholder="contact@company.com"
-                            className="pl-9 bg-white border-slate-200"
+                            className="pl-9 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 dark:text-white"
                           />
                         </div>
                         <Button
@@ -264,14 +264,14 @@ export default function CompanyProfileUpdate() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-sm font-semibold text-slate-700">Phone Number</Label>
+                      <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Phone Number</Label>
                       <div className="relative">
                         <Phone className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                         <Input
                           value={profile.telephone}
                           onChange={(e) => setProfile((p) => ({ ...p, telephone: e.target.value }))}
                           placeholder="+1 555 555 5555"
-                          className="pl-9 bg-white border-slate-200"
+                          className="pl-9 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 dark:text-white"
                         />
                       </div>
                     </div>
@@ -279,13 +279,13 @@ export default function CompanyProfileUpdate() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/80 backdrop-blur-xl border-white/60 shadow-sm">
-                <CardHeader className="border-b border-slate-100 pb-4">
-                  <CardTitle className="text-lg font-bold text-slate-900">Preferences & Interests</CardTitle>
+              <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/60 dark:border-slate-800 shadow-sm">
+                <CardHeader className="border-b border-slate-100 dark:border-slate-800 pb-4">
+                  <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Preferences & Interests</CardTitle>
                 </CardHeader>
                 <CardContent className="p-6 space-y-8">
                   <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-slate-700">Reasons for Joining</Label>
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Reasons for Joining</Label>
                     <div className="grid gap-3 sm:grid-cols-2">
                       {[
                         "Onboard skilled talent for quick turn around",
@@ -302,7 +302,7 @@ export default function CompanyProfileUpdate() {
                             "cursor-pointer rounded-xl border p-4 text-sm transition-all hover:border-primary/40 hover:bg-primary/5",
                             profile.reasonsForJoining.includes(r)
                               ? "border-primary bg-primary/5 text-primary ring-1 ring-primary"
-                              : "border-slate-200 bg-slate-50/50 text-slate-600"
+                              : "border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-slate-600 dark:text-slate-400"
                           )}
                         >
                           <div className="flex items-start gap-3">
@@ -320,7 +320,7 @@ export default function CompanyProfileUpdate() {
                   </div>
 
                   <div className="space-y-3">
-                    <Label className="text-sm font-semibold text-slate-700">Project/Work Types of Interest</Label>
+                    <Label className="text-sm font-semibold text-slate-700 dark:text-slate-200">Project/Work Types of Interest</Label>
                     <div className="flex flex-wrap gap-2">
                       {[
                         "Tech", "Marketing", "Design", "Operations", "Product", "Other"
@@ -332,7 +332,7 @@ export default function CompanyProfileUpdate() {
                             "cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-all",
                             profile.projectTypes.includes(t)
                               ? "border-primary bg-primary/5 text-primary"
-                              : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                              : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-900"
                           )}
                         >
                           {t}
@@ -344,7 +344,7 @@ export default function CompanyProfileUpdate() {
                         value={profile.projectTypesOther}
                         onChange={(e) => setProfile((p) => ({ ...p, projectTypesOther: e.target.value }))}
                         placeholder="Please specify other Project/Work Types"
-                        className="mt-2 bg-white border-slate-200"
+                        className="mt-2 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 dark:text-white"
                       />
                     )}
                   </div>
@@ -362,7 +362,7 @@ export default function CompanyProfileUpdate() {
                     const slug = (profile.name || "company").toString().trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "company";
                     navigate(`/company/profile/${slug}`);
                   }}
-                  className="h-12 px-6 rounded-xl text-slate-600 hover:bg-slate-100"
+                  className="h-12 px-6 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 dark:hover:text-white"
                 >
                   Cancel
                 </Button>
