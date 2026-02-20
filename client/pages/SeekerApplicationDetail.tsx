@@ -7,6 +7,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { toast } from "@/components/ui/use-toast";
 import { fetchApplicationById, withdrawApplication, type Application } from "@/lib/applications";
 import { supabase } from "@/lib/supabase";
+import { getApplicationStatusLabel, toTitleCase } from "@/lib/uiText";
 import * as React from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
@@ -170,7 +171,7 @@ export default function SeekerApplicationDetail() {
               </div>
               <div className={cn("inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium", getStatusColor(application.status))}>
                 {getStatusIcon(application.status)}
-                <span className="capitalize">{application.status.replace('_', ' ')}</span>
+                <span>{toTitleCase(getApplicationStatusLabel(application.status))}</span>
               </div>
             </div>
           </div>

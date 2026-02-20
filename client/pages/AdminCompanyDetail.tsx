@@ -26,6 +26,7 @@ import {
 import { useParams, Link } from "react-router-dom";
 import * as React from "react";
 import { supabase } from "@/lib/supabase";
+import { getTeamGoalLabel } from "@/lib/uiText";
 import { toast } from "@/components/ui/use-toast";
 import {
   Building2,
@@ -440,7 +441,7 @@ export default function AdminCompanyDetail() {
                       {company.hiringGoal && (
                         <section className="bg-indigo-50/50 dark:bg-indigo-900/10 p-5 rounded-xl border border-indigo-100/50 dark:border-indigo-900/20">
                           <h3 className="text-sm font-bold text-indigo-900 dark:text-indigo-300 mb-2">Team Goal</h3>
-                          <p className="text-sm text-indigo-700 dark:text-indigo-400">{company.hiringGoal}</p>
+                          <p className="text-sm text-indigo-700 dark:text-indigo-400">{getTeamGoalLabel(company.hiringGoal)}</p>
                         </section>
                       )}
                     </CardContent>

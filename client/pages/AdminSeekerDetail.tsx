@@ -40,6 +40,7 @@ import {
   FileText
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getApplicationStatusLabel } from "@/lib/uiText";
 
 type SeekerProfile = {
   id: string;
@@ -416,7 +417,7 @@ export default function AdminSeekerDetail() {
                                       "text-slate-600 dark:text-slate-300"
                                   )}
                                 >
-                                  {app.status}
+                                  {getApplicationStatusLabel(app.status)}
                                 </Badge>
                                 <span className="text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md flex items-center gap-1">
                                   <Clock className="w-3 h-3" />

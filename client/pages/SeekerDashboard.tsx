@@ -7,6 +7,7 @@ import { toast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { fetchApplicationsForApplicant, withdrawApplication, type Application } from "@/lib/applications";
 import { supabase } from "@/lib/supabase";
+import { getApplicationStatusLabel, toTitleCase } from "@/lib/uiText";
 import { Link } from "react-router-dom";
 import * as React from "react";
 import { FileText, Clock, CheckCircle, XCircle, AlertCircle, ArrowRight, LayoutDashboard, Briefcase, Search } from "lucide-react";
@@ -141,6 +142,7 @@ export default function SeekerDashboard() {
   };
 
   const [filter, setFilter] = React.useState<"all" | "interviewing" | "hired" | "rejected">("all");
+  const filterLabel = filter === "hired" ? "Selected" : filter.charAt(0).toUpperCase() + filter.slice(1);
 
   const filteredApps = React.useMemo(() => {
     if (filter === "all") return apps;
@@ -205,7 +207,7 @@ export default function SeekerDashboard() {
               {[
                 { icon: FileText, label: "Total Applications", value: stats.total, color: "blue" },
                 { icon: Clock, label: "Interviewing", value: stats.interviewing, color: "yellow" },
-                { icon: CheckCircle, label: "Hired", value: stats.hired, color: "green" },
+                { icon: CheckCircle, label: "Selected", value: stats.hired, color: "green" },
                 { icon: XCircle, label: "Rejected", value: stats.rejected, color: "red" },
               ].map((stat, i) => (
                 <motion.div key={i} variants={itemAnimations}>
@@ -247,13 +249,13 @@ export default function SeekerDashboard() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="sm" className="h-9 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md border-slate-200/60 dark:border-slate-800/60">
                     <Search className="mr-2 h-4 w-4" />
-                    {filter === 'all' ? 'Filter' : filter.charAt(0).toUpperCase() + filter.slice(1)}
+                    {filter === 'all' ? 'Filter' : filterLabel}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={() => setFilter("all")}>All Applications</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setFilter("interviewing")}>Interviewing</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setFilter("hired")}>Hired</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setFilter("hired")}>Selected</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setFilter("rejected")}>Rejected</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -316,7 +318,7 @@ export default function SeekerDashboard() {
                                 </div>
                                 <Badge variant="outline" className={cn("capitalize flex items-center gap-1.5 px-2.5 py-0.5 backdrop-blur-sm", getStatusColor(a.status))}>
                                   {getStatusIcon(a.status)}
-                                  {a.status.replace('_', ' ')}
+                                  {toTitleCase(getApplicationStatusLabel(a.status))}
                                 </Badge>
                               </div>
 

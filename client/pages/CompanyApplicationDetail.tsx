@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
 import { fetchApplicationById, type Application } from "@/lib/applications";
+import { getApplicationStatusLabel } from "@/lib/uiText";
 import { supabase } from "@/lib/supabase";
 import * as React from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -158,7 +159,7 @@ export default function CompanyApplicationDetail() {
                   application.status === 'hired' ? 'default' :
                     application.status === 'interviewing' ? 'secondary' : 'outline'
                 } className="uppercase text-xs tracking-wider px-2 py-0.5 border-slate-200">
-                  {application.status}
+                  {getApplicationStatusLabel(application.status)}
                 </Badge>
               </div>
               <div className="flex items-center gap-4 text-sm text-slate-500">

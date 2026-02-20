@@ -314,7 +314,7 @@ export default function CompanyJobApplicants() {
               <div className="flex items-center gap-2 text-sm text-slate-500 mb-1">
                 <Link to="/company/dashboard" className="hover:text-primary dark:hover:text-white transition-colors">Dashboard</Link>
                 <span>/</span>
-                <span className="text-slate-900 dark:text-white font-medium">Hiring Pipeline</span>
+                <span className="text-slate-900 dark:text-white font-medium">Selection Pipeline</span>
               </div>
               <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Candidates & Placements</h1>
               <p className="text-slate-500 dark:text-slate-400">Manage your applicants, interviews, and active team.</p>
@@ -371,13 +371,13 @@ export default function CompanyJobApplicants() {
                             <td className="px-6 py-4"><Badge variant="outline" className="capitalize">{a.status}</Badge></td>
                             <td className="px-6 py-4">
                               <div className="flex items-center gap-2">
-                                <Button size="sm" variant="outline" asChild className="rounded-lg h-8 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700">
+                                <Button size="sm" variant="outline" asChild className="rounded-lg h-8 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 hover:text-slate-900 dark:hover:bg-slate-700">
                                   <Link to={`/company/applications/${a.id}`}>Review</Link>
                                 </Button>
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  className="rounded-lg h-8 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-primary dark:text-blue-400 hover:bg-slate-50 dark:hover:bg-slate-700"
+                                  className="rounded-lg h-8 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-primary dark:text-blue-400 hover:bg-slate-50 hover:text-primary dark:hover:bg-slate-700"
                                   onClick={() => handleMessage(a.applicant_id)}
                                 >
                                   <MessageSquare className="h-4 w-4 mr-1.5" />
@@ -513,7 +513,7 @@ export default function CompanyJobApplicants() {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="text-emerald-600 border-emerald-200 hover:bg-emerald-50 dark:border-emerald-900 dark:hover:bg-emerald-900/20"
+                                className="text-emerald-600 border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 dark:border-emerald-900 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
                                 onClick={() => {
                                   setNewHire(prev => ({ ...prev, applicant_id: r.applicant_id }));
                                   document.getElementById('hire-form')?.scrollIntoView({ behavior: 'smooth' });
