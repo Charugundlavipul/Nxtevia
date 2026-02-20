@@ -160,7 +160,7 @@ export default function AdminProfile() {
               <CardContent className="p-6 space-y-3">
                 <div className="font-semibold">Quick links</div>
                 <div className="grid gap-2">
-                  <Button asChild variant="outline"><Link to="/admin/jobs">Jobs</Link></Button>
+                  <Button asChild variant="outline"><Link to="/admin/jobs">Opportunities</Link></Button>
                   <Button asChild variant="outline"><Link to="/admin/seekers">Seekers</Link></Button>
                   <Button asChild variant="outline"><Link to="/admin/companies">Companies</Link></Button>
                   <Button asChild variant="outline"><Link to="/admin/analytics">Analytics</Link></Button>

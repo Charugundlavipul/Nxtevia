@@ -275,10 +275,10 @@ export default function CompanyProfileCreate() {
                           <SelectValue placeholder="Select size" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="1-10">1–10 employees</SelectItem>
-                          <SelectItem value="11-50">11–50 employees</SelectItem>
-                          <SelectItem value="51-200">51–200 employees</SelectItem>
-                          <SelectItem value="200+">200+ employees</SelectItem>
+                          <SelectItem value="1-10">1-10 team members</SelectItem>
+                          <SelectItem value="11-50">11-50 team members</SelectItem>
+                          <SelectItem value="51-200">51-200 team members</SelectItem>
+                          <SelectItem value="200+">200+ team members</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>

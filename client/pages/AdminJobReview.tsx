@@ -287,7 +287,7 @@ export default function AdminJobReview() {
   const act = async (type: "approve" | "reject" | "revision" | "close" | "activate") => {
     if (!job) return;
     if (type === "close" && job.status !== "approved") {
-      toast({ title: "Cannot close", description: "Only active jobs can be closed.", duration: 1500 });
+      toast({ title: "Cannot close", description: "Only active Opportunities can be closed.", duration: 1500 });
       return;
     }
     let note: string | undefined;

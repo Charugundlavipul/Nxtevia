@@ -350,7 +350,7 @@ const App = () => (
                 }
               />
               <Route
-                path="/company/employees"
+                path="/company/seekers"
                 element={
                   <AuthGate>
                     <RoleGate allowed={["company"]}>
@@ -360,7 +360,7 @@ const App = () => (
                 }
               />
               <Route
-                path="/company/employees/:id/tenure"
+                path="/company/seekers/:id/tenure"
                 element={
                   <AuthGate>
                     <RoleGate allowed={["company"]}>
@@ -509,7 +509,7 @@ const App = () => (
                 }
               />
               <Route
-                path="/admin/employees"
+                path="/admin/hires"
                 element={
                   <AdminGate>
                     <AdminEmployees />
@@ -518,7 +518,7 @@ const App = () => (
               />
 
               <Route
-                path="/admin/employees/:id"
+                path="/admin/hires/:id"
                 element={
                   <AdminGate>
                     <AdminEmployeeTenure />

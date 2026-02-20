@@ -60,7 +60,7 @@ export default function CompanyEmployeeTenure() {
         flag_reason: flagReason || null,
       });
       toast({ title: "Saved", description: "Employment record updated successfully.", duration: 1800 });
-      navigate(`/company/employees`);
+      navigate(`/company/seekers`);
     } catch (err) {
       toast({ title: "Save failed", description: err instanceof Error ? err.message : "Could not update", duration: 2200, variant: "destructive" });
     };
@@ -68,12 +68,12 @@ export default function CompanyEmployeeTenure() {
 
   const deleteRecord = async () => {
     if (!id) return;
-    if (!window.confirm("Are you sure you want to remove this employee? This will also reset their application status.")) return;
+    if (!window.confirm("Are you sure you want to remove this seeker? This will also reset their application status.")) return;
 
     try {
       await deleteEmployeeRecordAndRevertApplication(id);
-      toast({ title: "Deleted", description: "Employee removed and application status reverted.", duration: 2000 });
-      navigate("/company/employees");
+      toast({ title: "Deleted", description: "Seeker removed and application status reverted.", duration: 2000 });
+      navigate("/company/seekers");
     } catch (err) {
       toast({ title: "Delete failed", description: err instanceof Error ? err.message : "Could not delete", duration: 2200, variant: "destructive" });
     }
@@ -94,7 +94,7 @@ export default function CompanyEmployeeTenure() {
       <Layout>
         <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50 flex flex-col items-center justify-center p-4">
           <h1 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Record Not Found</h1>
-          <Button asChild variant="outline"><Link to="/company/employees">Back to Employees</Link></Button>
+          <Button asChild variant="outline"><Link to="/company/seekers">Back to Seekers</Link></Button>
         </div>
       </Layout>
     );
@@ -111,7 +111,7 @@ export default function CompanyEmployeeTenure() {
         <section className="container py-10 relative z-10 max-w-3xl">
           <div className="flex items-center gap-4 mb-8">
             <Button variant="ghost" size="icon" asChild className="rounded-full bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 backdrop-blur-sm">
-              <Link to="/company/employees"><ArrowLeft className="h-5 w-5" /></Link>
+              <Link to="/company/seekers"><ArrowLeft className="h-5 w-5" /></Link>
             </Button>
             <div>
               <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Edit Employment Record</h1>
@@ -244,12 +244,12 @@ export default function CompanyEmployeeTenure() {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <Button type="button" variant="ghost" onClick={deleteRecord} className="text-red-600 hover:text-red-700 hover:bg-red-50">
-                  <Trash2 className="h-4 w-4 mr-2" /> Delete Employee
+                  <Trash2 className="h-4 w-4 mr-2" /> Delete Seeker
                 </Button>
               </div>
               <div className="flex items-center gap-3">
                 <Button asChild variant="outline" className="border-slate-200 dark:border-slate-700 rounded-xl px-6">
-                  <Link to={`/company/employees`}>Cancel</Link>
+                  <Link to={`/company/seekers`}>Cancel</Link>
                 </Button>
                 <Button type="submit" className="rounded-xl px-6 bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20">
                   <Save className="h-4 w-4 mr-2" /> Save Changes

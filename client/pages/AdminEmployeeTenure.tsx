@@ -143,7 +143,7 @@ export default function AdminEmployeeTenure() {
             }
 
             toast({ title: "Saved", description: "Employment record updated successfully.", duration: 1800 });
-            navigate(`/admin/employees`);
+            navigate(`/admin/hires`);
         } catch (err) {
             toast({ title: "Save failed", description: err instanceof Error ? err.message : "Could not update", duration: 2200, variant: "destructive" });
         }
@@ -151,12 +151,12 @@ export default function AdminEmployeeTenure() {
 
     const deleteRecord = async () => {
         if (!id || isNew) return;
-        if (!window.confirm("Are you sure you want to remove this employee? This will also reset their application status.")) return;
+        if (!window.confirm("Are you sure you want to remove this seeker? This will also reset their application status.")) return;
 
         try {
             await deleteEmployeeRecordAndRevertApplication(id);
-            toast({ title: "Deleted", description: "Employee removed and application status reverted.", duration: 2000 });
-            navigate("/admin/employees");
+            toast({ title: "Deleted", description: "Seeker removed and application status reverted.", duration: 2000 });
+            navigate("/admin/hires");
         } catch (err) {
             toast({ title: "Delete failed", description: err instanceof Error ? err.message : "Could not delete", duration: 2200, variant: "destructive" });
         }
@@ -177,7 +177,7 @@ export default function AdminEmployeeTenure() {
             <Layout>
                 <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/50 flex flex-col items-center justify-center p-4">
                     <h1 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Record Not Found</h1>
-                    <Button asChild variant="outline"><Link to="/admin/employees">Back to Employees</Link></Button>
+                    <Button asChild variant="outline"><Link to="/admin/hires">Back to Hires</Link></Button>
                 </div>
             </Layout>
         );
@@ -194,7 +194,7 @@ export default function AdminEmployeeTenure() {
                 <section className="container py-10 relative z-10 max-w-3xl">
                     <div className="flex items-center gap-4 mb-8">
                         <Button variant="ghost" size="icon" asChild className="rounded-full bg-white/50 dark:bg-slate-800/50 hover:bg-white dark:hover:bg-slate-800 backdrop-blur-sm">
-                            <Link to="/admin/employees"><ArrowLeft className="h-5 w-5" /></Link>
+                            <Link to="/admin/hires"><ArrowLeft className="h-5 w-5" /></Link>
                         </Button>
                         <div>
                             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{isNew ? 'New' : 'Edit'} Employment Record</h1>
@@ -270,7 +270,7 @@ export default function AdminEmployeeTenure() {
                                         <div className="flex items-center gap-3">
                                             <User className="h-5 w-5 text-slate-400" />
                                             <div>
-                                                <div className="text-xs text-slate-500 uppercase tracking-wide font-semibold">Employee</div>
+                                                <div className="text-xs text-slate-500 uppercase tracking-wide font-semibold">Seeker</div>
                                                 <div className="font-medium text-slate-900 dark:text-white">{applicantName}</div>
                                             </div>
                                         </div>
@@ -397,13 +397,13 @@ export default function AdminEmployeeTenure() {
                             <div>
                                 {!isNew && (
                                     <Button type="button" variant="ghost" onClick={deleteRecord} className="text-red-600 hover:text-red-700 hover:bg-red-50">
-                                        <Trash2 className="h-4 w-4 mr-2" /> Delete Employee
+                                        <Trash2 className="h-4 w-4 mr-2" /> Delete Seeker
                                     </Button>
                                 )}
                             </div>
                             <div className="flex items-center gap-3">
                                 <Button asChild variant="outline" className="border-slate-200 dark:border-slate-700 rounded-xl px-6">
-                                    <Link to={`/admin/employees`}>Cancel</Link>
+                                    <Link to={`/admin/hires`}>Cancel</Link>
                                 </Button>
                                 <Button type="submit" className="rounded-xl px-6 bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/20">
                                     <Save className="h-4 w-4 mr-2" /> Save Changes

@@ -18,6 +18,10 @@ import { Badge } from "@/components/ui/badge";
 import {
   DialogHeader,
   DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { ESAExemptionModal } from "@/components/modals/ESAExemptionModal";
 import { createAttestation, ATTESTATION_TYPES } from "@/lib/attestations";
@@ -79,6 +83,8 @@ export default function PostOpportunity() {
   const [reqLoading, setReqLoading] = React.useState(true);
   const [reqOpen, setReqOpen] = React.useState(true);
   const [submitting, setSubmitting] = React.useState(false);
+  const [disclaimerOpen, setDisclaimerOpen] = React.useState(false);
+  const [pendingValues, setPendingValues] = React.useState<FormValues | null>(null);
 
   const [esaModalOpen, setEsaModalOpen] = React.useState(false);
   const [esaVerified, setEsaVerified] = React.useState(false);
@@ -165,7 +171,9 @@ export default function PostOpportunity() {
         },
     );
 
-  const onSubmit = async (values: FormValues) => {
+  const handleConfirmSubmit = async () => {
+    if (!pendingValues) return;
+    const values = pendingValues;
     const skills = values.skills.split(",").map((s) => s.trim()).filter(Boolean);
     if (skills.length < 1) {
       alert("Please add at least one skill.");
@@ -217,7 +225,23 @@ export default function PostOpportunity() {
       toast({ title: "Error", description: err.message || "Failed to post opportunity.", variant: "destructive" });
     } finally {
       setSubmitting(false);
+      setDisclaimerOpen(false);
+      setPendingValues(null);
     }
+  };
+
+  const onPreSubmit = (values: FormValues) => {
+    const skills = values.skills.split(",").map((s) => s.trim()).filter(Boolean);
+    if (skills.length < 1) {
+      alert("Please add at least one skill.");
+      return;
+    }
+    if (!requirements) {
+      alert("Requirements not loaded. Please try again.");
+      return;
+    }
+    setPendingValues(values);
+    setDisclaimerOpen(true);
   };
 
   return (
@@ -240,7 +264,7 @@ export default function PostOpportunity() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={handleSubmit(onPreSubmit)} className="space-y-8">
 
             {/* Opportunity Details Card */}
             <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-white/60 dark:border-slate-800 shadow-sm overflow-hidden">
@@ -564,9 +588,6 @@ export default function PostOpportunity() {
             </Card>
 
             <div className="space-y-4 pt-4 pb-12">
-              <p className="text-sm text-slate-500 dark:text-slate-400 text-justify">
-                By posting, you confirm this opportunity complies with Ontario&apos;s Employment Standards Act and Human Rights Code. You acknowledge that NxteVia is a technology platform only, not a recruiter or employer, and you are solely responsible for the hiring relationship.
-              </p>
               <div className="flex items-center gap-4">
                 <Button
                   type="submit"
@@ -602,6 +623,22 @@ export default function PostOpportunity() {
         }}
         onVerify={handleESAVerified}
       />
+      <Dialog open={disclaimerOpen} onOpenChange={setDisclaimerOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Compliance Confirmation</DialogTitle>
+            <DialogDescription className="text-justify pt-4">
+              By posting, you confirm this opportunity complies with applicable employment and human rights legislation (including Ontario’s Employment Standards Act and Human Rights Code). You acknowledge that NxteVia is a technology platform only, not a recruiter or employer, and you are solely responsible for the hiring relationship.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button variant="outline" onClick={() => setDisclaimerOpen(false)}>Cancel</Button>
+            <Button onClick={handleConfirmSubmit} disabled={submitting}>
+              {submitting ? "Submitting..." : "Agree & Submit"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Layout >
   );
 }

@@ -53,9 +53,9 @@ export default function AdminDashboard() {
           <div className="bg-white dark:bg-slate-800 p-4 rounded-full shadow-sm mb-4">
             <FileText className="h-8 w-8 text-slate-400 dark:text-slate-500" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">No jobs found</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">No opportunities found</h3>
           <p className="text-slate-500 dark:text-slate-400 max-w-sm mt-2">
-            There are no jobs with this status currently.
+            There are no opportunities with this status currently.
           </p>
         </div>
       );
@@ -164,7 +164,7 @@ export default function AdminDashboard() {
             </Card>
             <Card className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-white/50 dark:border-slate-800 shadow-sm">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400">Active Jobs</CardTitle>
+                <CardTitle className="text-sm font-medium text-slate-600 dark:text-slate-400">Active Opportunities</CardTitle>
                 <div className="p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
                   <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
                 </div>

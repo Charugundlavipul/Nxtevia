@@ -358,13 +358,13 @@ export default function AdminJobApplicants() {
             </CardContent>
           </Card>
 
-          {/* Hired Employees */}
+          {/* Hired Seekers */}
           <Card className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-white/50 dark:border-slate-800 shadow-sm">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="bg-emerald-50 dark:bg-emerald-900/20 p-2 rounded-lg"><UserCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-400" /></div>
-                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">Hired Employees</h2>
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white">Hired Seekers</h2>
                   <Badge variant="secondary" className="ml-2 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">{hired.length}</Badge>
                 </div>
               </div>

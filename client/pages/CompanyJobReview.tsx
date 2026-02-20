@@ -88,7 +88,7 @@ export default function CompanyJobReview() {
 
   const closeJob = async () => {
     if (!job || job.status !== "approved") {
-      toast({ title: "Cannot close", description: "Only active jobs can be closed.", duration: 1800 });
+      toast({ title: "Cannot close", description: "Only active opportunities can be closed.", duration: 1800 });
       return;
     }
     try {

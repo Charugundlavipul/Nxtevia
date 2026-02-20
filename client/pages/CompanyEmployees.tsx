@@ -271,7 +271,7 @@ export default function CompanyEmployees() {
                 </div>
               ) : filteredList.length === 0 ? (
                 <div className="p-8 text-center text-slate-500">
-                  No employees match your search.
+                  No seekers match your search.
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -314,7 +314,7 @@ export default function CompanyEmployees() {
                                 size="sm"
                                 variant="outline"
                                 className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700"
-                                onClick={() => navigate(`/company/employees/${employee.id}/tenure`)}
+                                onClick={() => navigate(`/company/seekers/${employee.id}/tenure`)}
                               >
                                 Manage
                               </Button>

@@ -130,7 +130,7 @@ export function Header() {
                 <>
                   <NavLink to="/company/home" className={navLink}>Home</NavLink>
                   <NavLink to="/company/dashboard" className={navLink}>Dashboard</NavLink>
-                  <NavLink to="/company/employees" className={navLink}>Seekers</NavLink>
+                  <NavLink to="/company/seekers" className={navLink}>Seekers</NavLink>
                   <NavLink to="/company/chats" className={navLink}>Messages</NavLink>
                   <NavLink to="/company/requirements" className={navLink}>Requirements</NavLink>
                 </>
@@ -158,7 +158,7 @@ export function Header() {
               <NavLink to="/admin/jobs" className={navLink}>Jobs</NavLink>
               <NavLink to="/admin/seekers" className={navLink}>Seekers</NavLink>
               <NavLink to="/admin/companies" className={navLink}>Companies</NavLink>
-              <NavLink to="/admin/employees" className={navLink}>Employees</NavLink>
+              <NavLink to="/admin/hires" className={navLink}>Hires</NavLink>
               <NavLink to="/admin/chats" className={navLink}>Messages</NavLink>
               <NavLink to="/admin/analytics" className={navLink}>Analytics</NavLink>
               <NavLink to="/admin/tickets" className={navLink}>Tickets</NavLink>
@@ -239,7 +239,7 @@ export function Header() {
                   <>
                     <MobileLink to="/company/home" onClick={() => setOpen(false)}>Home</MobileLink>
                     <MobileLink to="/company/dashboard" onClick={() => setOpen(false)}>Dashboard</MobileLink>
-                    <MobileLink to="/company/employees" onClick={() => setOpen(false)}>Seekers</MobileLink>
+                    <MobileLink to="/company/seekers" onClick={() => setOpen(false)}>Seekers</MobileLink>
                     <MobileLink to="/company/chats" onClick={() => setOpen(false)}>Messages</MobileLink>
                     <MobileLink to="/company/requirements" onClick={() => setOpen(false)}>Requirements</MobileLink>
                   </>
@@ -267,7 +267,7 @@ export function Header() {
                 <MobileLink to="/admin/jobs" onClick={() => setOpen(false)}>Jobs</MobileLink>
                 <MobileLink to="/admin/seekers" onClick={() => setOpen(false)}>Seekers</MobileLink>
                 <MobileLink to="/admin/companies" onClick={() => setOpen(false)}>Companies</MobileLink>
-                <MobileLink to="/admin/employees" onClick={() => setOpen(false)}>Employees</MobileLink>
+                <MobileLink to="/admin/hires" onClick={() => setOpen(false)}>Hires</MobileLink>
                 <MobileLink to="/admin/chats" onClick={() => setOpen(false)}>Messages</MobileLink>
                 <MobileLink to="/admin/analytics" onClick={() => setOpen(false)}>Analytics</MobileLink>
                 <MobileLink to="/admin/tickets" onClick={() => setOpen(false)}>Tickets</MobileLink>

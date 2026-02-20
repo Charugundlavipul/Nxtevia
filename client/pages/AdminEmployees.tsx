@@ -30,7 +30,7 @@ export default function AdminEmployees() {
                 const recs = await fetchAllEmployeeRecords();
                 setList(recs.filter((r) => r.status === "hired"));
             } catch (err) {
-                console.error("Failed to fetch employees", err);
+                console.error("Failed to fetch hires", err);
             } finally {
                 setLoading(false);
             }
@@ -97,20 +97,20 @@ export default function AdminEmployees() {
 
     return (
         <Layout>
-            <Seo title="Admin Employees - NxteVia" canonical={window.location.href} />
+            <Seo title="Admin Hires - NxteVia" canonical={window.location.href} />
             <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 py-12">
                 <div className="container max-w-6xl space-y-8">
 
                     {/* Header */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
-                            <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">All Employees</h1>
-                            <p className="text-slate-500 dark:text-slate-400 mt-1">Manage employees across all companies.</p>
+                            <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">All Hires</h1>
+                            <p className="text-slate-500 dark:text-slate-400 mt-1">Manage hired seekers across all companies.</p>
                         </div>
                         <div className="flex items-center gap-3">
                             <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-lg shadow-blue-600/20">
-                                <Link to="/admin/employees/new">
-                                    <Plus className="mr-2 h-4 w-4" /> Add Employee
+                                <Link to="/admin/hires/new">
+                                    <Plus className="mr-2 h-4 w-4" /> Add Hire
                                 </Link>
                             </Button>
                         </div>
@@ -123,14 +123,14 @@ export default function AdminEmployees() {
                                 <div className="flex items-center gap-3">
                                     <div className="bg-slate-100 border border-slate-200 dark:border-transparent dark:bg-indigo-900/10 p-2 rounded-lg"><Users className="h-5 w-5 text-indigo-600 dark:text-indigo-400" /></div>
                                     <div>
-                                        <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Employee Records</CardTitle>
-                                        <CardDescription className="dark:text-slate-400">View and manage hired employees.</CardDescription>
+                                        <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">Hire Records</CardTitle>
+                                        <CardDescription className="dark:text-slate-400">View and manage hired seekers.</CardDescription>
                                     </div>
                                 </div>
                                 <div className="relative w-full sm:w-64">
                                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                                     <Input
-                                        placeholder="Search employees or companies..."
+                                        placeholder="Search seekers or companies..."
                                         className="pl-9 bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus:bg-white dark:focus:bg-slate-900 transition-all dark:text-white"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -150,12 +150,12 @@ export default function AdminEmployees() {
                                     <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-full mb-3">
                                         <Users className="h-6 w-6 text-slate-400" />
                                     </div>
-                                    <p className="text-slate-900 dark:text-white font-medium">No employees found</p>
+                                    <p className="text-slate-900 dark:text-white font-medium">No hires found</p>
                                     <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">No hired records exist in the system.</p>
                                 </div>
                             ) : filteredList.length === 0 ? (
                                 <div className="p-8 text-center text-slate-500 dark:text-slate-400">
-                                    No employees match your search.
+                                    No seekers match your search.
                                 </div>
                             ) : (
                                 <div className="overflow-x-auto">
@@ -196,7 +196,7 @@ export default function AdminEmployees() {
                                                                 size="sm"
                                                                 variant="outline"
                                                                 className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700"
-                                                                onClick={() => navigate(`/admin/employees/${employee.id}`)}
+                                                                onClick={() => navigate(`/admin/hires/${employee.id}`)}
                                                             >
                                                                 Manage
                                                             </Button>

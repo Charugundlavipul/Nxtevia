@@ -225,7 +225,7 @@ function ActiveJobsShowcase({ jobs, loading, onViewAll }: { jobs: Opportunity[];
         <div className="bg-white p-3 rounded-full w-fit mx-auto shadow-sm mb-4">
           <Briefcase className="h-6 w-6 text-primary" />
         </div>
-        <h3 className="text-lg font-semibold text-primary">No active jobs</h3>
+        <h3 className="text-lg font-semibold text-primary">No active opportunities</h3>
         <p className="text-primary/80 mt-1 mb-6 max-w-md mx-auto">
           You don't have any jobs currently visible to candidates. Post a new opportunity to get started.
         </p>
@@ -243,7 +243,7 @@ function ActiveJobsShowcase({ jobs, loading, onViewAll }: { jobs: Opportunity[];
           <Briefcase className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
         </div>
         <div>
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white">Active Jobs</h2>
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">Active Opportunities</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">{jobs.length} opportunities currently live</p>
         </div>
       </div>

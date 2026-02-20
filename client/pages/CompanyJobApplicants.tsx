@@ -404,7 +404,7 @@ export default function CompanyJobApplicants() {
             </CardContent>
           </Card>
 
-          {/* Hired Employees */}
+          {/* Hired Seekers */}
           <Card className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border-white/50 dark:border-slate-800 shadow-sm">
             <CardContent className="p-6 space-y-6">
               <div className="flex items-center justify-between">
@@ -420,7 +420,7 @@ export default function CompanyJobApplicants() {
                   <table className="w-full text-sm text-left">
                     <thead className="bg-slate-50/80 dark:bg-slate-800/80 text-xs text-slate-500 uppercase tracking-wider font-semibold">
                       <tr>
-                        <th className="px-6 py-4">Employee</th>
+                        <th className="px-6 py-4">Seeker</th>
                         <th className="px-6 py-4">Role</th>
                         <th className="px-6 py-4">Start Date</th>
 
@@ -441,7 +441,7 @@ export default function CompanyJobApplicants() {
                                 <Pencil className="h-4 w-4 text-slate-500" />
                               </Button>
                               <Button size="sm" variant="outline" className="bg-white dark:bg-slate-800 text-primary dark:text-white border-primary/20 dark:border-slate-600 hover:bg-primary/5 dark:hover:bg-slate-700" asChild>
-                                <Link to={`/company/employees/${r.id}/tenure`}>Manage</Link>
+                                <Link to={`/company/seekers/${r.id}/tenure`}>Manage</Link>
                               </Button>
                               <Button size="sm" variant="ghost" className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30" onClick={() => onDelete(r.id)}>
                                 <Trash2 className="h-4 w-4" />
