@@ -165,8 +165,8 @@ export default function AdminEmployees() {
                                                 <th className="px-6 py-4">Full Name</th>
                                                 <th className="px-6 py-4">Company</th>
                                                 <th className="px-6 py-4">Role</th>
-                                                <th className="px-6 py-4">Start Date</th>
-                                                <th className="px-6 py-4">End Date</th>
+                                                <th className="px-6 py-4">Initiation Date</th>
+                                                <th className="px-6 py-4">Completion Date</th>
                                                 <th className="px-6 py-4 text-right">Actions</th>
                                             </tr>
                                         </thead>
@@ -195,7 +195,7 @@ export default function AdminEmployees() {
                                                             <Button
                                                                 size="sm"
                                                                 variant="outline"
-                                                                className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700"
+                                                                className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-white hover:bg-slate-50 hover:text-slate-900 dark:hover:bg-slate-700 dark:hover:text-white"
                                                                 onClick={() => navigate(`/admin/hires/${employee.id}`)}
                                                             >
                                                                 Manage

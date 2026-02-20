@@ -117,7 +117,7 @@ export default function AdminChatListPane({ currentConversationId }: AdminChatLi
           </Button>
           <Button
             onClick={() => setShowNewChat(true)}
-            className="flex-1 justify-start gap-2 bg-white dark:bg-slate-950 text-slate-900 dark:text-white border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900 shadow-sm"
+            className="flex-1 justify-start gap-2 bg-white dark:bg-slate-950 text-slate-900 dark:text-white border-slate-200 dark:border-slate-800 hover:bg-slate-50 hover:text-slate-900 dark:hover:bg-slate-900 dark:hover:text-white shadow-sm"
             variant="outline"
           >
             <Plus className="h-4 w-4 text-blue-600 dark:text-blue-400" />
